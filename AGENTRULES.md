@@ -11,3 +11,5 @@
 5. If you are unsure about what the user wants please ask.
 
 6. Generated topology and joint transitions must emerge from the physical scenarios, material, objectives, and declared design constraints. Study-specific data may identify CAD fixtures, preserved features, loads, exclusions, and the available design space. Keep part-specific shape prescriptions out of generation, reconstruction, and candidate selection.
+
+7. Commit completed project changes and published study results, push them to the configured GitHub remote, and verify the remote commit.

@@ -3,31 +3,9 @@ from functools import cached_property
 import numpy as np
 from scipy.spatial import cKDTree
 import trimesh
-from vtkmodules.vtkCommonCore import reference
-from vtkmodules.vtkCommonDataModel import vtkStaticCellLocator
-from .cad_motion import polydata
+from .surface_locator import SurfaceLocator
 from .mesh_quality import InadmissibleBoundary
 from .surface_transfer import native_samples
-
-
-class SurfaceLocator:
-    def __init__(self,vertices,faces):
-        self.vertices=vertices
-        self.faces=faces
-        self.locator=vtkStaticCellLocator()
-        self.locator.SetDataSet(polydata(vertices,faces))
-        self.locator.BuildLocator()
-
-    def nearest(self,points):
-        triangles=np.empty(len(points),dtype=np.intp)
-        projections=np.empty_like(points,dtype=float)
-        cell,sub,distance=reference(0),reference(0),reference(0.)
-        hit=[0.,0.,0.]
-        for i,point in enumerate(points):
-            self.locator.FindClosestPoint(point,hit,cell,sub,distance)
-            triangles[i]=int(cell)
-            projections[i]=hit
-        return triangles,projections
 
 
 class TrianglePatch:

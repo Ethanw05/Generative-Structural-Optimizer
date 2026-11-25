@@ -3,9 +3,8 @@ import subprocess
 
 import numpy as np
 import trimesh
-from vtkmodules.vtkCommonCore import reference
-from vtkmodules.vtkCommonDataModel import vtkStaticCellLocator
-from .cad_motion import cad_bounds, polydata
+from .surface_locator import SurfaceLocator
+from .cad_motion import cad_bounds
 from .cad_wrench import SurfaceWrench
 
 
@@ -16,25 +15,23 @@ class SurfaceMotion:
         self.vertices = vertices
         self.faces = faces
         self.values = values
-        surface = polydata(vertices, faces)
-        self.locator = vtkStaticCellLocator()
-        self.locator.SetDataSet(surface)
-        self.locator.BuildLocator()
+        self.locator = SurfaceLocator(vertices, faces)
 
     def sample(self, points):
         if len(points) == 0:
             return np.empty(0)
-        cells = np.empty(len(points), dtype=np.intp)
-        projected = np.empty_like(points, dtype=float)
-        closest = [0., 0., 0.]
-        face, sub_id, distance = reference(0), reference(0), reference(0.)
-        for index, point in enumerate(points):
-            self.locator.FindClosestPoint(point, closest, face, sub_id, distance)
-            cells[index] = int(face)
-            projected[index] = closest
+        cells, projected = self.locator.nearest(points)
         triangles = self.faces[cells]
         barycentric = trimesh.triangles.points_to_barycentric(self.vertices[triangles], projected)
         return np.einsum('ij,ij->i', self.values[triangles], barycentric)
+
+
+def prescribed_faces(study):
+    loads = [*study.loads.values(), *(item.attachment for history in study.histories.values()
+                                      for item in history.loads)]
+    faces = [*study.fixed_faces, *(face for load in loads for face in
+                                   (load.faces if isinstance(load, SurfaceWrench) else (load.face,)))]
+    return {id(face): face for face in faces}.values()
 
 
 def solve_motion(study, evidence, executable, work, move, spacing, weights, available_volume, regularization_mm=0.):
@@ -46,10 +43,7 @@ def solve_motion(study, evidence, executable, work, move, spacing, weights, avai
     if np.any(area <= 0.):
         raise ValueError('Degenerate analysis boundary')
     locked = np.zeros(len(faces), dtype=bool)
-    prescribed=[*study.loads.values(),*(item.attachment for h in study.histories.values() for item in h.loads)]
-    loaded_faces = [face for load in prescribed
-                    for face in (load.faces if isinstance(load,SurfaceWrench) else (load.face,))]
-    for face in [*study.fixed_faces,*loaded_faces]:
+    for face in prescribed_faces(study):
         locked |= face.contains_projection(centers, spacing / 2.)
 
     drive = np.zeros(len(faces))

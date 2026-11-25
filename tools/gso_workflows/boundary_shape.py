@@ -5,7 +5,7 @@ from scipy.ndimage import map_coordinates
 import trimesh
 from .mesh_quality import InadmissibleBoundary, validate_single_part
 from .reconstruction import distance_samples, region_distances, surface_from_signed
-from .surface_motion import solve_motion
+from .surface_motion import prescribed_faces, solve_motion
 from .front_transport import advance
 
 
@@ -19,6 +19,29 @@ def local_signed_surface(mesh, first, shape, spacing, band):
     cfg.vol.voxelSize=mr.Vector3f(*([spacing]*3))
     cfg.vol.origin=mr.Vector3f(*map(float,first-.5*spacing))
     return arrays.getNumpy3Darray(mr.meshToDistanceVolume(surface,cfg)).copy()
+
+
+def pin_selected_faces(study, first, spacing, field, retained, restriction):
+    """Hold both interpolation endpoints of prescribed CAD faces throughout evolution."""
+    shape = np.array(field.shape)
+    halo = np.sqrt(3.) * spacing
+    for face in prescribed_faces(study):
+        vertices = face.triangles.reshape(-1, 3)
+        low = np.maximum(0, np.floor((vertices.min(axis=0) - halo - first) / spacing).astype(int))
+        high = np.minimum(shape, np.ceil((vertices.max(axis=0) + halo - first) / spacing).astype(int) + 1)
+        if np.any(high <= low):
+            continue
+        # Slice by the longest bounding-box axis to bound temporary storage on large faces.
+        axis = int(np.argmax(high - low))
+        axes = [np.arange(lo, hi) for lo, hi in zip(low, high)]
+        for station in axes[axis]:
+            section = list(axes)
+            section[axis] = np.array([station])
+            indices = np.stack(np.meshgrid(*section, indexing='ij'), axis=-1).reshape(-1, 3)
+            selected = face.contains_projection(first + spacing * indices, halo)
+            sites = tuple(indices[selected].T)
+            fixed = np.maximum(np.minimum(field[sites], retained[sites]), restriction[sites])
+            retained[sites] = restriction[sites] = fixed
 
 
 def admissible_growth(i,baseline,gradient,clearance,motion,spacing):
@@ -42,9 +65,14 @@ def admissible_growth(i,baseline,gradient,clearance,motion,spacing):
     return motion
 
 
-def propose(study, source, evidence, exe, work, spacing, move, weights, regularization_mm=0.):
+def propose(study, source, evidence, exe, work, spacing, move, weights, regularization_mm=None):
+    if regularization_mm is None:
+        regularization_mm = move
     slack = max(0., study.volume_limit_mm3 - source.volume)
     motion = solve_motion(study, evidence, exe, work, move, spacing, weights, slack, regularization_mm)
+    # The heat length is expressed in model units and scales down on line search.
+    # It is independent of the sampling lattice used to realize a trial.
+    diffusion_mm2 = .5 * move * regularization_mm
     if np.max(np.abs(motion.values)) <= 64. * np.finfo(float).eps * move:
         return None
 
@@ -61,6 +89,7 @@ def propose(study, source, evidence, exe, work, spacing, move, weights, regulari
     clearance = region_distances(study.space.exclusions, first, shape, spacing, band)
     np.maximum(restriction, -clearance, out=restriction)
     retained = region_distances(study.space.preserved, first, shape, spacing, band)
+    pin_selected_faces(study, first, spacing, baseline, retained, restriction)
     boundary_velocity = np.zeros_like(baseline)
     for i, section in enumerate(baseline):
         j, k = np.nonzero(abs(section) <= move + spacing)
@@ -81,7 +110,8 @@ def propose(study, source, evidence, exe, work, spacing, move, weights, regulari
     del boundary_velocity
 
     def field_at(growth_fraction):
-        return advance(baseline, retreat + growth_fraction * outward, retained, restriction, spacing, exe)
+        return advance(baseline, retreat + growth_fraction * outward, retained, restriction, spacing, exe,
+                       diffusion_mm2, move)
 
     def extract(field, adaptivity=0.):
         return surface_from_signed(field, first, spacing, band, adaptivity=adaptivity)

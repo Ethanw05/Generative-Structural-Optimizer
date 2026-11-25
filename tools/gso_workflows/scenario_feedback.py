@@ -55,6 +55,7 @@ class FeedbackAnalysis:
     def __init__(self, study, baseline, pitch, spacing, work, solver):
         self.study = study
         self.baseline = baseline
+        self.analysis_pitch = pitch
         self.edge = .95*pitch
         self.envelope = .25*spacing
         self.surface_tol = 1.5*spacing
@@ -144,43 +145,64 @@ def feedback_step(analysis, current, identity, label, targets, exe, pitch, spaci
         raise ValueError('Mutation evidence does not belong to the current geometry and case')
     event = dict(sweep=sweep, step=ordinal, case=label, parent=identity, field_geometry=parent.geometry,
                  parent_peak_MPa=parent.response.get('peak_MPa'))
-    move = pitch
-    weights = mutation_weights(label in analysis.study.histories, targets)
+    history = label in analysis.study.histories
+    directions = [('requested', mutation_weights(history, targets))]
+    if not history and targets.stiffness and targets.maximum_stress:
+        # Step reduction changes magnitude only. Probe the separate shape
+        # derivatives if the combined direction trades away another objective.
+        directions.extend([
+            ('stress', mutation_weights(False, replace(targets, stiffness=False))),
+            ('stiffness', mutation_weights(False, replace(targets, maximum_stress=False))),
+        ])
+
     def candidate(field, name):
         return EvaluatedSurface(None, [[field.response]], [], name)
+
     before = candidate(parent, 'parent')
     reference = analysis.field(analysis.baseline, analysis.baseline_id, label)
     scale = objective_scales(candidate(reference, 'reference'), targets)
     best = None
+    seen = {}
     event['trials'] = []
+    event['directions_searched'] = []
     with np.load(parent.path) as evidence:
-        while move >= spacing:
-            try:
-                child = propose(analysis.study, current, [evidence], exe, analysis.run, spacing, move, weights, 0.)
-                if child is None:
-                    break
-                if child.volume > analysis.study.volume_limit_mm3*(1.+1.e-6):
-                    raise InadmissibleBoundary('Candidate exceeds the material budget')
-                child_id = digest(child)
-                if child_id != identity:
-                    result = analysis.field(child, child_id, label)
-                    after = candidate(result, 'trial')
-                    scores = compromise_scores([before, after], targets, scale)
-                    improves = any(item is after for item in pareto([before, after], targets)) and scores['trial'] < scores['parent']
-                    event['trials'].append(dict(geometry=child_id, move_mm=move, regret=scores))
-                    # Compare reductions relative to the same parent. Store an uphill candidate
-                    # for an exploratory continuation if the line search finds no improving move.
-                    delta = tuple(trial-old for trial,old in zip(scores['trial'],scores['parent'],strict=True))
-                    if best is None or delta < best[0]:
-                        best = (delta, child, result, move)
-                    if improves:
+        for direction, weights in directions:
+            event['directions_searched'].append(direction)
+            move = pitch
+            dominates = False
+            while move >= spacing:
+                try:
+                    child = propose(analysis.study, current, [evidence], exe, analysis.run, spacing,
+                                    move, weights, analysis.analysis_pitch)
+                    if child is None:
                         break
-            except (InadmissibleBoundary, UnresolvedHistory, UnresolvedSolid) as error:
-                event['last_rejection'] = str(error)
-            move *= .5
+                    if child.volume > analysis.study.volume_limit_mm3*(1.+1.e-6):
+                        raise InadmissibleBoundary('Candidate exceeds the material budget')
+                    child_id = digest(child)
+                    if child_id != identity:
+                        if child_id not in seen:
+                            result = analysis.field(child, child_id, label)
+                            after = candidate(result, 'trial')
+                            front = pareto([before, after], targets)
+                            scores = compromise_scores([before, after], targets, scale)
+                            delta = tuple(a-b for a,b in zip(scores['trial'],scores['parent'],strict=True))
+                            improves = any(item is after for item in front) and delta < (0.,0.)
+                            seen[child_id] = (improves, len(front)==1 and front[0] is after)
+                            event['trials'].append(dict(geometry=child_id, direction=direction,
+                                                       move_mm=move, regret=scores))
+                            if best is None or delta < best[0]:
+                                best = (delta, child, result, move, direction)
+                        improves, dominates = seen[child_id]
+                        if improves:
+                            break
+                except (InadmissibleBoundary, UnresolvedHistory, UnresolvedSolid) as error:
+                    event['last_rejection'] = str(error)
+                move *= .5
+            if dominates:
+                break
     if best is not None:
-        delta, child, result, move = best
-        event.update(status='advanced', child=result.geometry, move_mm=move,
+        delta, child, result, move, direction = best
+        event.update(status='advanced', child=result.geometry, move_mm=move, direction=direction,
                      selection='improving' if delta < (0.,0.) else 'exploratory',
                      child_peak_MPa=result.response.get('peak_MPa'))
         analysis.checkpoint(child, event)

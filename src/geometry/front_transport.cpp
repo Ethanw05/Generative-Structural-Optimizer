@@ -1,3 +1,5 @@
+#include "front_volume.hpp"
+#include "level_set_curvature.hpp"
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -28,10 +30,13 @@ float upwind(float middle, float previous, float next, float sign)
 
 void transport(std::size_t nx, std::size_t ny, std::size_t nz, const float* field,
                const float* speed, const float* retained, const float* restriction,
-               float spacing, float* result)
+               float spacing, float diffusionMm2, float moveBound, float* result)
 {
     const auto limit = std::numeric_limits<std::size_t>::max();
     if (nx == 0 || ny == 0 || nz == 0 || ny > limit / nz || nx > limit / (ny * nz) ||
+        !std::isfinite(diffusionMm2) || diffusionMm2 < 0.f || !std::isfinite(moveBound) || moveBound < 0.f ||
+        (diffusionMm2 > 0.f && moveBound == 0.f) ||
+        nz > static_cast<std::size_t>(std::numeric_limits<std::ptrdiff_t>::max()) / ny ||
         !std::isfinite(spacing) || spacing <= 0.f || !field || !speed || !retained || !restriction || !result)
     {
         throw std::invalid_argument("Invalid front data");
@@ -48,7 +53,8 @@ void transport(std::size_t nx, std::size_t ny, std::size_t nz, const float* fiel
             throw std::invalid_argument("Nonfinite front data");
         }
         result[id] = std::max(std::min(field[id], retained[id]), restriction[id]);
-        if (speed[id] == 0.f) { continue; }
+        const bool inCurvatureBand = diffusionMm2 > 0.f && std::abs(field[id]) <= moveBound + 2.f * spacing;
+        if ((!inCurvatureBand && speed[id] == 0.f) || restriction[id] >= retained[id]) { continue; }
         const auto y = id / nz % ny;
         const auto z = id % nz;
         const unsigned flags = (id < slab) | ((id >= count - slab) << 1) |
@@ -58,10 +64,14 @@ void transport(std::size_t nx, std::size_t ny, std::size_t nz, const float* fiel
         maximum = std::max(maximum, std::abs(speed[id]));
     }
     if (samples.empty()) { return; }
-    const double needed = std::ceil(3. * maximum / spacing);
+    // Explicit combined CFL bound for normal transport and tangential diffusion in 3D.
+    const double inverseSpacing = 1. / spacing;
+    const double diffusion = diffusionMm2 * inverseSpacing * inverseSpacing;
+    const double needed = std::ceil(3. * maximum * inverseSpacing + 6. * diffusion);
     if (needed > std::numeric_limits<int>::max()) { throw std::invalid_argument("Unresolved front speed"); }
     const int steps = std::max(1, static_cast<int>(needed));
     for (auto& sample : samples) { sample.increment /= static_cast<float>(steps) * spacing; }
+    const float diffusionStep = static_cast<float>(diffusion / steps);
     std::vector<float> update(samples.size());
     for (int step = 0; step < steps; ++step)
     {
@@ -76,8 +86,17 @@ void transport(std::size_t nx, std::size_t ny, std::size_t nz, const float* fiel
                                    result[(flags & 8) ? id : id + nz], sign);
             const float sz = upwind(middle, result[(flags & 16) ? id : id - 1],
                                    result[(flags & 32) ? id : id + 1], sign);
-            update[i] = std::max(std::min(middle - speedStep * std::sqrt(sx*sx + sy*sy + sz*sz),
-                                          retained[id]), restriction[id]);
+            float value = middle - speedStep * std::sqrt(sx*sx + sy*sy + sz*sz);
+            if (diffusionStep > 0.f)
+            {
+                if (!flags)
+                {
+                    value += diffusionStep * gso::geometry::tangentialLaplacian(
+                        result + id, static_cast<std::ptrdiff_t>(slab), static_cast<std::ptrdiff_t>(nz));
+                }
+                value = std::clamp(value, field[id] - moveBound, field[id] + moveBound);
+            }
+            update[i] = std::max(std::min(value, retained[id]), restriction[id]);
         }
         for (std::size_t i = 0; i < samples.size(); ++i) { result[samples[i].index] = update[i]; }
     }
@@ -89,7 +108,38 @@ extern "C" GSO_EXPORT int gsoAdvanceFront(std::size_t nx, std::size_t ny, std::s
     const float* field, const float* speed, const float* retained, const float* restriction,
     float spacing, float* result) noexcept
 {
-    try { transport(nx, ny, nz, field, speed, retained, restriction, spacing, result); }
+    try { transport(nx, ny, nz, field, speed, retained, restriction, spacing, 0.f, 0.f, result); }
+    catch (const std::invalid_argument&) { return 1; }
+    catch (...) { return 2; }
+    return 0;
+}
+
+extern "C" GSO_EXPORT int gsoAdvanceRegularizedFront(std::size_t nx, std::size_t ny, std::size_t nz,
+    const float* field, const float* speed, const float* retained, const float* restriction,
+    float spacing, float diffusionMm2, float moveBound, float* result) noexcept
+{
+    try { transport(nx, ny, nz, field, speed, retained, restriction, spacing, diffusionMm2, moveBound, result); }
+    catch (const std::invalid_argument&) { return 1; }
+    catch (...) { return 2; }
+    return 0;
+}
+
+extern "C" GSO_EXPORT int gsoAdvanceVolumeNeutralFront(std::size_t nx, std::size_t ny, std::size_t nz,
+    const float* field, const float* speed, const float* retained, const float* restriction,
+    float spacing, float diffusionMm2, float moveBound, float* result) noexcept
+{
+    try
+    {
+        transport(nx, ny, nz, field, speed, retained, restriction, spacing, diffusionMm2, moveBound, result);
+        if (diffusionMm2 > 0.f)
+        {
+            const auto count = nx * ny * nz;  // Dimensions validated by transport.
+            std::vector<float> mechanical(count);
+            transport(nx, ny, nz, field, speed, retained, restriction, spacing, 0.f, 0.f, mechanical.data());
+            gso::geometry::projectTransportVolume(count, field, mechanical.data(), retained, restriction,
+                                                 spacing, moveBound, result);
+        }
+    }
     catch (const std::invalid_argument&) { return 1; }
     catch (...) { return 2; }
     return 0;

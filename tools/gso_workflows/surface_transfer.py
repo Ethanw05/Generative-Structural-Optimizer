@@ -2,7 +2,7 @@
 import numpy as np
 import trimesh
 from .mesh_quality import InadmissibleBoundary
-from scipy.spatial import cKDTree
+from .surface_locator import SurfaceLocator
 
 
 def native_samples(face,max_spacing,with_normals=False):
@@ -27,27 +27,24 @@ def project_face(points,skin,face,tolerance,spacing=.8):
     triangles=points[skin]
     normal=np.cross(triangles[:,1]-triangles[:,0],triangles[:,2]-triangles[:,0])
     lengths=np.linalg.norm(normal,axis=1)
-    center=triangles.mean(axis=1)
-    pick=((normal@face.normal)>.35*lengths)&(np.abs((center-face.origin)@face.normal)<2.*tolerance)
-    eligible=np.flatnonzero(pick)
-    if not len(eligible):raise InadmissibleBoundary('Missing prescribed face on realized solid')
-    tree=cKDTree(center[eligible])
-    samples,areas=native_samples(face,spacing)
-    ids=[];weights=[];distances=[];positions=[]
-    for start in range(0,len(samples),512):
-        query=samples[start:start+512];a=areas[start:start+512]
-        k=min(24,len(eligible))
-        nearby=eligible[tree.query(query,k=k)[1]].reshape(len(query),k)
-        tri=triangles[nearby]
-        closest=trimesh.triangles.closest_point(tri.reshape(-1,3,3),np.repeat(query,k,axis=0)).reshape(len(query),k,3)
-        distance=np.linalg.norm(closest-query[:,None,:],axis=2)
-        which=np.argmin(distance,axis=1);row=np.arange(len(query))
-        chosen=nearby[row,which];q=closest[row,which]
-        bary=trimesh.triangles.points_to_barycentric(triangles[chosen],q)
-        ids.append(skin[chosen]);weights.append(a[:,None]*bary);distances.append(distance[row,which]);positions.append(q)
-    distance=np.concatenate(distances)
-    worst=float(distance.max());rms=float(np.sqrt(np.average(distance**2,weights=areas)))
-    if worst>tolerance:
+    # A triangle reaching the CAD plane can have a remote centroid on a
+    # graded or oblique mesh. Its normal interval is a conservative broad phase.
+    plane_distance = (triangles-face.origin) @ face.normal
+    eligible = ((normal @ face.normal > .35*lengths)
+                & (plane_distance.min(axis=1) <= tolerance)
+                & (plane_distance.max(axis=1) >= -tolerance))
+    if not np.any(eligible):
+        raise InadmissibleBoundary('Missing prescribed face on realized solid')
+    receiver = skin[eligible]
+    locator = SurfaceLocator(points, receiver)
+    samples, areas = native_samples(face, spacing)
+    cells, projected = locator.nearest(samples)
+    nodes = receiver[cells]
+    barycentric = trimesh.triangles.points_to_barycentric(points[nodes], projected)
+    distance = np.linalg.norm(projected-samples, axis=1)
+    worst = float(distance.max())
+    rms = float(np.sqrt(np.average(distance**2, weights=areas)))
+    if worst > tolerance:
         raise InadmissibleBoundary(f'Prescribed face misses material: maximum {worst:.4f} mm, RMS {rms:.4f} mm')
-    return np.vstack(ids),np.vstack(weights),dict(max_mm=worst,rms_mm=rms,
-            centroid_drift_mm=(np.average(np.vstack(positions)-samples,axis=0,weights=areas)).tolist())
+    drift = np.average(projected-samples, axis=0, weights=areas)
+    return nodes, areas[:,None]*barycentric, dict(max_mm=worst, rms_mm=rms, centroid_drift_mm=drift.tolist())

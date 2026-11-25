@@ -73,7 +73,8 @@ def grid_wrench(load,origin,shape,pitch,node_map,executable):
 
 
 def boundary_wrench(load,local,skin,tolerance,executable):
-    from .cad_patch import TrianglePatch,SurfaceLocator,project_patch
+    from .cad_patch import TrianglePatch,project_patch
+    from .surface_locator import SurfaceLocator
     locator=SurfaceLocator(local,skin) if any(isinstance(face,TrianglePatch) for face in load.faces) else None
     ids=[];weights=[];points=[];areas=[];reports=[]
     for face in load.faces:
