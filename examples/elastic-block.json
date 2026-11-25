@@ -1,0 +1,207 @@
+{
+  "schema": "gso.study/1",
+  "geometry": {
+    "domain": {
+      "min_mm": [
+        0,
+        0,
+        0
+      ],
+      "max_mm": [
+        4,
+        1,
+        1
+      ]
+    },
+    "background": 1,
+    "kernels": []
+  },
+  "material": {
+    "young_MPa": 2000,
+    "poisson": 0,
+    "density_kg_m3": 1200
+  },
+  "sites_mm": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      4,
+      0,
+      0
+    ]
+  ],
+  "support_mm": 9,
+  "integration": {
+    "divisions": [
+      2,
+      2,
+      2
+    ],
+    "boundary_depth": 2,
+    "max_visits": 10000
+  },
+  "restraints": [
+    {
+      "position_mm": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "position_mm": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "position_mm": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "position_mm": [
+        0,
+        1,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "position_mm": [
+        0,
+        1,
+        0
+      ],
+      "direction": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "position_mm": [
+        0,
+        1,
+        0
+      ],
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "position_mm": [
+        0,
+        0,
+        1
+      ],
+      "direction": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "position_mm": [
+        0,
+        0,
+        1
+      ],
+      "direction": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "position_mm": [
+        0,
+        0,
+        1
+      ],
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "load_cases": [
+    {
+      "name": "axial",
+      "kind": "static",
+      "forces": [
+        {
+          "position_mm": [
+            4,
+            0.5,
+            0.5
+          ],
+          "force_N": [
+            5,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "oscillating-axial",
+      "kind": "harmonic",
+      "frequency_Hz": 60000,
+      "rayleigh_mass_per_s": 750,
+      "rayleigh_stiffness_s": 1.4e-7,
+      "forces": [
+        {
+          "position_mm": [
+            4,
+            0.5,
+            0.5
+          ],
+          "force_N": [
+            5,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}
