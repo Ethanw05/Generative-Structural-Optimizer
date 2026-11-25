@@ -2,7 +2,7 @@
 from typing import NamedTuple
 import numpy as np
 from scipy import sparse
-from .surface_transfer import project_face
+from .surface_transfer import project_face, project_fixture
 from .analysis_boundary import exterior,require_closed_fans
 from .cad_wrench import SurfaceWrench, boundary_wrench
 
@@ -52,15 +52,12 @@ def assemble(points,cells,study,surface_tol):
     normal=np.cross(tri[:,1]-tri[:,0],tri[:,2]-tri[:,0])
     inward=np.einsum('ij,ij->i',normal,tri.mean(1)-local[t[owner]].mean(1))<0.
     skin[inward]=skin[inward,::-1]
-    normal[inward]*=-1.
     require_closed_fans(skin)
-    length=np.linalg.norm(normal,axis=1)
     fixed=np.zeros(n,bool);fixture_area=0.;fixture_transfer=[]
     for face in study.fixed_faces:
-        ids,weights,dist=project_face(local,skin,face,surface_tol)
-        nodes=np.unique(skin[(normal@face.normal)>.35*length])
-        fixed[nodes[face.contains_projection(local[nodes],surface_tol)]]=True
-        fixture_area+=weights.sum()
+        nodes,area,dist=project_fixture(local,skin,face,surface_tol)
+        fixed[nodes]=True
+        fixture_area+=area
         fixture_transfer.append(dist)
     return ElasticSystem(p,t,volume,grad,shear,lame,matrix,skin,owner,local,fixed,fixture_area,fixture_transfer)
 

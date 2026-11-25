@@ -22,7 +22,7 @@ def native_samples(face,max_spacing,with_normals=False):
     return np.vstack(xyz),np.concatenate(weights)
 
 
-def project_face(points,skin,face,tolerance,spacing=.8):
+def _receiver(points,skin,face,tolerance):
     points=np.asarray(points)
     triangles=points[skin]
     normal=np.cross(triangles[:,1]-triangles[:,0],triangles[:,2]-triangles[:,0])
@@ -35,12 +35,14 @@ def project_face(points,skin,face,tolerance,spacing=.8):
                 & (plane_distance.max(axis=1) >= -tolerance))
     if not np.any(eligible):
         raise InadmissibleBoundary('Missing prescribed face on realized solid')
-    receiver = skin[eligible]
-    locator = SurfaceLocator(points, receiver)
+    return SurfaceLocator(points, skin[eligible])
+
+
+def _quadrature(locator, face, tolerance, spacing):
     samples, areas = native_samples(face, spacing)
     cells, projected = locator.nearest(samples)
-    nodes = receiver[cells]
-    barycentric = trimesh.triangles.points_to_barycentric(points[nodes], projected)
+    nodes = locator.faces[cells]
+    barycentric = trimesh.triangles.points_to_barycentric(locator.vertices[nodes], projected)
     distance = np.linalg.norm(projected-samples, axis=1)
     worst = float(distance.max())
     rms = float(np.sqrt(np.average(distance**2, weights=areas)))
@@ -48,3 +50,29 @@ def project_face(points,skin,face,tolerance,spacing=.8):
         raise InadmissibleBoundary(f'Prescribed face misses material: maximum {worst:.4f} mm, RMS {rms:.4f} mm')
     drift = np.average(projected-samples, axis=0, weights=areas)
     return nodes, areas[:,None]*barycentric, dict(max_mm=worst, rms_mm=rms, centroid_drift_mm=drift.tolist())
+
+
+def project_face(points, skin, face, tolerance, spacing=.8):
+    locator = _receiver(points, skin, face, tolerance)
+    return _quadrature(locator, face, tolerance, spacing)
+
+
+def project_fixture(points, skin, face, tolerance, spacing=.8):
+    """Recover Dirichlet support on the receiving sheet of the selected CAD face."""
+    locator = _receiver(points, skin, face, tolerance)
+    nodes, weights, distances = _quadrature(locator, face, tolerance, spacing)
+    epsilon = 64.*np.finfo(float).eps
+    supported = nodes[weights > epsilon * weights.sum(axis=1)[:, None]]
+
+    # Quadrature alone can undersample fine triangles. Trace each candidate
+    # node back to the selected CAD patch and check which sheet receives it.
+    nearby = np.unique(locator.faces)
+    nearby = nearby[face.contains_projection(points[nearby], tolerance)]
+    relative = (points[nearby] - face.origin) @ face.normal
+    query = points[nearby] - relative[:,None]*face.normal
+    cells, hits = locator.nearest(query)
+    first_sheet = np.any(locator.faces[cells] == nearby[:,None], axis=1)
+    roundoff = epsilon * max(1., np.max(np.abs(points)))
+    # Shared edges can have several equally close receiving triangles.
+    tied = np.abs(relative) <= np.linalg.norm(query-hits,axis=1) + roundoff
+    return np.union1d(supported, nearby[first_sheet | tied]), float(weights.sum()), distances

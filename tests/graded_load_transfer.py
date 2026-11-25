@@ -31,3 +31,27 @@ for rotation in [np.eye(3), *Rotation.random(3,random_state=rng).as_matrix()]:
     np.testing.assert_allclose(np.einsum('ij,ijk->k',weights,points[nodes]), areas @ expected, atol=1.e-13)
     assert report['max_mm'] < 1.e-11
 print('Graded CAD patch transferred area and first moment in four orientations.')
+
+# Two sheet faces overlap in projection and lie inside the transfer tolerance.
+# Only the top face of the selected sheet transmits the prescribed fixture.
+from itertools import permutations, product
+from gso_workflows.design_space import Face
+from gso_workflows.tetra_elasticity import assemble
+import trimesh
+
+base = np.array(list(product(range(2),repeat=3)), dtype=float)
+base[:,2] *= .04
+two_sheets = np.vstack((base, base+[0.,0.,.12]))
+cells = []
+for order in permutations(range(3)):
+    corners = np.vstack((np.zeros(3,dtype=int),np.eye(3,dtype=int)[list(order)].cumsum(axis=0)))
+    cells.append(np.ravel_multi_index(corners.T,(2,2,2)))
+cells = np.array(cells)
+upper = trimesh.creation.box(extents=(1.,1.,.04))
+upper.apply_translation([.5,.5,.14])
+fixture = Face.pick(upper,[.5,.5,.16],[0.,0.,1.])
+study = SimpleNamespace(world_origin=np.zeros(3),world_rotation=np.eye(3),
+                        fixed_faces=(fixture,),young_mpa=1800.,poisson=.32)
+system = assemble(two_sheets,np.vstack((cells,cells+8)),study,.15)
+np.testing.assert_array_equal(system.fixed, np.isclose(two_sheets[:,2], .16))
+print('Only the selected sheet carries fixture reactions.')
