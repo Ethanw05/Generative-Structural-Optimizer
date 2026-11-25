@@ -110,3 +110,8 @@ for height, corrugated in zip(heights,(False,True),strict=True):
         assert np.median(residual) > .015
     else:
         assert np.max(residual) < 1.e-12
+
+from gso_workflows.surface_roughness import crease_length
+box = trimesh.creation.box(extents=(2.,3.,4.))
+np.testing.assert_allclose(crease_length(box, 45.), 4.*(2.+3.+4.))
+assert crease_length(box, 100.) == 0.

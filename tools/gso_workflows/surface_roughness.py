@@ -53,3 +53,12 @@ def surface_residuals(mesh, radius_mm, count=2048, seed=31567):
     if not residuals:
         raise ValueError('No site supported a full local quadratic fit')
     return np.array(residuals), len(residuals)/count
+
+
+def crease_length(mesh, angle_degrees):
+    """Total length of all internal mesh edges sharper than a specified dihedral."""
+    if not np.isfinite(angle_degrees) or not 0. < angle_degrees < 180.:
+        raise ValueError('The dihedral threshold must lie between 0 and 180 degrees')
+    sharp = mesh.face_adjacency_angles > np.deg2rad(angle_degrees)
+    edges = mesh.face_adjacency_edges[sharp]
+    return float(np.linalg.norm(mesh.vertices[edges[:,1]]-mesh.vertices[edges[:,0]],axis=1).sum())
