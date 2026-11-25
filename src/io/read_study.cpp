@@ -1,15 +1,15 @@
 #include "dispatch.hpp"
 #include "gso/mechanics/boundary.hpp"
 #include "gso/mechanics/equilibrium.hpp"
+#include "scenario.hpp"
 #include "study.hpp"
 #include <fstream>
 #include <json.hpp>
+#include <optional>
 #include <set>
 #include <stdexcept>
 
 namespace gso
-{
-namespace
 {
 using Json = nlohmann::json;
 Point point(const Json &a)
@@ -29,6 +29,8 @@ SurfacePatch patch(const Json &v)
 {
     return {point(v.at("origin_mm")), point(v.at("edge_u_mm")), point(v.at("edge_v_mm"))};
 }
+namespace
+{
 Box box(const Json &b)
 {
     return {point(b.at("min_mm")), point(b.at("max_mm"))};
@@ -96,50 +98,37 @@ Json analyze(const Json &data)
         }
     }
     const auto system = assemble(model);
+    std::optional<StressRecovery> recovery;
+    std::optional<System> freeSystem;
     Json cases = Json::object();
     for (const auto &load : data.at("load_cases"))
     {
-        const std::string name = load.at("name"), kind = load.at("kind");
+        const std::string name = load.at("name");
         if (name.empty() || cases.contains(name))
         {
             throw std::invalid_argument("Duplicate or empty load name");
         }
-        Excitation drive;
-        if (kind == "harmonic")
+        bool stress = load.value("recover_stress", false);
+        if (load.contains("limits"))
         {
-            drive = {load.at("frequency_Hz"), load.at("rayleigh_mass_per_s"),
-                     load.at("rayleigh_stiffness_s")};
-            if (drive.hertz <= 0.)
+            const auto &limits = load.at("limits");
+            stress |= limits.contains("regional_peak_rms_MPa") || limits.contains("stress_p8_MPa") || limits.contains("peak_von_mises_MPa");
+        }
+        if (stress && !recovery)
+        {
+            recovery.emplace(model, system);
+        }
+        const System *current = &system;
+        if (load.value("free_body", false))
+        {
+            if (!freeSystem)
             {
-                throw std::invalid_argument("Harmonic frequency must be positive");
+                freeSystem = system;
+                freeSystem->constraints.resize(0, system.stiffness.cols());
             }
+            current = &*freeSystem;
         }
-        else if (kind != "static")
-        {
-            throw std::invalid_argument("Unsupported load kind");
-        }
-        std::vector<Force> forces;
-        if (load.contains("forces"))
-        {
-            for (const auto &f : load.at("forces"))
-            {
-                forces.push_back({point(f.at("position_mm")), point(f.at("force_N"))});
-            }
-        }
-        if (load.contains("tractions"))
-        {
-            for (const auto &t : load.at("tractions"))
-            {
-                const auto distributed =
-                    integrateTraction(patch(t), point(t.at("traction_MPa")), model.support / 3.);
-                forces.insert(forces.end(), distributed.begin(), distributed.end());
-            }
-        }
-        const auto result = solve(system, loadVector(model, system, forces), drive);
-        cases[name] = {{"work_real_Nmm", result.workNmm.real()},
-                       {"work_imag_Nmm", result.workNmm.imag()},
-                       {"work_amplitude_Nmm", std::abs(result.workNmm)},
-                       {"relative_residual", result.relativeResidual}};
+        cases[name] = evaluateCase(model, *current, load, stress ? &*recovery : nullptr);
     }
     if (cases.empty())
     {

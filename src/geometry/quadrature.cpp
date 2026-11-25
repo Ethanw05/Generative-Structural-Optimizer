@@ -8,20 +8,21 @@ namespace
 {
 constexpr unsigned maxCutDepth = 12;
 void visit(const ImplicitSolid &solid, const Box &root, unsigned remaining, std::size_t budget,
-           Quadrature &out)
+           const SampleIndex &rootIndex, Quadrature &out)
 {
     struct Cell
     {
         Box box;
         unsigned depth;
+        SampleIndex index;
     };
     // Depth-first subdivision needs at most seven deferred siblings per level.
     std::array<Cell, 1 + 7 * maxCutDepth> pending;
-    pending[0] = {root, remaining};
+    pending[0] = {root, remaining, rootIndex};
     std::size_t count = 1;
     while (count > 0)
     {
-        const auto [box, depth] = pending[--count];
+        const auto [box, depth, index] = pending[--count];
         if (++out.visits > budget)
         {
             throw std::runtime_error("Integration subdivision budget exhausted");
@@ -37,8 +38,10 @@ void visit(const ImplicitSolid &solid, const Box &root, unsigned remaining, std:
             for (unsigned mask = 0; mask < 8; ++mask)
             {
                 Box child = box;
+                SampleIndex childIndex{};
                 for (int a = 0; a < 3; ++a)
                 {
+                    childIndex[a] = 2 * index[a] + ((mask >> a) & 1U);
                     if ((mask & (1U << a)) != 0)
                     {
                         child.low[a] = mid[a];
@@ -48,7 +51,7 @@ void visit(const ImplicitSolid &solid, const Box &root, unsigned remaining, std:
                         child.high[a] = mid[a];
                     }
                 }
-                pending[count++] = {child, depth - 1};
+                pending[count++] = {child, depth - 1, childIndex};
             }
             continue;
         }
@@ -71,7 +74,9 @@ void visit(const ImplicitSolid &solid, const Box &root, unsigned remaining, std:
             }
             if (state == Occupancy::full || solid.contains(p))
             {
-                out.points.push_back({p, volume / 8.0});
+                SampleIndex address{};
+                for (int a = 0; a < 3; ++a) { address[a] = 2 * index[a] + ((mask >> a) & 1U); }
+                out.points.push_back({p, volume / 8.0, address, remaining - depth + 1});
             }
         }
     }
@@ -112,7 +117,7 @@ Quadrature integrate(const ImplicitSolid &solid, const IntegrationSettings &s)
                         cell.high[a] = domain.high[a];
                     }
                 }
-                visit(solid, cell, s.boundaryDepth, s.maxVisits, out);
+                visit(solid, cell, s.boundaryDepth, s.maxVisits, {i, j, k}, out);
             }
         }
     }

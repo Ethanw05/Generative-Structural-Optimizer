@@ -2,13 +2,17 @@
 #include "gso/geometry/implicit_solid.hpp"
 #include <array>
 #include <cstddef>
+#include <cstdint>
 
 namespace gso
 {
+using SampleIndex = std::array<std::int64_t, 3>;
 struct VolumePoint
 {
     Point location;
     double volume;
+    SampleIndex index{};
+    unsigned level = 0;
 };
 struct IntegrationSettings
 {

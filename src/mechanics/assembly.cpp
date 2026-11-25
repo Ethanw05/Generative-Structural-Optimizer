@@ -50,7 +50,7 @@ System assemble(const Model &model)
     }
     if (model.sites.size() < 4 ||
         model.sites.size() > static_cast<std::size_t>(std::numeric_limits<int>::max() / 6) ||
-        model.restraints.size() < 6 || model.restraints.size() > 3 * model.sites.size())
+        model.restraints.size() > 3 * model.sites.size())
     {
         throw std::invalid_argument("Invalid displacement site or restraint count");
     }
