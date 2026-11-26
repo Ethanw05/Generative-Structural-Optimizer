@@ -1,0 +1,287 @@
+{
+  "linear_elastic": true,
+  "force_N": 33.0,
+  "torque_Nmm": 1000.0,
+  "frame": "arm-local CAD",
+  "force_application": "distributed on motor pad",
+  "moment_application": "pure couple on motor bolt bores",
+  "fixtures": "same two hub attachment faces",
+  "parts": {
+    "trial": {
+      "geometry": "d6db0ba20201937d259d71af6a1b051ed50f55557c67cda8ddaaaca411435a55",
+      "n_tets": 1413662,
+      "mesh": {
+        "nodes": 258739,
+        "effective_surface_tolerance_mm": 0.06,
+        "tetrahedron_longest_edge_mm": {
+          "median": 0.9232311668230222,
+          "p95": 1.0642975133409616,
+          "maximum": 2.555209536479543
+        },
+        "refinement": {
+          "method": "refine tetrahedra on registered exterior",
+          "source_tetrahedra": 153003,
+          "source_skin": "c7b452555981e33ded961dc66fd37c5943550b2fab5726fc0569a6a4bf0791d6",
+          "regular_tet_equivalent_edge_mm": 0.9,
+          "maximum_tetrahedron_volume_mm3": 0.08591347391416553
+        }
+      },
+      "modes": {
+        "ABS": {
+          "span": {
+            "positive": {
+              "peak_MPa": 6.679155470070692,
+              "regional_peak_rms_MPa": 0.4926363649886644,
+              "required_yield_MPa_for_factor_two": 13.358310940141385,
+              "peak_at_world_mm": [
+                -19.47775251371027,
+                -5.8521572488570985,
+                25.380578183875198
+              ],
+              "force_world_N": [
+                -22.548583372934218,
+                0.0,
+                24.094841519998294
+              ],
+              "reaction_world_N": [
+                22.54858337297117,
+                -6.145106645760734e-11,
+                -24.094841520021024
+              ],
+              "moment_balance_world_Nmm": [
+                6.628900983685071e-09,
+                1.1260392972223254e-08,
+                6.707791322391188e-09
+              ],
+              "compliance_Nmm": 3.7533093313159256,
+              "signed_displacement_mm": 0.1137366464035129,
+              "stiffness_N_per_mm": 290.14395134285195
+            },
+            "negative": {
+              "peak_MPa": 6.679155470070692,
+              "regional_peak_rms_MPa": 0.4926363649886644,
+              "required_yield_MPa_for_factor_two": 13.358310940141385,
+              "peak_at_world_mm": [
+                -19.47775251371027,
+                -5.8521572488570985,
+                25.380578183875198
+              ],
+              "force_world_N": [
+                22.548583372934218,
+                0.0,
+                -24.094841519998294
+              ],
+              "reaction_world_N": [
+                -22.54858337297117,
+                6.145106645760734e-11,
+                24.094841520021024
+              ],
+              "moment_balance_world_Nmm": [
+                -6.628900983685071e-09,
+                -1.1260392972223254e-08,
+                -6.707791322391188e-09
+              ],
+              "compliance_Nmm": 3.7533093313159256,
+              "signed_displacement_mm": -0.1137366464035129,
+              "stiffness_N_per_mm": 290.14395134285195
+            }
+          },
+          "lateral": {
+            "positive": {
+              "peak_MPa": 72.94648898782492,
+              "regional_peak_rms_MPa": 3.9041511163655445,
+              "required_yield_MPa_for_factor_two": 145.89297797564984,
+              "peak_at_world_mm": [
+                -19.47775251371027,
+                -5.8521572488570985,
+                25.380578183875198
+              ],
+              "force_world_N": [
+                24.094841519998294,
+                0.0,
+                22.548583372934218
+              ],
+              "reaction_world_N": [
+                -24.094841519559893,
+                -1.75935710444719e-10,
+                -22.54858337304402
+              ],
+              "moment_balance_world_Nmm": [
+                5.257004165315493e-09,
+                2.040320459251177e-07,
+                -6.250102768667887e-09
+              ],
+              "compliance_Nmm": 242.54615212371948,
+              "signed_displacement_mm": 7.349883397688469,
+              "stiffness_N_per_mm": 4.489867146787454
+            },
+            "negative": {
+              "peak_MPa": 72.94648898782492,
+              "regional_peak_rms_MPa": 3.9041511163655445,
+              "required_yield_MPa_for_factor_two": 145.89297797564984,
+              "peak_at_world_mm": [
+                -19.47775251371027,
+                -5.8521572488570985,
+                25.380578183875198
+              ],
+              "force_world_N": [
+                -24.094841519998294,
+                0.0,
+                -22.548583372934218
+              ],
+              "reaction_world_N": [
+                24.094841519559893,
+                1.75935710444719e-10,
+                22.54858337304402
+              ],
+              "moment_balance_world_Nmm": [
+                -5.257004165315493e-09,
+                -2.040320459251177e-07,
+                6.250102768667887e-09
+              ],
+              "compliance_Nmm": 242.54615212371948,
+              "signed_displacement_mm": -7.349883397688469,
+              "stiffness_N_per_mm": 4.489867146787454
+            }
+          },
+          "torque": {
+            "positive": {
+              "peak_MPa": 11.651523459516124,
+              "regional_peak_rms_MPa": 1.7389805762819264,
+              "required_yield_MPa_for_factor_two": 23.303046919032248,
+              "peak_at_world_mm": [
+                -136.89024042574573,
+                -1.9474682182175604,
+                132.38289599988315
+              ],
+              "force_world_N": [
+                4.736488978807074e-14,
+                2.129440829397311e-18,
+                -1.4176507190377663e-13
+              ],
+              "reaction_world_N": [
+                1.7879142610865983e-10,
+                -3.39952233030516e-11,
+                -1.4072421006261493e-10
+              ],
+              "moment_balance_world_Nmm": [
+                -1.1259820853481983e-09,
+                -1.3911375496000744e-08,
+                -5.56060536505143e-09
+              ],
+              "compliance_Nmm": 43.637251096772616,
+              "applied_moment_local_Nmm": [
+                8.024483855173514e-14,
+                8.611861224139261e-14,
+                999.9999999999931
+              ],
+              "signed_rotation_deg": 2.500230317397693,
+              "stiffness_Nmm_per_rad": 22916.20060535755
+            },
+            "negative": {
+              "peak_MPa": 11.651523459516124,
+              "regional_peak_rms_MPa": 1.7389805762819264,
+              "required_yield_MPa_for_factor_two": 23.303046919032248,
+              "peak_at_world_mm": [
+                -136.89024042574573,
+                -1.9474682182175604,
+                132.38289599988315
+              ],
+              "force_world_N": [
+                -4.736488978807074e-14,
+                -2.129440829397311e-18,
+                1.4176507190377663e-13
+              ],
+              "reaction_world_N": [
+                -1.7879142610865983e-10,
+                3.39952233030516e-11,
+                1.4072421006261493e-10
+              ],
+              "moment_balance_world_Nmm": [
+                1.1259820853481983e-09,
+                1.3911375496000744e-08,
+                5.56060536505143e-09
+              ],
+              "compliance_Nmm": 43.637251096772616,
+              "applied_moment_local_Nmm": [
+                -8.024483855173514e-14,
+                -8.611861224139261e-14,
+                -999.9999999999931
+              ],
+              "signed_rotation_deg": -2.500230317397693,
+              "stiffness_Nmm_per_rad": 22916.20060535755
+            }
+          },
+          "span twist": {
+            "positive": {
+              "peak_MPa": 19.517069939571332,
+              "regional_peak_rms_MPa": 2.4065345806143608,
+              "required_yield_MPa_for_factor_two": 39.034139879142664,
+              "peak_at_world_mm": [
+                -19.47775251371027,
+                -5.8521572488570985,
+                25.380578183875198
+              ],
+              "force_world_N": [
+                -5.039371697712625e-16,
+                3.331779296900095e-13,
+                -1.5178830414797062e-16
+              ],
+              "reaction_world_N": [
+                -1.2700140938903814e-10,
+                5.491251897637994e-11,
+                -2.8232566284813743e-10
+              ],
+              "moment_balance_world_Nmm": [
+                -3.572995513345667e-08,
+                -4.977052925347891e-08,
+                -3.0810998197239314e-08
+              ],
+              "compliance_Nmm": 78.7241566007119,
+              "applied_moment_local_Nmm": [
+                1000.0000000000026,
+                -1.0355050150678835e-12,
+                1.607047828144914e-13
+              ],
+              "signed_rotation_deg": 4.510561918947753,
+              "stiffness_Nmm_per_rad": 12702.58130642148
+            },
+            "negative": {
+              "peak_MPa": 19.517069939571332,
+              "regional_peak_rms_MPa": 2.4065345806143608,
+              "required_yield_MPa_for_factor_two": 39.034139879142664,
+              "peak_at_world_mm": [
+                -19.47775251371027,
+                -5.8521572488570985,
+                25.380578183875198
+              ],
+              "force_world_N": [
+                5.039371697712625e-16,
+                -3.331779296900095e-13,
+                1.5178830414797062e-16
+              ],
+              "reaction_world_N": [
+                1.2700140938903814e-10,
+                -5.491251897637994e-11,
+                2.8232566284813743e-10
+              ],
+              "moment_balance_world_Nmm": [
+                3.572995513345667e-08,
+                4.977052925347891e-08,
+                3.0810998197239314e-08
+              ],
+              "compliance_Nmm": 78.7241566007119,
+              "applied_moment_local_Nmm": [
+                -1000.0000000000026,
+                1.0355050150678835e-12,
+                -1.607047828144914e-13
+              ],
+              "signed_rotation_deg": -4.510561918947753,
+              "stiffness_Nmm_per_rad": 12702.58130642148
+            }
+          }
+        }
+      }
+    }
+  }
+}
