@@ -7,7 +7,7 @@ root=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(root/'build/sunbeam33/meshlib-runtime'),str(root/'build/sunbeam33/deps'),str(root/'tools')]
 import numpy as np
 from gso_workflows.material_shells import material_shells,verify_constraints
-from gso_workflows.analysis_mesh import volume_mesh,digest
+from gso_workflows.analysis_mesh import volume_mesh,digest,registered_analysis_mesh
 # A conforming volume can have an invalid material surface when cells touch only
 # along an edge or vertex. Both must be rejected before stress recovery.
 from gso_workflows.analysis_boundary import analysis_skin
@@ -65,6 +65,17 @@ with tempfile.TemporaryDirectory(dir=root/'build') as tmp:
     np.savez(folder/f'surface-{key[:24]}-0.8-0.04.npz',source=key,p=points,tet=full)
     p,t=volume_mesh(original,folder,.8,.04)
     recovered=analysis_skin(p,t)
+    registered=folder/f'conforming-surface-{key[:24]}-0.8-0.04.npz'
+    exact,v,elems,baseline=registered_analysis_mesh(registered,folder)
+    assert exact==key and 'refinement' not in baseline
+    np.testing.assert_array_equal(elems,t)
+    np.testing.assert_array_equal(v,p)
+    exact,fine_v,fine_t,fine=registered_analysis_mesh(registered,folder,.55)
+    assert exact==key and fine['effective_surface_tolerance_mm']==baseline['effective_surface_tolerance_mm']
+    assert fine['refinement']['source_skin']==digest(recovered)
+    assert fine['refinement']['source_tetrahedra']==len(t) and len(fine_t)>len(t)
+    verify_constraints(material_shells(recovered),analysis_skin(fine_v,fine_t))
+    np.testing.assert_allclose(analysis_skin(fine_v,fine_t).volume,26.,atol=1.e-9)
     verify_constraints(material_shells(original),recovered)
     np.testing.assert_allclose(recovered.volume,26.,atol=1.e-9)
     assert len(material_shells(recovered)[1])==1

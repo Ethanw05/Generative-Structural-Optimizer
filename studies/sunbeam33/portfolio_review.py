@@ -8,6 +8,7 @@ sys.path[:0]=[str(ROOT/'tools'),str(ROOT/'build/sunbeam33/deps')]
 import numpy as np
 
 from filaments import PLA
+from refined_cases import refined_cases
 from gso_workflows.design_targets import MinimizeResponse,ResponseLimit,YieldSafety,assessments
 from gso_workflows.surface_objectives import EvaluatedSurface,ShapeTargets,pareto,compromise_scores,objective_scales
 
@@ -70,6 +71,20 @@ def collect(label,identity,folder,directions,drop_reports,service_reports,range_
     return EvaluatedSurface(None,[rows],[],label)
 
 
+def measured_rows(item,sensor):
+    fields=('scenario','n_tets','peak_MPa','regional_peak_rms_MPa','compliance_Nmm','peak_elastic_displacement_mm',
+            sensor,'mean_lift_mm','signed_rotation_deg','signed_displacement_mm','window_s','contact_histories',
+            'maximum_compliance_Nmm','regional_peak_rms_at_stress_angle_MPa','stress_angle_deg','compliance_angle_deg')
+    measured=[]
+    for row in item.responses[0]:
+        stored={k:row[k] for k in fields if k in row}
+        refined=item.limit_evidence.get(row['scenario'],())
+        if refined:
+            stored['refinement']=[{k:r[k] for k in fields if k in r} for r in refined]
+        measured.append(stored)
+    return measured
+
+
 def review(candidates,baseline):
     ref=next(item for item in candidates if item.name==baseline)
     rows=ref.responses[0]
@@ -107,11 +122,8 @@ def review(candidates,baseline):
     parts={}
     for item in candidates:
         checks=assessments(item,targets.limits,require_all=True)
-        fields=('scenario','n_tets','peak_MPa','regional_peak_rms_MPa','compliance_Nmm','peak_elastic_displacement_mm',
-                sensor,'mean_lift_mm','signed_rotation_deg','signed_displacement_mm','window_s','contact_histories',
-                'maximum_compliance_Nmm','regional_peak_rms_at_stress_angle_MPa','stress_angle_deg','compliance_angle_deg')
         parts[item.name]=dict(requirements_met=all(r['met'] for r in checks),checks=checks,
-                              results=[{k:r[k] for k in fields if k in r} for r in item.responses[0]])
+                              results=measured_rows(item,sensor))
     return dict(reference=baseline,selected_generated=selected.name,generated_nondominated=[c.name for c in archive],
                 material=PLA.assumptions,verification='matched single verified tetrahedral mesh per geometry',
                 static_signs='both independently solved, positive response used once in ranking',parts=parts)
@@ -125,6 +137,8 @@ if __name__=='__main__':
     parser.add_argument('--drop',type=Path,action='append',required=True)
     parser.add_argument('--service',type=Path,action='append',default=[])
     parser.add_argument('--range',dest='ranges',type=Path,action='append',default=[])
+    parser.add_argument('--refined-axes',type=Path,action='append',default=[])
+    parser.add_argument('--refined-range',type=Path,action='append',default=[])
     parser.add_argument('--reference',required=True)
     args=parser.parse_args()
     read=lambda paths:[json.loads(path.read_text()) for path in paths]
@@ -139,7 +153,21 @@ if __name__=='__main__':
     if len({name for name,_,_ in args.part})!=len(args.part) or len({key for _,key,_ in args.part})!=len(args.part):
         parser.error('Use distinct part names and geometries')
     inputs=[collect(name,key,Path(folder),directional,drop,service,ranges) for name,key,folder in args.part]
+    refined_axes,refined_ranges=map(read,(args.refined_axes,args.refined_range))
+    resolutions=set()
+    for item,(_,identity,_) in zip(inputs,args.part,strict=True):
+        evidence,edge=refined_cases(identity,directional,refined_axes,refined_ranges)
+        if set(evidence)-{row['scenario'] for row in item.responses[0]}:
+            parser.error('Every refined case needs a matching baseline test')
+        item.limit_evidence=evidence
+        item.verify_margin=bool(evidence)
+        resolutions.add(edge)
+    if len(resolutions)!=1:
+        parser.error('Rank all geometries at the same refinement setting')
     report=review(inputs,args.reference)
+    if refined_axes:
+        report['verification']='matched portfolio with additional fixed-exterior directional checks'
+        report['directional_refinement_equivalent_edge_mm']=resolutions.pop()
     for name,key,_ in args.part:
         report['parts'][name]['geometry']=key
     args.output.parent.mkdir(parents=True,exist_ok=True)

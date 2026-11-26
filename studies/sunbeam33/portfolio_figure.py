@@ -23,6 +23,9 @@ def draw(record,output):
     active=[(key,title) for key,title in order if key in first]
     if set(key for key,_ in active)!=first.keys():
         raise ValueError('The figure needs labels for all service cases')
+    if 'directional_refinement_equivalent_edge_mm' in record:
+        active=[(key,title+' (base mesh)' if key.endswith(' range') and 'refinement' not in first[key] else title)
+                for key,title in active]
     y=np.arange(len(active))
     fig,(stress,shock)=plt.subplots(1,2,figsize=(11.5,.54*len(active)+1.8),sharey=True,
                                     gridspec_kw={'width_ratios':[2.4,1]},layout='constrained')
@@ -31,7 +34,7 @@ def draw(record,output):
     offsets=np.linspace(-.19,.19,len(parts))
     for j,(name,cases) in enumerate(series.items()):
         color=colors[j%len(colors)]
-        values=[cases[k]['peak_MPa'] for k,_ in active]
+        values=[max(row['peak_MPa'] for row in (cases[k],*cases[k].get('refinement',()))) for k,_ in active]
         stress.scatter(values,y+offsets[j],s=44,color=color,zorder=3,label=names.get(name,name))
         positions=[i for i,(k,_) in enumerate(active) if 'peak_acceleration_g@hub' in cases[k]]
         shock.scatter([cases[active[i][0]]['peak_acceleration_g@hub'] for i in positions],
@@ -40,7 +43,8 @@ def draw(record,output):
     stress.axvline(cap,color='#9e575d',ls='--',lw=1.6,label=f'Factor 2 threshold ({cap:g} MPa)')
     stress.set_xscale('log')
     stress.set_yticks(y,[title for _,title in active]);stress.invert_yaxis()
-    stress.set_xlabel('Whole-arm peak von Mises stress (MPa, log scale)')
+    basis='Peak over measured meshes' if 'directional_refinement_equivalent_edge_mm' in record else 'Whole-arm peak'
+    stress.set_xlabel(basis+' von Mises stress (MPa, log scale)')
     shock.set_xlabel('Peak hub acceleration (g)')
     shock.set_xlim(left=0.)
     for ax in (stress,shock):

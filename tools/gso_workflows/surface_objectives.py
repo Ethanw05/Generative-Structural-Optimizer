@@ -97,7 +97,14 @@ def objective_bounds(candidate,targets):
     upper=[]
     for level in candidate.responses:
         for result in level:
-            primary=[targets.direction(result,metric)*measured(result,metric) for metric in targets.names(result)]
+            extra=candidate.limit_evidence.get(result.get('scenario'),())
+            primary=[]
+            for metric in targets.names(result):
+                sense=targets.direction(result,metric)
+                # Retain the least favorable measured value of each objective when a
+                # target recheck also measured stiffness, stress, or receiver motion.
+                refined=[sense*measured(row,metric) for row in extra if metric in row]
+                primary.append(max([sense*measured(result,metric),*refined]))
             lower.extend(primary)
             upper.extend(primary)
             if targets.maximum_stress:
@@ -136,12 +143,16 @@ def objective_scales(reference,targets):
     case_scales=[]
     for index,response in enumerate(reference.responses[0]):
         cases=[row[index] for row in reference.responses]
-        stress_scale=max((case.get('peak_MPa',0.) for case in cases),default=0.)
+        checks=reference.limit_evidence.get(response.get('scenario'),())
+        stress_scale=max((case.get('peak_MPa',0.) for case in (*cases,*checks)),default=0.)
         # With zero baseline stress the study unit (MPa) is the available physical scale.
         stress_scale=stress_scale if stress_scale>0. else 1.
         primary=[]
         for key in targets.names(response):
-            magnitude=stress_scale if key in ('peak_MPa','regional_peak_rms_MPa') else max(c[key] for c in cases)
+            if key in ('peak_MPa','regional_peak_rms_MPa'):
+                magnitude=stress_scale
+            else:
+                magnitude=max([c[key] for c in cases]+[c[key] for c in checks if key in c])
             if key=='peak_equivalent_plastic_strain':
                 material=response['solid_model']
                 magnitude=max(magnitude,material['initial_Kirchhoff_yield_MPa']/material['young_MPa'])

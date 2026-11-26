@@ -1,0 +1,831 @@
+{
+  "force_N": 33.0,
+  "torque_Nmm": 1000.0,
+  "parts": {
+    "installed": {
+      "geometry": "6ebcc1942b82d3b185367dcefec0cb68369f793b2403c298ca713b3d0c47c0af",
+      "tetrahedra": [
+        127052,
+        1399832
+      ],
+      "meshes": [
+        {
+          "nodes": 29809,
+          "effective_surface_tolerance_mm": 0.06,
+          "tetrahedron_longest_edge_mm": {
+            "median": 2.098104624550326,
+            "p95": 2.560753349004911,
+            "maximum": 3.424093497705605
+          }
+        },
+        {
+          "nodes": 255224,
+          "effective_surface_tolerance_mm": 0.06,
+          "tetrahedron_longest_edge_mm": {
+            "median": 0.924240843073718,
+            "p95": 1.063015848119658,
+            "maximum": 2.57997497926349
+          },
+          "refinement": {
+            "method": "refine tetrahedra on registered exterior",
+            "source_tetrahedra": 127052,
+            "source_skin": "b16fbd06bf108a35a3f8a16b8de41360cc97601edc6e6c454b8fbbf44b519235",
+            "regular_tet_equivalent_edge_mm": 0.9,
+            "maximum_tetrahedron_volume_mm3": 0.08591347391416553
+          }
+        }
+      ],
+      "modes": {
+        "span": {
+          "peak_MPa": [
+            9.825153537305969,
+            14.08532332405428
+          ],
+          "motion_metric": "signed_displacement_mm",
+          "movement": [
+            0.2857941331669364,
+            0.3086757594306814
+          ],
+          "peak_change_percent": 43.35982914233865,
+          "motion_change_percent": 8.006331694142755,
+          "required_ABS_yield_MPa_for_factor_two": 28.17064664810856,
+          "yield_screen": {
+            "PLA": {
+              "level": 1,
+              "scenario": "span",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 51.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 14.08532332405428,
+              "achieved": 3.6207901534574294,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.5523656205511482,
+              "violation": 0.0,
+              "met": true,
+              "status": "met",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.38530013871788116,
+                0.5523656205511482
+              ],
+              "last_utilization_change": 0.16706548183326708,
+              "normalized_selection_excess": 0.0
+            },
+            "PETG": {
+              "level": 1,
+              "scenario": "span",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 47.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 14.08532332405428,
+              "achieved": 3.3368066120097875,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.5993754605980545,
+              "violation": 0.0,
+              "met": true,
+              "status": "met",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.41809163988536036,
+                0.5993754605980545
+              ],
+              "last_utilization_change": 0.1812838207126941,
+              "normalized_selection_excess": 0.0
+            }
+          },
+          "stress_location": [
+            {
+              "peak_at_world_mm": [
+                -146.7174887516311,
+                -2.3663643406213284,
+                144.36909436053836
+              ],
+              "p99_by_volume_MPa": 2.3794490577095053,
+              "near_load": {
+                "radius_mm": 24.37502037732222,
+                "volume_mm3": 5607.253646354428,
+                "p99_MPa": 3.708228174880699,
+                "peak_MPa": 9.825153537305969
+              },
+              "peak_distance_to_fixture_perimeter_mm": 170.99960001410219
+            },
+            {
+              "peak_at_world_mm": [
+                -148.5709942399224,
+                -0.49673722547032206,
+                146.16034671171622
+              ],
+              "p99_by_volume_MPa": 2.5190365157895416,
+              "near_load": {
+                "radius_mm": 24.37502037732222,
+                "volume_mm3": 5600.974092345491,
+                "p99_MPa": 3.9752902591778856,
+                "peak_MPa": 14.08532332405428
+              },
+              "peak_distance_to_fixture_perimeter_mm": 173.62576736353958
+            }
+          ]
+        },
+        "lateral": {
+          "peak_MPa": [
+            31.872960878050073,
+            34.4290093604762
+          ],
+          "motion_metric": "signed_displacement_mm",
+          "movement": [
+            9.377460821877428,
+            9.90870600086371
+          ],
+          "peak_change_percent": 8.01948865750468,
+          "motion_change_percent": 5.665128216232018,
+          "required_ABS_yield_MPa_for_factor_two": 68.8580187209524,
+          "yield_screen": {
+            "PLA": {
+              "level": 1,
+              "scenario": "lateral",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 51.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 34.4290093604762,
+              "achieved": 1.481308958559434,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 1.3501572298225961,
+              "violation": 0.3501572298225961,
+              "met": false,
+              "status": "exceeded",
+              "observed_met": false,
+              "utilization_by_mesh": [
+                1.249920034433336,
+                1.3501572298225961
+              ],
+              "last_utilization_change": 0.10023719538926001,
+              "normalized_selection_excess": 0.3501572298225961
+            },
+            "PETG": {
+              "level": 1,
+              "scenario": "lateral",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 47.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 34.4290093604762,
+              "achieved": 1.3651278637704587,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 1.4650642281053703,
+              "violation": 0.4650642281053703,
+              "met": false,
+              "status": "exceeded",
+              "observed_met": false,
+              "utilization_by_mesh": [
+                1.3562962075765987,
+                1.4650642281053703
+              ],
+              "last_utilization_change": 0.10876802052877155,
+              "normalized_selection_excess": 0.4650642281053703
+            }
+          },
+          "stress_location": [
+            {
+              "peak_at_world_mm": [
+                -102.63940043867295,
+                -1.942766380501753,
+                115.75648679008663
+              ],
+              "p99_by_volume_MPa": 11.375362843307624,
+              "near_load": {
+                "radius_mm": 24.37502037732222,
+                "volume_mm3": 5607.2536463544275,
+                "p99_MPa": 6.757325395404026,
+                "peak_MPa": 11.846700079222254
+              },
+              "peak_distance_to_fixture_perimeter_mm": 119.97273641686893
+            },
+            {
+              "peak_at_world_mm": [
+                -104.91180810652862,
+                -2.199077920629348,
+                116.61296297948776
+              ],
+              "p99_by_volume_MPa": 11.822576934538107,
+              "near_load": {
+                "radius_mm": 24.37502037732222,
+                "volume_mm3": 5600.974092345491,
+                "p99_MPa": 7.33038299729915,
+                "peak_MPa": 15.73346125756501
+              },
+              "peak_distance_to_fixture_perimeter_mm": 122.1000865360353
+            }
+          ]
+        },
+        "torque": {
+          "peak_MPa": [
+            14.846700917553255,
+            20.18766249838168
+          ],
+          "motion_metric": "signed_rotation_deg",
+          "movement": [
+            4.322377986272303,
+            4.6680751948205685
+          ],
+          "peak_change_percent": 35.97406326488202,
+          "motion_change_percent": 7.997847704346661,
+          "required_ABS_yield_MPa_for_factor_two": 40.37532499676336,
+          "yield_screen": {
+            "PLA": {
+              "level": 1,
+              "scenario": "torque",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 51.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 20.18766249838168,
+              "achieved": 2.526295454170999,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.7916730391522228,
+              "violation": 0.0,
+              "met": false,
+              "status": "margin_unresolved",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.5822235653942452,
+                0.7916730391522228
+              ],
+              "last_utilization_change": 0.2094494737579775,
+              "normalized_selection_excess": 0.0011225129102001574
+            },
+            "PETG": {
+              "level": 1,
+              "scenario": "torque",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 47.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 20.18766249838168,
+              "achieved": 2.328154634236019,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.8590494680162417,
+              "violation": 0.0,
+              "met": false,
+              "status": "margin_unresolved",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.6317745071299258,
+                0.8590494680162417
+              ],
+              "last_utilization_change": 0.22727496088631594,
+              "normalized_selection_excess": 0.08632442890255776
+            }
+          },
+          "stress_location": [
+            {
+              "peak_at_world_mm": [
+                -121.48359205833069,
+                -23.974369077473412,
+                145.1887540538485
+              ],
+              "p99_by_volume_MPa": 7.066720162267095,
+              "near_load": {
+                "radius_mm": 3.9947773389198367,
+                "volume_mm3": 670.9153622455938,
+                "p99_MPa": 2.188438460221498,
+                "peak_MPa": 2.8166992206327826
+              },
+              "peak_distance_to_fixture_perimeter_mm": 154.5961898607709
+            },
+            {
+              "peak_at_world_mm": [
+                -121.83932477117223,
+                -23.265663026127292,
+                145.20416917844017
+              ],
+              "p99_by_volume_MPa": 7.491359404015725,
+              "near_load": {
+                "radius_mm": 3.9947773389198367,
+                "volume_mm3": 657.0367735030426,
+                "p99_MPa": 2.3403322358311236,
+                "peak_MPa": 3.7596414375326987
+              },
+              "peak_distance_to_fixture_perimeter_mm": 154.82429772544492
+            }
+          ]
+        },
+        "span twist": {
+          "peak_MPa": [
+            28.81347601858685,
+            39.466202088291524
+          ],
+          "motion_metric": "signed_rotation_deg",
+          "movement": [
+            7.860131040997403,
+            8.854958350743562
+          ],
+          "peak_change_percent": 36.97133265987369,
+          "motion_change_percent": 12.65662499209328,
+          "required_ABS_yield_MPa_for_factor_two": 78.93240417658305,
+          "yield_screen": {
+            "PLA": {
+              "level": 1,
+              "scenario": "span twist",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 51.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 39.466202088291524,
+              "achieved": 1.292244941276734,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 1.5476941995408442,
+              "violation": 0.5476941995408442,
+              "met": false,
+              "status": "exceeded",
+              "observed_met": false,
+              "utilization_by_mesh": [
+                1.1299402360230137,
+                1.5476941995408442
+              ],
+              "last_utilization_change": 0.41775396351783045,
+              "normalized_selection_excess": 0.5476941995408442
+            },
+            "PETG": {
+              "level": 1,
+              "scenario": "span twist",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 47.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 39.466202088291524,
+              "achieved": 1.1908923968628726,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 1.679412854820916,
+              "violation": 0.679412854820916,
+              "met": false,
+              "status": "exceeded",
+              "observed_met": false,
+              "utilization_by_mesh": [
+                1.2261053624930576,
+                1.679412854820916
+              ],
+              "last_utilization_change": 0.4533074923278584,
+              "normalized_selection_excess": 0.679412854820916
+            }
+          },
+          "stress_location": [
+            {
+              "peak_at_world_mm": [
+                -143.9624583260347,
+                -5.568066554436846,
+                155.48879560384685
+              ],
+              "p99_by_volume_MPa": 8.57123320106107,
+              "near_load": {
+                "radius_mm": 3.9947773389198367,
+                "volume_mm3": 670.9153622455939,
+                "p99_MPa": 5.496194874320997,
+                "peak_MPa": 7.272460661202572
+              },
+              "peak_distance_to_fixture_perimeter_mm": 177.05585807967927
+            },
+            {
+              "peak_at_world_mm": [
+                -144.3942724983538,
+                -5.590257129521216,
+                155.88554771712484
+              ],
+              "p99_by_volume_MPa": 9.276086095505704,
+              "near_load": {
+                "radius_mm": 3.9947773389198367,
+                "volume_mm3": 657.0367735030426,
+                "p99_MPa": 5.819813412110106,
+                "peak_MPa": 9.140947221325236
+              },
+              "peak_distance_to_fixture_perimeter_mm": 177.63993379677777
+            }
+          ]
+        }
+      }
+    },
+    "generated": {
+      "geometry": "894449eecab6b6cd9fada2132b5e37266345f6d6ed62437573d80f9959a36349",
+      "tetrahedra": [
+        154365,
+        1412950
+      ],
+      "meshes": [
+        {
+          "nodes": 37387,
+          "effective_surface_tolerance_mm": 0.06,
+          "tetrahedron_longest_edge_mm": {
+            "median": 1.9427160665262517,
+            "p95": 2.5070026889401906,
+            "maximum": 3.3951097589287556
+          }
+        },
+        {
+          "nodes": 259273,
+          "effective_surface_tolerance_mm": 0.06,
+          "tetrahedron_longest_edge_mm": {
+            "median": 0.9230693802054614,
+            "p95": 1.0631754478460935,
+            "maximum": 2.4371462787760247
+          },
+          "refinement": {
+            "method": "refine tetrahedra on registered exterior",
+            "source_tetrahedra": 154365,
+            "source_skin": "0c4fbdf543bc5eb7f4cf2f7f3bf911a7368655e733a135d76a1659eac688de0e",
+            "regular_tet_equivalent_edge_mm": 0.9,
+            "maximum_tetrahedron_volume_mm3": 0.08591347391416553
+          }
+        }
+      ],
+      "modes": {
+        "span": {
+          "peak_MPa": [
+            2.729098765645846,
+            6.1539698186759875
+          ],
+          "motion_metric": "signed_displacement_mm",
+          "movement": [
+            0.10636109324972512,
+            0.1093546743185749
+          ],
+          "peak_change_percent": 125.49458070710901,
+          "motion_change_percent": 2.8145452226794543,
+          "required_ABS_yield_MPa_for_factor_two": 12.307939637351975,
+          "yield_screen": {
+            "PLA": {
+              "level": 1,
+              "scenario": "span",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 51.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 6.1539698186759875,
+              "achieved": 8.287333461601627,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.24133214975199951,
+              "violation": 0.0,
+              "met": true,
+              "status": "met",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.10702348100571944,
+                0.24133214975199951
+              ],
+              "last_utilization_change": 0.13430866874628006,
+              "normalized_selection_excess": 0.0
+            },
+            "PETG": {
+              "level": 1,
+              "scenario": "span",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 47.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 6.1539698186759875,
+              "achieved": 7.6373465234367925,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.2618710561138718,
+              "violation": 0.0,
+              "met": true,
+              "status": "met",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.11613186236790833,
+                0.2618710561138718
+              ],
+              "last_utilization_change": 0.14573919374596345,
+              "normalized_selection_excess": 0.0
+            }
+          },
+          "stress_location": [
+            {
+              "peak_at_world_mm": [
+                -115.84301203321809,
+                -3.6133710794164977,
+                118.52777331889558
+              ],
+              "p99_by_volume_MPa": 1.2846814161248306,
+              "near_load": {
+                "radius_mm": 24.37502037732222,
+                "volume_mm3": 6218.317205747891,
+                "p99_MPa": 1.3094392618657589,
+                "peak_MPa": 2.2691940170340716
+              },
+              "peak_distance_to_fixture_perimeter_mm": 130.88433163070366
+            },
+            {
+              "peak_at_world_mm": [
+                -23.445995893091414,
+                -5.908962004560985,
+                25.27900651160663
+              ],
+              "p99_by_volume_MPa": 1.30642112832137,
+              "near_load": {
+                "radius_mm": 24.37502037732222,
+                "volume_mm3": 6218.834869661975,
+                "p99_MPa": 1.3224876142281847,
+                "peak_MPa": 2.421297340385917
+              },
+              "peak_distance_to_fixture_perimeter_mm": 0.144542919956841
+            }
+          ]
+        },
+        "lateral": {
+          "peak_MPa": [
+            17.588372944447233,
+            51.019032146749616
+          ],
+          "motion_metric": "signed_displacement_mm",
+          "movement": [
+            6.811247654778994,
+            7.051724537355099
+          ],
+          "peak_change_percent": 190.0724945274524,
+          "motion_change_percent": 3.5305849201853423,
+          "required_ABS_yield_MPa_for_factor_two": 102.03806429349923,
+          "yield_screen": {
+            "PLA": {
+              "level": 1,
+              "scenario": "lateral",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 51.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 51.019032146749616,
+              "achieved": 0.9996269598628434,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 2.0007463586960634,
+              "violation": 1.0007463586960634,
+              "met": false,
+              "status": "exceeded",
+              "observed_met": false,
+              "utilization_by_mesh": [
+                0.689740115468519,
+                2.0007463586960634
+              ],
+              "last_utilization_change": 1.3110062432275444,
+              "normalized_selection_excess": 1.0007463586960634
+            },
+            "PETG": {
+              "level": 1,
+              "scenario": "lateral",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 47.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 51.019032146749616,
+              "achieved": 0.9212248453637969,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 2.171022644542537,
+              "violation": 1.171022644542537,
+              "met": false,
+              "status": "exceeded",
+              "observed_met": false,
+              "utilization_by_mesh": [
+                0.7484414018913716,
+                2.171022644542537
+              ],
+              "last_utilization_change": 1.4225812426511653,
+              "normalized_selection_excess": 1.171022644542537
+            }
+          },
+          "stress_location": [
+            {
+              "peak_at_world_mm": [
+                -25.58359245834082,
+                -5.642256003642573,
+                1.762666606075764
+              ],
+              "p99_by_volume_MPa": 7.514808979318448,
+              "near_load": {
+                "radius_mm": 24.37502037732222,
+                "volume_mm3": 6218.317205747891,
+                "p99_MPa": 5.152366153242253,
+                "peak_MPa": 8.388702379850926
+              },
+              "peak_distance_to_fixture_perimeter_mm": 0.3603900099783608
+            },
+            {
+              "peak_at_world_mm": [
+                -23.445995893091414,
+                -5.908962004560985,
+                25.27900651160663
+              ],
+              "p99_by_volume_MPa": 7.732111540223494,
+              "near_load": {
+                "radius_mm": 24.37502037732222,
+                "volume_mm3": 6218.834869661974,
+                "p99_MPa": 5.232069377902567,
+                "peak_MPa": 8.996066237955691
+              },
+              "peak_distance_to_fixture_perimeter_mm": 0.144542919956841
+            }
+          ]
+        },
+        "torque": {
+          "peak_MPa": [
+            13.507583744745483,
+            14.434290063977604
+          ],
+          "motion_metric": "signed_rotation_deg",
+          "movement": [
+            2.6481432684781545,
+            2.7634103530405603
+          ],
+          "peak_change_percent": 6.8606372297533635,
+          "motion_change_percent": 4.352751074100603,
+          "required_ABS_yield_MPa_for_factor_two": 28.86858012795521,
+          "yield_screen": {
+            "PLA": {
+              "level": 1,
+              "scenario": "torque",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 51.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 14.434290063977604,
+              "achieved": 3.5332530920433864,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.5660505907442198,
+              "violation": 0.0,
+              "met": true,
+              "status": "met",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.5297091664606072,
+                0.5660505907442198
+              ],
+              "last_utilization_change": 0.036341424283612644,
+              "normalized_selection_excess": 0.0
+            },
+            "PETG": {
+              "level": 1,
+              "scenario": "torque",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 47.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 14.434290063977604,
+              "achieved": 3.256135202471356,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.6142251091054299,
+              "violation": 0.0,
+              "met": true,
+              "status": "met",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.574790797648744,
+                0.6142251091054299
+              ],
+              "last_utilization_change": 0.039434311456685966,
+              "normalized_selection_excess": 0.0
+            }
+          },
+          "stress_location": [
+            {
+              "peak_at_world_mm": [
+                -143.38889982401753,
+                -2.527811081964037,
+                140.95954974678654
+              ],
+              "p99_by_volume_MPa": 5.394205012342599,
+              "near_load": {
+                "radius_mm": 3.9947773389198367,
+                "volume_mm3": 666.1691990765528,
+                "p99_MPa": 2.1931930170095093,
+                "peak_MPa": 3.593473112238921
+              },
+              "peak_distance_to_fixture_perimeter_mm": 166.23348899708222
+            },
+            {
+              "peak_at_world_mm": [
+                -143.1335688430356,
+                -2.996035861341036,
+                140.54420204665564
+              ],
+              "p99_by_volume_MPa": 5.601813504573337,
+              "near_load": {
+                "radius_mm": 3.9947773389198367,
+                "volume_mm3": 657.2473471015053,
+                "p99_MPa": 2.1918525250283967,
+                "peak_MPa": 4.137851489193727
+              },
+              "peak_distance_to_fixture_perimeter_mm": 165.7514410559383
+            }
+          ]
+        },
+        "span twist": {
+          "peak_MPa": [
+            11.712229767131033,
+            15.23562638825431
+          ],
+          "motion_metric": "signed_rotation_deg",
+          "movement": [
+            4.975095290674705,
+            5.46656468085102
+          ],
+          "peak_change_percent": 30.083055841435645,
+          "motion_change_percent": 9.878592498469786,
+          "required_ABS_yield_MPa_for_factor_two": 30.47125277650862,
+          "yield_screen": {
+            "PLA": {
+              "level": 1,
+              "scenario": "span twist",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 51.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 15.23562638825431,
+              "achieved": 3.3474173427695577,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.5974755446374239,
+              "violation": 0.0,
+              "met": true,
+              "status": "met",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.4593031281227856,
+                0.5974755446374239
+              ],
+              "last_utilization_change": 0.1381724165146383,
+              "normalized_selection_excess": 0.0
+            },
+            "PETG": {
+              "level": 1,
+              "scenario": "span twist",
+              "quantity": "whole-part yield factor of safety",
+              "minimum": 2.0,
+              "yield_MPa": 47.0,
+              "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+              "peak_MPa": 15.23562638825431,
+              "achieved": 3.0848748060817495,
+              "unbounded": false,
+              "plastic_flow_detected": false,
+              "utilization": 0.6483245271597579,
+              "violation": 0.0,
+              "met": true,
+              "status": "met",
+              "observed_met": true,
+              "utilization_by_mesh": [
+                0.49839275604812905,
+                0.6483245271597579
+              ],
+              "last_utilization_change": 0.1499317711116288,
+              "normalized_selection_excess": 0.0
+            }
+          },
+          "stress_location": [
+            {
+              "peak_at_world_mm": [
+                -136.84779902802643,
+                -18.12494179738107,
+                146.03535564572297
+              ],
+              "p99_by_volume_MPa": 6.080618432952841,
+              "near_load": {
+                "radius_mm": 3.9947773389198367,
+                "volume_mm3": 666.1691990765529,
+                "p99_MPa": 3.1246966370492806,
+                "peak_MPa": 4.512939117468095
+              },
+              "peak_distance_to_fixture_perimeter_mm": 165.3253731089571
+            },
+            {
+              "peak_at_world_mm": [
+                -23.07257419347984,
+                -5.871166055093312,
+                25.308030598234033
+              ],
+              "p99_by_volume_MPa": 6.368731582592803,
+              "near_load": {
+                "radius_mm": 3.9947773389198367,
+                "volume_mm3": 657.2473471015053,
+                "p99_MPa": 3.3092178309019564,
+                "peak_MPa": 6.042178840660145
+              },
+              "peak_distance_to_fixture_perimeter_mm": 0.22149331511268514
+            }
+          ]
+        }
+      }
+    }
+  },
+  "stress_transfer": "homogeneous linear elasticity, equal Poisson ratios, force/moment controlled; directly cross-checked on first mesh"
+}

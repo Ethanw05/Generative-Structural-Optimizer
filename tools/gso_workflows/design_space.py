@@ -63,6 +63,24 @@ class Face:
             loops.append(((mesh.vertices[chain]-point)@basis.T)[:,:2])
         return cls(mesh.triangles[group],normal,loops,basis,point,tolerance)
 
+    def perimeter_distance(self,point):
+        """Shortest 3D distance to any outer or inner loop of this selected CAD face."""
+        coordinates=(np.asarray(point,dtype=float)-self.origin)@self.basis.T
+        if coordinates.shape!=(3,) or not np.isfinite(coordinates).all():
+            raise ValueError('Expected one finite point in the CAD frame')
+        distances=[]
+        for loop in self.loops:
+            edges=np.roll(loop,-1,axis=0)-loop
+            squared=np.einsum('ij,ij->i',edges,edges)
+            keep=squared>0.
+            delta=coordinates[:2]-loop[keep]
+            if len(delta):
+                along=np.clip(np.einsum('ij,ij->i',delta,edges[keep])/squared[keep],0.,1.)
+                distances.append(np.linalg.norm(delta-along[:,None]*edges[keep],axis=1).min())
+        if not distances:
+            raise ValueError('The selected face has no boundary segments')
+        return float(np.hypot(min(distances),coordinates[2]))
+
     def prism(self,depth,outer_only=False,side_inset=0.):
         loops=self.loops
         if outer_only:

@@ -72,3 +72,13 @@ narrow.limit_evidence={'pull':[dict(scenario='pull',peak_MPa=14.20)]}
 assert assessments(narrow,(safety,))[0]['met']
 rejects(lambda:ShapeTargets(verification_edges_mm=(.3,.4)))
 print('Scoped yield, shock, missing evidence and feasibility ordering passed')
+
+
+# Scope extra evidence to its physical case and respect each objective direction.
+from gso_workflows.surface_objectives import coordinates
+proof=EvaluatedSurface(None,[[dict(scenario='pull',peak_MPa=10.,stiffness=12.),
+                             dict(scenario='twist',peak_MPa=8.)]],[],'verified',
+                      limit_evidence={'pull':[dict(peak_MPa=17.,stiffness=9.)]})
+requests=ShapeTargets(False,False,extra_objectives=(MinimizeResponse(('pull','twist'),'peak_MPa'),
+                                                   MaximizeResponse(('pull',),'stiffness')))
+np.testing.assert_allclose(coordinates(proof,requests),[17.,-9.,8.])

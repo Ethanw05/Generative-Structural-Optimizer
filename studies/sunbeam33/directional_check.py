@@ -13,8 +13,7 @@ from geometry import WORK,build_study
 import numpy as np
 from filaments import ABS,PLA,PETG
 from service_scenarios import directional_loads
-from gso_workflows.analysis_boundary import analysis_skin
-from gso_workflows.analysis_mesh import digest,read_mesh,volume_mesh
+from gso_workflows.analysis_mesh import registered_analysis_mesh
 from gso_workflows.cad_wrench import SurfaceWrench
 from gso_workflows.design_targets import YieldSafety
 from gso_workflows.study_materials import material_portfolio
@@ -48,21 +47,9 @@ def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.
     study=material_portfolio(replace(study,loads=signed,mechanics_executable=ROOT/'build/Release/gso.exe'),materials)
     storage=(workspace,factor_ram_mb) if factor_ram_mb is not None else None
     solver,handle=linear_solver(WORK,factor_storage=storage)
-    with np.load(mesh) as data:
-        if int(data['verified_boundary'])!=2:
-            raise ValueError('Expected a verified conforming solid mesh')
-        key=str(data['source'])
-        tolerance=float(data['effective_tolerance'])
-    points,cells=read_mesh(mesh,key)
     workspace.mkdir(parents=True,exist_ok=True)
-    refinement={}
-    if fixed_surface_edge_mm is not None:
-        skin=analysis_skin(points,cells)
-        maximum_volume=fixed_surface_edge_mm**3/(6.*np.sqrt(2.))
-        refinement=dict(method='refine tetrahedra on registered exterior',source_tetrahedra=len(cells),
-                        source_skin=digest(skin),regular_tet_equivalent_edge_mm=fixed_surface_edge_mm,
-                        maximum_tetrahedron_volume_mm3=maximum_volume)
-        points,cells=volume_mesh(skin,workspace,maximum_volume,0.,'interior')
+    key,points,cells,metadata=registered_analysis_mesh(mesh,workspace,fixed_surface_edge_mm)
+    if 'refinement' in metadata:
         print(workspace.name,'fixed surface refinement:',len(cells),'tetrahedra',flush=True)
     paths={label:workspace/label.replace(' / ','-') for label in study.loads}
     raw=solve_static_cases(points,cells,study,paths,solver,surface_tol=.36)
@@ -96,9 +83,8 @@ def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.
             modes[mode]=values
             print(workspace.name,spec.name,mode,round(values['positive']['peak_MPa'],3),'MPa',flush=True)
         report[spec.name]=modes
-    mesh_info=mesh_statistics(points,cells,tolerance)
-    if refinement:
-        mesh_info['refinement']=refinement
+    mesh_info=mesh_statistics(points,cells,metadata['effective_surface_tolerance_mm'])
+    mesh_info.update(metadata)
     return dict(geometry=key,n_tets=len(cells),mesh=mesh_info,modes=report)
 
 

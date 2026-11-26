@@ -1,0 +1,821 @@
+{
+  "reference": "installed",
+  "selected_generated": "generated",
+  "generated_nondominated": [
+    "generated"
+  ],
+  "material": "Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35.",
+  "verification": "matched portfolio with additional fixed-exterior directional checks",
+  "static_signs": "both independently solved, positive response used once in ranking",
+  "parts": {
+    "installed": {
+      "requirements_met": false,
+      "checks": [
+        {
+          "level": 0,
+          "scenario": "PLA / lift",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 11.550624437815376,
+          "achieved": 4.415345704863543,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.45296566422805395,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.45296566422805395
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / drop",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 64.6213980680626,
+          "achieved": 0.7892122659785874,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 2.534172473257357,
+          "violation": 1.5341724732573572,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            2.534172473257357
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 1.5341724732573572
+        },
+        {
+          "level": 1,
+          "scenario": "PLA / lateral",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 34.4290093604762,
+          "achieved": 1.481308958559434,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 1.3501572298225961,
+          "violation": 0.3501572298225961,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.2499200344112975,
+            1.3501572298225961
+          ],
+          "last_utilization_change": 0.10023719541129861,
+          "normalized_selection_excess": 0.3501572298225961
+        },
+        {
+          "level": 1,
+          "scenario": "PLA / span",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 14.08532332405428,
+          "achieved": 3.6207901534574294,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.5523656205511482,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.38530013871780366,
+            0.5523656205511482
+          ],
+          "last_utilization_change": 0.16706548183334458,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 1,
+          "scenario": "PLA / span twist",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 39.466202088291524,
+          "achieved": 1.292244941276734,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 1.5476941995408442,
+          "violation": 0.5476941995408442,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.1299402360231168,
+            1.5476941995408442
+          ],
+          "last_utilization_change": 0.4177539635177274,
+          "normalized_selection_excess": 0.5476941995408442
+        },
+        {
+          "level": 1,
+          "scenario": "PLA / torque",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 20.18766249838168,
+          "achieved": 2.526295454170999,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.7916730391522228,
+          "violation": 0.0,
+          "met": false,
+          "status": "margin_unresolved",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.582223565392837,
+            0.7916730391522228
+          ],
+          "last_utilization_change": 0.20944947375938572,
+          "normalized_selection_excess": 0.0011225129116083643
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / horizontal range",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 31.973831336888786,
+          "achieved": 1.595054388779501,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 1.253875738701521,
+          "violation": 0.2538757387015209,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.253875738701521
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.2538757387015209
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / torque plane range",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 29.410913524143126,
+          "achieved": 1.7340501837229438,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 1.1533691578095344,
+          "violation": 0.15336915780953442,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.1533691578095344
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.15336915780953442
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / brake",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 19.135675478048615,
+          "achieved": 2.6651789772722876,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.7504186461979849,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.7504186461979849
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / strike",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 225.34763279620444,
+          "achieved": 0.2263169990612788,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 8.83716207043939,
+          "violation": 7.8371620704393905,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            8.83716207043939
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 7.8371620704393905
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / drop",
+          "quantity": "peak_acceleration_g@hub",
+          "achieved": 11.241933106104414,
+          "maximum": 11.241933106104414,
+          "utilization": 1.0,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            1.0
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / strike",
+          "quantity": "peak_acceleration_g@hub",
+          "achieved": 19.380085776091217,
+          "maximum": 19.380085776091217,
+          "utilization": 1.0,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            1.0
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.0
+        }
+      ],
+      "results": [
+        {
+          "scenario": "PLA / lift",
+          "n_tets": 127052,
+          "peak_MPa": 11.550624437815376,
+          "regional_peak_rms_MPa": 2.689370635402043,
+          "compliance_Nmm": 80.56051307745116,
+          "mean_lift_mm": 2.4412276690136716
+        },
+        {
+          "scenario": "PLA / drop",
+          "n_tets": 127052,
+          "peak_MPa": 64.6213980680626,
+          "regional_peak_rms_MPa": 12.203347693223456,
+          "peak_elastic_displacement_mm": 19.393614865289194,
+          "peak_acceleration_g@hub": 11.241933106104414,
+          "window_s": 0.028,
+          "contact_histories": [
+            {
+              "peak_N": 221.34305362132523,
+              "peak_time_s": 0.008625,
+              "first_contact_s": 6.25e-05,
+              "first_release_s": 0.017750000000000002,
+              "final_force_N": 0.0,
+              "impulse_Ns": 2.3735950018909424
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / lateral",
+          "peak_MPa": 31.872960877488087,
+          "regional_peak_rms_MPa": 5.059027346425533,
+          "compliance_Nmm": 296.0015894154998,
+          "signed_displacement_mm": 8.969745133803023,
+          "refinement": [
+            {
+              "scenario": "PLA / lateral",
+              "n_tets": 1399832,
+              "peak_MPa": 34.4290093604762,
+              "regional_peak_rms_MPa": 4.759007336500249,
+              "compliance_Nmm": 312.770458983785,
+              "signed_displacement_mm": 9.477892696478332
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / span",
+          "peak_MPa": 9.825153537303994,
+          "regional_peak_rms_MPa": 0.909890185308144,
+          "compliance_Nmm": 9.021153942568676,
+          "signed_displacement_mm": 0.27336830128995987,
+          "refinement": [
+            {
+              "scenario": "PLA / span",
+              "n_tets": 1399832,
+              "peak_MPa": 14.08532332405428,
+              "regional_peak_rms_MPa": 0.8655844541017809,
+              "compliance_Nmm": 9.743417449855421,
+              "signed_displacement_mm": 0.29525507423804304
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / span twist",
+          "peak_MPa": 28.813476018589476,
+          "regional_peak_rms_MPa": 3.347877165723728,
+          "compliance_Nmm": 131.2205938555483,
+          "signed_rotation_deg": 7.51838621312322,
+          "refinement": [
+            {
+              "scenario": "PLA / span twist",
+              "n_tets": 1399832,
+              "peak_MPa": 39.466202088291524,
+              "regional_peak_rms_MPa": 3.3841663130148567,
+              "compliance_Nmm": 147.82869233233586,
+              "signed_rotation_deg": 8.469960161580799
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / torque",
+          "peak_MPa": 14.846700917517346,
+          "regional_peak_rms_MPa": 2.561382641132039,
+          "compliance_Nmm": 72.15973922913244,
+          "signed_rotation_deg": 4.134448508593889,
+          "refinement": [
+            {
+              "scenario": "PLA / torque",
+              "n_tets": 1399832,
+              "peak_MPa": 20.18766249838168,
+              "regional_peak_rms_MPa": 2.499834344826106,
+              "compliance_Nmm": 77.93096527680359,
+              "signed_rotation_deg": 4.465115403741414
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / horizontal range",
+          "peak_MPa": 31.973831336888786,
+          "maximum_compliance_Nmm": 296.0178765039634,
+          "regional_peak_rms_at_stress_angle_MPa": 5.040474126885528,
+          "stress_angle_deg": 85.446311899034,
+          "compliance_angle_deg": 89.56838386025072
+        },
+        {
+          "scenario": "PLA / torque plane range",
+          "peak_MPa": 29.410913524143126,
+          "maximum_compliance_Nmm": 134.77449870254952,
+          "regional_peak_rms_at_stress_angle_MPa": 3.4180049412063074,
+          "stress_angle_deg": 101.80986205073475,
+          "compliance_angle_deg": 103.40034258408002
+        },
+        {
+          "scenario": "PLA / brake",
+          "n_tets": 127052,
+          "peak_MPa": 19.135675478048615,
+          "regional_peak_rms_MPa": 3.355079667518781,
+          "peak_elastic_displacement_mm": 6.81767185943295,
+          "window_s": 0.15
+        },
+        {
+          "scenario": "PLA / strike",
+          "n_tets": 127052,
+          "peak_MPa": 225.34763279620444,
+          "regional_peak_rms_MPa": 33.45619824476247,
+          "peak_elastic_displacement_mm": 61.203076376438375,
+          "peak_acceleration_g@hub": 19.380085776091217,
+          "window_s": 0.056,
+          "contact_histories": [
+            {
+              "peak_N": 441.9245612574115,
+              "peak_time_s": 0.014234375,
+              "first_contact_s": 7.8125e-06,
+              "first_release_s": 0.00975,
+              "final_force_N": 0.0,
+              "impulse_Ns": 5.721969814997436
+            }
+          ]
+        }
+      ],
+      "geometry": "6ebcc1942b82d3b185367dcefec0cb68369f793b2403c298ca713b3d0c47c0af"
+    },
+    "generated": {
+      "requirements_met": false,
+      "checks": [
+        {
+          "level": 0,
+          "scenario": "PLA / lift",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 29.236515775144966,
+          "achieved": 1.7443939076816044,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 1.1465300303978418,
+          "violation": 0.14653003039784185,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.1465300303978418
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.14653003039784185
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / drop",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 160.25924156758037,
+          "achieved": 0.3182343776317798,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 6.2846761399051125,
+          "violation": 5.2846761399051125,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            6.2846761399051125
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 5.2846761399051125
+        },
+        {
+          "level": 1,
+          "scenario": "PLA / lateral",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 51.019032146749616,
+          "achieved": 0.9996269598628434,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 2.0007463586960634,
+          "violation": 1.0007463586960634,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            0.6897401154638831,
+            2.0007463586960634
+          ],
+          "last_utilization_change": 1.3110062432321803,
+          "normalized_selection_excess": 1.0007463586960634
+        },
+        {
+          "level": 1,
+          "scenario": "PLA / span",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 6.1539698186759875,
+          "achieved": 8.287333461601627,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.24133214975199951,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.10702348100416205,
+            0.24133214975199951
+          ],
+          "last_utilization_change": 0.13430866874783748,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 1,
+          "scenario": "PLA / span twist",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 15.23562638825431,
+          "achieved": 3.3474173427695577,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.5974755446374239,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.4593031281234913,
+            0.5974755446374239
+          ],
+          "last_utilization_change": 0.13817241651393264,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 1,
+          "scenario": "PLA / torque",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 14.434290063977604,
+          "achieved": 3.5332530920433864,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.5660505907442198,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.5297091664604869,
+            0.5660505907442198
+          ],
+          "last_utilization_change": 0.03634142428373288,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / horizontal range",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 17.614786579524395,
+          "achieved": 2.895294800748986,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.6907759442950743,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.6907759442950743
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / torque plane range",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 14.734195421238146,
+          "achieved": 3.4613359292416903,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.5778115851465939,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.5778115851465939
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / brake",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 17.108024092053526,
+          "achieved": 2.981057293675948,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.6709029055707265,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.6709029055707265
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / strike",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 213.31843907839436,
+          "achieved": 0.2390791917489024,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 8.365428983466446,
+          "violation": 7.365428983466446,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            8.365428983466446
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 7.365428983466446
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / drop",
+          "quantity": "peak_acceleration_g@hub",
+          "achieved": 13.313174265674297,
+          "maximum": 11.241933106104414,
+          "utilization": 1.1842424376680547,
+          "violation": 0.1842424376680547,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.1842424376680547
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.1842424376680547
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / strike",
+          "quantity": "peak_acceleration_g@hub",
+          "achieved": 23.46032135584563,
+          "maximum": 19.380085776091217,
+          "utilization": 1.2105375397661091,
+          "violation": 0.21053753976610912,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.2105375397661091
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.21053753976610912
+        }
+      ],
+      "results": [
+        {
+          "scenario": "PLA / lift",
+          "n_tets": 154365,
+          "peak_MPa": 29.236515775144966,
+          "regional_peak_rms_MPa": 1.8255162848299937,
+          "compliance_Nmm": 34.541494126545416,
+          "mean_lift_mm": 1.046711943228649
+        },
+        {
+          "scenario": "PLA / drop",
+          "n_tets": 154365,
+          "peak_MPa": 160.25924156758037,
+          "regional_peak_rms_MPa": 10.122049840215087,
+          "peak_elastic_displacement_mm": 6.418397003640391,
+          "peak_acceleration_g@hub": 13.313174265674297,
+          "window_s": 0.028,
+          "contact_histories": [
+            {
+              "peak_N": 235.362010051553,
+              "peak_time_s": 0.00984375,
+              "first_contact_s": 3.125e-05,
+              "first_release_s": 0.01703125,
+              "final_force_N": 0.0,
+              "impulse_Ns": 2.5881722733394854
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / lateral",
+          "peak_MPa": 17.58837294432902,
+          "regional_peak_rms_MPa": 4.232304124785453,
+          "compliance_Nmm": 214.9985129240069,
+          "signed_displacement_mm": 6.515106452242633,
+          "refinement": [
+            {
+              "scenario": "PLA / lateral",
+              "n_tets": 1412950,
+              "peak_MPa": 51.019032146749616,
+              "regional_peak_rms_MPa": 3.84585691743279,
+              "compliance_Nmm": 222.58921800520878,
+              "signed_displacement_mm": 6.74512781833966
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / span",
+          "peak_MPa": 2.7290987656061323,
+          "regional_peak_rms_MPa": 0.5469196618057749,
+          "compliance_Nmm": 3.3573110303464357,
+          "signed_displacement_mm": 0.10173669788928594,
+          "refinement": [
+            {
+              "scenario": "PLA / span",
+              "n_tets": 1412950,
+              "peak_MPa": 6.1539698186759875,
+              "regional_peak_rms_MPa": 0.478660186917151,
+              "compliance_Nmm": 3.4518040676211035,
+              "signed_displacement_mm": 0.10460012326124556
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / span twist",
+          "peak_MPa": 11.712229767149028,
+          "regional_peak_rms_MPa": 2.6731159174681767,
+          "compliance_Nmm": 83.05649805661743,
+          "signed_rotation_deg": 4.758786799780703,
+          "refinement": [
+            {
+              "scenario": "PLA / span twist",
+              "n_tets": 1412950,
+              "peak_MPa": 15.23562638825431,
+              "regional_peak_rms_MPa": 2.669515665159018,
+              "compliance_Nmm": 91.26131104303623,
+              "signed_rotation_deg": 5.228887955596628
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / torque",
+          "peak_MPa": 13.507583744742417,
+          "regional_peak_rms_MPa": 1.9650953602409447,
+          "compliance_Nmm": 44.209305225381684,
+          "signed_rotation_deg": 2.5330066046200272,
+          "refinement": [
+            {
+              "scenario": "PLA / torque",
+              "n_tets": 1412950,
+              "peak_MPa": 14.434290063977604,
+              "regional_peak_rms_MPa": 1.8339429546887074,
+              "compliance_Nmm": 46.13362623363682,
+              "signed_rotation_deg": 2.6432620768214057
+            }
+          ]
+        },
+        {
+          "scenario": "PLA / horizontal range",
+          "peak_MPa": 17.614786579524395,
+          "maximum_compliance_Nmm": 216.6472233734529,
+          "regional_peak_rms_at_stress_angle_MPa": 4.20668671134618,
+          "stress_angle_deg": 86.86176083242232,
+          "compliance_angle_deg": 95.02451772067481
+        },
+        {
+          "scenario": "PLA / torque plane range",
+          "peak_MPa": 14.734195421238146,
+          "maximum_compliance_Nmm": 83.78156324110009,
+          "regional_peak_rms_at_stress_angle_MPa": 1.948433520241351,
+          "stress_angle_deg": 27.74761424739623,
+          "compliance_angle_deg": 97.70875257021208
+        },
+        {
+          "scenario": "PLA / brake",
+          "n_tets": 154365,
+          "peak_MPa": 17.108024092053526,
+          "regional_peak_rms_MPa": 2.66047427514545,
+          "peak_elastic_displacement_mm": 4.276923141527538,
+          "window_s": 0.15
+        },
+        {
+          "scenario": "PLA / strike",
+          "n_tets": 154365,
+          "peak_MPa": 213.31843907839436,
+          "regional_peak_rms_MPa": 31.724254012044224,
+          "peak_elastic_displacement_mm": 44.540144001611345,
+          "peak_acceleration_g@hub": 23.46032135584563,
+          "window_s": 0.056,
+          "contact_histories": [
+            {
+              "peak_N": 419.9045282418286,
+              "peak_time_s": 0.014046875,
+              "first_contact_s": 1.5625e-05,
+              "first_release_s": 0.0056875,
+              "final_force_N": 0.0,
+              "impulse_Ns": 5.812834955178683
+            }
+          ]
+        }
+      ],
+      "geometry": "894449eecab6b6cd9fada2132b5e37266345f6d6ed62437573d80f9959a36349"
+    }
+  },
+  "directional_refinement_equivalent_edge_mm": 0.9
+}

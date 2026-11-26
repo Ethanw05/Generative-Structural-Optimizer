@@ -55,6 +55,28 @@ def read_mesh(path,key):
         return data['p'],data['tet']
 
 
+def registered_analysis_mesh(path, workspace, fixed_surface_edge_mm=None):
+    """Load a verified CAD analysis mesh and optionally refine its interior at fixed exterior geometry."""
+    with np.load(path) as data:
+        if int(data['verified_boundary']) != 2:
+            raise ValueError('Expected a verified conforming analysis boundary')
+        identity = str(data['source'])
+        tolerance = float(data['effective_tolerance'])
+        points, cells = data['p'], data['tet']
+    metadata = dict(effective_surface_tolerance_mm=tolerance)
+    if fixed_surface_edge_mm is not None:
+        if not np.isfinite(fixed_surface_edge_mm) or fixed_surface_edge_mm <= 0.:
+            raise ValueError('Choose a finite positive regular-tetrahedron equivalent edge')
+        skin = analysis_skin(points, cells)
+        maximum_volume = fixed_surface_edge_mm**3 / (6.*np.sqrt(2.))
+        metadata['refinement'] = dict(method='refine tetrahedra on registered exterior', source_tetrahedra=len(cells),
+                                      source_skin=digest(skin), regular_tet_equivalent_edge_mm=fixed_surface_edge_mm,
+                                      maximum_tetrahedron_volume_mm3=maximum_volume)
+        workspace.mkdir(parents=True, exist_ok=True)
+        points, cells = volume_mesh(skin, workspace, maximum_volume, 0., 'interior')
+    return identity, points, cells, metadata
+
+
 def save_mesh(path,key,p,t,tolerance):
     with tempfile.TemporaryDirectory(dir=path.parent) as temporary:
         cache=Path(temporary)/'verified.npz'

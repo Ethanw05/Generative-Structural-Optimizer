@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from directional_check import ROOT,WORK,PLA,build_study,directional_loads
-from gso_workflows.analysis_mesh import read_mesh
+from gso_workflows.analysis_mesh import registered_analysis_mesh
 from gso_workflows.cad_wrench import SurfaceWrench
 from gso_workflows.elastic_load_plane import equivalent_stress_squared,compliance_plane
 from gso_workflows.tetra_check import solve_static_cases
@@ -25,17 +25,14 @@ def combination(first,second,angle):
     return replace(first,force_n=force)
 
 
-def measure(mesh_path,work,force,torque):
-    with np.load(mesh_path) as data:
-        if int(data['verified_boundary'])!=2:
-            raise ValueError('The directional envelope requires a verified analysis boundary')
-        ident=str(data['source'])
-    points,cells=read_mesh(mesh_path,ident)
+def measure(mesh_path,work,force,torque,fixed_surface_edge_mm=None,factor_ram_mb=None):
+    ident,points,cells,metadata=registered_analysis_mesh(mesh_path,work,fixed_surface_edge_mm)
     study=PLA.apply(build_study(WORK/'installed-arm.obj'))
     loads=directional_loads(study,force,torque)
     study=replace(study,loads=loads,mechanics_executable=ROOT/'build/Release/gso.exe')
     work.mkdir(parents=True,exist_ok=True)
-    solver,handle=linear_solver(WORK)
+    storage=(work,factor_ram_mb) if factor_ram_mb is not None else None
+    solver,handle=linear_solver(WORK,factor_storage=storage)
     fields={}
     def record(label,stress,force,motion):
         fields[label]=(stress,force,motion)
@@ -84,7 +81,7 @@ def measure(mesh_path,work,force,torque):
         else:
             row['maximum_directional_rotation_deg']=float(np.rad2deg(flexible['mean_rotation_rad']))
         print(work.name,family,round(row['stress_angle_deg'],2),'degrees',round(row['peak_MPa'],3),'MPa',flush=True)
-    return dict(geometry=ident,n_tets=len(cells),planes=result)
+    return dict(geometry=ident,n_tets=len(cells),mesh=metadata,planes=result)
 
 
 def main():
@@ -94,14 +91,18 @@ def main():
     parser.add_argument('--part',nargs=2,action='append',required=True,metavar=('LABEL','VERIFIED_MESH'))
     parser.add_argument('--force-n',type=float,default=33.)
     parser.add_argument('--torque-nmm',type=float,default=1000.)
+    parser.add_argument('--fixed-surface-edge-mm',type=float,help='Refine the registered exterior using a regular-tetrahedron equivalent volume bound')
+    parser.add_argument('--factor-ram-mb',type=int,help='oneMKL numerical factor memory budget in MB')
     args=parser.parse_args()
+    if args.factor_ram_mb is not None and args.factor_ram_mb<=0:
+        parser.error('Choose a positive factor memory budget in MB')
     if not np.isfinite([args.force_n,args.torque_nmm]).all() or min(args.force_n,args.torque_nmm)<=0.:
         parser.error('Choose positive finite load magnitudes')
     parts={}
     for name,mesh in args.part:
         if name in parts or Path(name).name!=name:
             parser.error('Choose distinct labels without path components')
-        parts[name]=measure(Path(mesh),args.work/name,args.force_n,args.torque_nmm)
+        parts[name]=measure(Path(mesh),args.work/name,args.force_n,args.torque_nmm,args.fixed_surface_edge_mm,args.factor_ram_mb)
     out=dict(material='PLA',force_N=args.force_n,torque_Nmm=args.torque_nmm,angle_frame='first axis toward second axis',
              range_deg=[0.,360.],linear_reversal_period_deg=180.,plot_spacing_deg=1.,
              method='elementwise exact quadratic stress envelope with independent direct solves at critical orientations',
