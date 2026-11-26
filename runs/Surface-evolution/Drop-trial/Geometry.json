@@ -1,0 +1,45 @@
+{
+  "parts": {
+    "parent": {
+      "geometry": "894449eecab6b6cd9fada2132b5e37266345f6d6ed62437573d80f9959a36349",
+      "volume_mm3": 64496.10763250656,
+      "triangles": 1068688,
+      "surface_area_mm2": 23955.941172884042
+    },
+    "trial": {
+      "geometry": "d6db0ba20201937d259d71af6a1b051ed50f55557c67cda8ddaaaca411435a55",
+      "volume_mm3": 64496.0833962076,
+      "triangles": 1062328,
+      "surface_area_mm2": 23593.837470029986,
+      "max_export_roundoff_mm": 5.684341886080802e-14,
+      "obj_lf_sha256": "00b10ea4b1bf4640366201095054c113adc5e1689c3d85765f502ee9929ec0d9"
+    }
+  },
+  "driving_case": "PLA / drop",
+  "field_window_s": 0.014,
+  "boundary_sampling_mm": 0.24,
+  "sampled_boundary_change": {
+    "trial_to_parent": {
+      "area_samples": 30000,
+      "seed": 293,
+      "absolute_median_mm": 0.1400502473115921,
+      "absolute_p95_mm": 1.1169812202453606,
+      "absolute_p99_mm": 1.4407101750373836,
+      "signed_p05_mm": -0.6673114508390426,
+      "signed_p95_mm": 0.9336858808994293,
+      "sampled_fraction_over_0_25_mm": 0.38816666666666666,
+      "sampled_fraction_over_1_mm": 0.06623333333333334
+    },
+    "parent_to_trial": {
+      "area_samples": 30000,
+      "seed": 294,
+      "absolute_median_mm": 0.14870399236679077,
+      "absolute_p95_mm": 1.1753712117671964,
+      "absolute_p99_mm": 1.6852643060684167,
+      "signed_p05_mm": -0.8039481163024902,
+      "signed_p95_mm": 0.8549183636903763,
+      "sampled_fraction_over_0_25_mm": 0.3944666666666667,
+      "sampled_fraction_over_1_mm": 0.07346666666666667
+    }
+  }
+}

@@ -31,3 +31,27 @@ def sample_deviation(first, second, limit):
             if maximum > limit:
                 return maximum
     return maximum
+
+
+def sample_offsets(source,target,count,seed):
+    """Measure signed distances from area-uniform source samples to the exact target triangles."""
+    if count<1:
+        raise ValueError('At least one area sample is required')
+    rng=np.random.default_rng(seed)
+    area=source.area_faces
+    indices=rng.choice(len(area),size=count,p=area/area.sum())
+    triangle=source.vertices[source.faces[indices]]
+    uv=rng.random((count,2))
+    flip=uv.sum(axis=1)>1.
+    uv[flip]=1.-uv[flip]
+    points=triangle[:,0]+uv[:,:1]*(triangle[:,1]-triangle[:,0])+uv[:,1:]*(triangle[:,2]-triangle[:,0])
+    distance=vtkImplicitPolyDataDistance()
+    distance.SetInput(polydata(target.vertices,target.faces))
+    sample=vtkSampleImplicitFunctionFilter()
+    sample.SetInputData(polydata(points))
+    sample.SetImplicitFunction(distance)
+    sample.Update()
+    offsets=vtk_to_numpy(sample.GetOutput().GetPointData().GetScalars()).astype(float)
+    if offsets.shape!=(count,) or not np.isfinite(offsets).all():
+        raise ValueError('Incomplete surface-distance measurements')
+    return offsets

@@ -13,7 +13,7 @@ from gso_workflows.design_targets import MinimizeResponse,ResponseLimit,YieldSaf
 from gso_workflows.mesh_quality import InadmissibleBoundary,validate_single_part
 from gso_workflows.scenario_feedback import mutation_weights
 from gso_workflows.surface_objectives import EvaluatedSurface,ShapeTargets,pareto,compromise_scores,objective_scales
-from gso_workflows.volume_study import publish_surface
+from trial_geometry import publish_trial_geometry
 
 
 def measured_proposal(study,parent,field_path,label,weights,work,spacing,step,resume):
@@ -95,6 +95,7 @@ def main():
                             args.spacing_mm,args.step_mm,args.resume_proposal)
     child_id=digest(child)
     print('Changed solid',child_id,'volume',child.volume,flush=True)
+    publish_trial_geometry(parent,child,args.work,args.output,label,rows[1]['window_s'],args.spacing_mm)
     cache=WORK/'joint-validation'
     volume_mesh(child,cache,1.9,.06)
     mesh=cache/f'conforming-surface-{child_id[:24]}-1.9-0.06.npz'
@@ -126,7 +127,6 @@ def main():
                 selected=selected.name,parts=results,reference_hub_g=installed_peak)
     args.output.mkdir(parents=True,exist_ok=True)
     (args.output/'Drop-feedback.json').write_text(json.dumps(report,indent=2,allow_nan=False))
-    publish_surface(child,args.output/'Front-Left-drop-trial.obj',args.work)
     print('Portfolio selection',selected.name,flush=True)
 
 
