@@ -27,6 +27,18 @@ def reversed_load(load):
     return replace(load,force_n=-load.force_n)
 
 
+def mesh_statistics(points,cells,tolerance):
+    # The surface envelope and tetrahedron sizes are different physical quantities.
+    longest_sq=np.zeros(len(cells))
+    for a,b in ((0,1),(0,2),(0,3),(1,2),(1,3),(2,3)):
+        delta=points[cells[:,a]]-points[cells[:,b]]
+        np.maximum(longest_sq,np.einsum('ij,ij->i',delta,delta),out=longest_sq)
+    longest=np.sqrt(longest_sq)
+    return dict(nodes=len(points),effective_surface_tolerance_mm=float(tolerance),
+                tetrahedron_longest_edge_mm=dict(median=float(np.median(longest)),
+                                                 p95=float(np.quantile(longest,.95)),maximum=float(longest.max())))
+
+
 def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.):
     study=build_study(WORK/'installed-arm.obj')
     loads=directional_loads(study,force_n,torque_nmm)
@@ -38,6 +50,7 @@ def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.
         if int(data['verified_boundary'])!=2:
             raise ValueError('Expected a verified conforming solid mesh')
         key=str(data['source'])
+        tolerance=float(data['effective_tolerance'])
     points,cells=read_mesh(mesh,key)
     workspace.mkdir(parents=True,exist_ok=True)
     paths={label:workspace/label.replace(' / ','-') for label in study.loads}
@@ -72,7 +85,7 @@ def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.
             modes[mode]=values
             print(workspace.name,spec.name,mode,round(values['positive']['peak_MPa'],3),'MPa',flush=True)
         report[spec.name]=modes
-    return dict(geometry=key,n_tets=len(cells),modes=report)
+    return dict(geometry=key,n_tets=len(cells),mesh=mesh_statistics(points,cells,tolerance),modes=report)
 
 
 def main():

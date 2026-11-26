@@ -16,8 +16,16 @@ def font(size,bold=False):
     return ImageFont.truetype('C:/Windows/Fonts/'+('segoeuib.ttf' if bold else 'segoeui.ttf'),size)
 
 
-def draw(report,work,output,labels):
+def draw(report,work,output,labels,additional=()):
     sample=json.loads(report.read_text())
+    for path in additional:
+        other=json.loads(path.read_text())
+        for key in ('force_N','torque_Nmm','frame','fixtures','force_application','moment_application'):
+            if other[key]!=sample[key]:
+                raise ValueError('Separate studies must use the same loading and fixtures')
+        if set(other['parts']) & sample['parts'].keys():
+            raise ValueError('Choose distinct labels when combining part comparisons')
+        sample['parts'].update(other['parts'])
     force,torque=sample['force_N'],sample['torque_Nmm']/1000.
     modes=(('span',f'{force:g} N along the arm'),('lateral',f'{force:g} N across the arm'),
            ('torque',f'{torque:g} N m about the motor axis'),('span twist',f'{torque:g} N m about the arm span'))
@@ -90,6 +98,7 @@ if __name__=='__main__':
     parser.add_argument('report',type=Path)
     parser.add_argument('work',type=Path)
     parser.add_argument('output',type=Path)
+    parser.add_argument('--additional',type=Path,action='append',default=[])
     parser.add_argument('--column',nargs=2,action='append',metavar=('LABEL','TITLE'))
     args=parser.parse_args()
-    draw(args.report,args.work,args.output,args.column or [('installed','Installed Rev 2'),('generated','Generated arm')])
+    draw(args.report,args.work,args.output,args.column or [('installed','Installed Rev 2'),('generated','Generated arm')],args.additional)

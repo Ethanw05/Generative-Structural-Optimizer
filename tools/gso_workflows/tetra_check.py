@@ -36,10 +36,12 @@ def solve(p,t,study,output,linear_solve,*,surface_tol=.35,local_regions=None,rep
     return result
 
 
-def solve_static_cases(points,cells,study,outputs,linear_solve,*,surface_tol=.35):
+def solve_static_cases(points,cells,study,outputs,linear_solve,*,surface_tol=.35,observe_linear=None):
     """Evaluate named load and moment cases, factoring each common linear elastic solid once."""
     if not outputs or set(outputs)-study.loads.keys():
         raise ValueError('Select one or more defined static cases')
+    if observe_linear is not None and set(outputs) & study.solid_laws.keys():
+        raise ValueError('Linear superposition requires linear material and small-strain kinematics')
     results={}
     groups={}
     for label,path in outputs.items():
@@ -59,11 +61,11 @@ def solve_static_cases(points,cells,study,outputs,linear_solve,*,surface_tol=.35
                 return factorized(rhs) if matrix is stiffness else linear_solve(matrix,rhs)
             for label,single,path in cases:
                 results[label]=_response(system,single,path,surface_tol,None,free,stiffness,solve_system,
-                                         sensitivities=False)
+                                         sensitivities=False,observe_linear=observe_linear)
     return results
 
 
-def _response(system,study,output,surface_tol,local_regions,free,A,linear_solve,*,sensitivities=True):
+def _response(system,study,output,surface_tol,local_regions,free,A,linear_solve,*,sensitivities=True,observe_linear=None):
     (p,t,volume,grad,shear,lame,matrix,skin,owner,local,fixed,fixture_area,fixture_transfer)=system
     n=len(p)
     load=next(iter(study.loads.values()))
@@ -80,6 +82,8 @@ def _response(system,study,output,surface_tol,local_regions,free,A,linear_solve,
     strain=.5*(du+du.transpose(0,2,1))
     dev=strain-np.trace(strain,axis1=1,axis2=2)[:,None,None]*np.eye(3)/3.
     vm=2*shear*np.sqrt(1.5*np.einsum('ijk,ijk->i',dev,dev))
+    if observe_linear is not None:
+        observe_linear(next(iter(study.loads)),2.*shear*dev,force,displacement)
     order=np.argsort(vm)
     def percentile(q):return float(np.interp(q*volume.sum(),np.cumsum(volume[order]),vm[order]))
     fn=float(np.linalg.norm(direction));work=float(rhs@u)

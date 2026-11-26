@@ -137,7 +137,35 @@ with tempfile.TemporaryDirectory(dir=root/'build') as tmp:
     materials=(IsotropicMaterial('soft',1100.,.35,1040.),IsotropicMaterial('stiff',2200.,.35,1040.))
     both=material_portfolio(opposing,materials)
     paths={key:folder/key.replace(' / ','-') for key in both.loads}
-    responses=solve_static_cases(points,np.asarray(cells),both,paths,spsolve,surface_tol=.01)
+    snapshots={}
+    def capture(label,tensor,force,motion):
+        snapshots[label]=(tensor,force,motion)
+    responses=solve_static_cases(points,np.asarray(cells),both,paths,spsolve,surface_tol=.01,observe_linear=capture)
+    from gso_workflows.elastic_load_plane import equivalent_stress_squared,compliance_plane
+    a,fa,ua=snapshots['stiff / forward']
+    b,fb,ub=snapshots['stiff / reverse']
+    squared=equivalent_stress_squared(a,b)
+    measure,angle=squared.maximum()
+    np.testing.assert_allclose(np.sqrt(measure.max()),np.sqrt(2.)*responses['stiff / forward']['peak_MPa'])
+    np.testing.assert_allclose(np.rad2deg(angle[np.argmax(measure)]),135.)
+    work_plane=compliance_plane(fa,ua,fb,ub)
+    max_work,angle=work_plane.maximum()
+    np.testing.assert_allclose(max_work,2.*responses['stiff / forward']['compliance_Nmm'])
+    np.testing.assert_allclose(work_plane.at(np.pi/4.),0.,atol=1.e-14)
+    # The same independent-direction tensor combination must match direct evaluation at off-axis angles.
+    rng=np.random.default_rng(1047)
+    aba=rng.normal(size=(17,3,3))
+    aba=(aba+aba.transpose(0,2,1))/2.
+    aba-=np.eye(3)*aba.trace(axis1=1,axis2=2)[:,None,None]/3.
+    other=np.roll(aba,1,axis=0)
+    plane=equivalent_stress_squared(aba,other)
+    maxima,angles=plane.maximum()
+    np.testing.assert_allclose(plane.at(angles),maxima,rtol=1.e-12)
+    for theta in np.linspace(0.,np.pi,23):
+        direct=np.cos(theta)*aba+np.sin(theta)*other
+        trial=1.5*np.einsum('ijk,ijk->i',direct,direct)
+        np.testing.assert_allclose(plane.at(theta),trial)
+        assert np.all(trial<=maxima+1.e-12)
     independent=solve(points,np.asarray(cells),study,folder/'check-step',spsolve,surface_tol=.01,report_to_console=False)
     for key,row in responses.items():
         np.testing.assert_allclose(row['peak_MPa'],independent['peak_MPa'],rtol=1.e-10)

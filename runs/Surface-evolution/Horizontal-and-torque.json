@@ -965,6 +965,15 @@
             }
           }
         }
+      },
+      "mesh": {
+        "nodes": 29809,
+        "effective_surface_tolerance_mm": 0.06,
+        "tetrahedron_longest_edge_mm": {
+          "median": 2.098104624550326,
+          "p95": 2.560753349004911,
+          "maximum": 3.424093497705605
+        }
       }
     },
     "generated": {
@@ -1924,6 +1933,15 @@
               }
             }
           }
+        }
+      },
+      "mesh": {
+        "nodes": 37387,
+        "effective_surface_tolerance_mm": 0.06,
+        "tetrahedron_longest_edge_mm": {
+          "median": 1.9427160665262517,
+          "p95": 2.5070026889401906,
+          "maximum": 3.3951097589287556
         }
       }
     }
