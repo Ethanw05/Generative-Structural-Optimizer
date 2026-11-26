@@ -167,10 +167,10 @@ with tempfile.TemporaryDirectory(dir=root/'build') as tmp:
         np.testing.assert_allclose(plane.at(theta),trial)
         assert np.all(trial<=maxima+1.e-12)
     independent=solve(points,np.asarray(cells),study,folder/'check-step',spsolve,surface_tol=.01,report_to_console=False)
-    from gso_workflows.volume_study import linear_solver
+    from gso_workflows.volume_study import linear_solver,mkl_runtime
     import os
     runtime=root/'build/sunbeam33'
-    if os.environ.get('PYPARDISO_MKL_RT') or any((runtime/'intel').rglob('mkl_rt*.dll')):
+    if mkl_runtime(runtime) is not None:
         disk_solver,dll_handle=linear_solver(runtime,factor_storage=(folder,512))
         prefix=os.environ.get('MKL_PARDISO_OOC_FILE_NAME')
         h=solve_static_cases(points,np.asarray(cells),opposing,{'forward':folder/'disk-forward','reverse':folder/'disk-reverse'},

@@ -53,7 +53,7 @@ def underside_sections(mesh,study):
 
 
 def measure(reference, candidates):
-    study = build_study(WORK/'installed-arm.obj')
+    study = build_study()
     # The exterior loop of the recorded native lift face defines the circular pad's center.
     face = study.loads['lift'].face
     outer = max(face.loops,key=lambda q: np.ptp(q,axis=0).prod())

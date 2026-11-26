@@ -31,7 +31,7 @@ def main():
     args=parser.parse_args()
     if args.factor_ram_mb is not None and args.factor_ram_mb<=0:
         parser.error('Choose a positive factor memory budget in MB')
-    study=build_study(WORK/'installed-arm.obj')
+    study=build_study()
     storage=(args.work,args.factor_ram_mb) if args.factor_ram_mb is not None else None
     solver,handle=linear_solver(WORK,factor_storage=storage)
     args.work.mkdir(parents=True,exist_ok=True)

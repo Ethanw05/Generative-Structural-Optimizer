@@ -18,7 +18,7 @@ def main():
     parser.add_argument('volume',type=float)
     parser.add_argument('--tetra',type=Path)
     args=parser.parse_args()
-    study=build_study(WORK/'installed-arm.obj')
+    study=build_study()
     cache=WORK/('tet-'+hashlib.sha256(args.obj.read_bytes()).hexdigest()[:16]+f'-{args.volume}.npz')
     if args.tetra or cache.exists():
         with np.load(args.tetra or cache) as d:p,t=d['p'],d['tet']

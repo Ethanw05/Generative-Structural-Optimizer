@@ -23,7 +23,7 @@ def measure(mesh,workspace,strike_window,names=('brake','strike')):
             raise ValueError('Expected a verified conforming mesh')
         identity=str(archive['source'])
     p,t=read_mesh(mesh,identity)
-    study=service_portfolio(build_study(WORK/'installed-arm.obj'))
+    study=service_portfolio(build_study())
     receiver=AccelerationReceiver('hub',study.fixed_faces)
     histories={'brake':study.histories['brake'],'strike':replace(study.histories['strike'],receivers=(receiver,))}
     study=material_portfolio(replace(study,loads={},histories=histories,mechanics_executable=ROOT/'build/Release/gso.exe'),(PLA,))

@@ -66,6 +66,7 @@ def main():
     targets=ShapeTargets('stiffness' in names,'maximum-stress' in names)
     executable=(args.executable or ROOT/'build/Release/gso.exe').resolve(strict=True)
     from tempfile import TemporaryDirectory
+    WORK.mkdir(parents=True,exist_ok=True)
     with TemporaryDirectory(dir=WORK) as directory:
         source=Path(directory)/'part.obj'
         subprocess.run([executable,'import',args.part.resolve(),source],check=True)

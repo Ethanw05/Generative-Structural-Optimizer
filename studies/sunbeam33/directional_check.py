@@ -40,7 +40,7 @@ def mesh_statistics(points,cells,tolerance):
 
 
 def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.,fixed_surface_edge_mm=None,factor_ram_mb=None):
-    study=build_study(WORK/'installed-arm.obj')
+    study=build_study()
     loads=directional_loads(study,force_n,torque_nmm)
     signed={mode+' '+symbol:action for mode,load in loads.items()
             for symbol,action in (('positive',load),('negative',reversed_load(load)))}

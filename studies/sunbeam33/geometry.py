@@ -16,7 +16,10 @@ UP=np.array([0.,1.,0.])
 ROT=np.stack([SPAN_AXIS,np.cross(UP,SPAN_AXIS),UP])
 
 
-def build_study(obj,assembly_geometry=None):
+REV2_REFERENCE=Path(__file__).resolve().parent/'inputs'/'rev2'/'installed-arm.obj'
+
+
+def build_study(obj=REV2_REFERENCE,assembly_geometry=None):
     from gso_workflows.volume_study import VolumeStudy,SurfaceLoad
     native=trimesh.load_mesh(obj,process=True)
     native.vertices=(native.vertices-ORIGIN)@ROT.T

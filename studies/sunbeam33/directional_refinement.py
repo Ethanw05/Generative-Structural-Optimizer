@@ -81,8 +81,8 @@ if __name__=='__main__':
     if args.fields:
         if len(args.fields)!=len(args.levels):
             cli.error('Provide one field directory per mesh level')
-        from geometry import WORK,build_study
-        study=build_study(WORK/'installed-arm.obj')
+        from geometry import build_study
+        study=build_study()
     report=compare([json.loads(path.read_text()) for path in args.levels],args.fields,study)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(report,indent=2,allow_nan=False))

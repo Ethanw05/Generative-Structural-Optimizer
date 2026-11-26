@@ -2,10 +2,12 @@
 from dataclasses import dataclass, field, replace
 from itertools import product
 from pathlib import Path
+from importlib.util import find_spec
 import hashlib
 import json
 import os
 import subprocess
+import sys
 import numpy as np
 from scipy import sparse
 from scipy.ndimage import gaussian_filter
@@ -88,9 +90,19 @@ class Design:
     workspace: Path
 
 
-def linear_solver(work,*,factor_storage=None):
+def mkl_runtime(work):
     configured=os.environ.get('PYPARDISO_MKL_RT')
-    dll=Path(configured) if configured else next((work/'intel').rglob('mkl_rt*.dll'),None)
+    if configured:
+        return Path(configured).resolve(strict=True)
+    bundled=next((work/'intel').rglob('mkl_rt*.dll'),None)
+    if bundled is not None or os.name!='nt' or find_spec('pypardiso') is None:
+        return bundled
+    # Intel's Windows wheels install their runtime relative to the interpreter.
+    return next((Path(sys.prefix)/'Library'/'bin').glob('mkl_rt*.dll'),None)
+
+
+def linear_solver(work,*,factor_storage=None):
+    dll=mkl_runtime(work)
     if dll is None:
         if factor_storage is not None:
             raise ValueError("Disk-backed stiffness factors require the oneMKL runtime")

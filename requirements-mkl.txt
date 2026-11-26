@@ -1,0 +1,4 @@
+# Optional Intel sparse solver for --factor-ram-mb on Windows x64.
+-r requirements.txt
+mkl==2026.2.1
+pypardiso==0.4.7

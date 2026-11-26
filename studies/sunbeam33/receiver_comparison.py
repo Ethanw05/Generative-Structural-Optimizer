@@ -67,7 +67,7 @@ def contact_history(system,study,output,solver,rebound_window,label):
 
 
 def study_definition(assembly=None):
-    study=service_portfolio(build_study(WORK/'installed-arm.obj',assembly))
+    study=service_portfolio(build_study(assembly_geometry=assembly))
     receiver=AccelerationReceiver('hub',study.fixed_faces)
     drop=replace(study.histories['drop'],receivers=(receiver,))
     study=replace(study,loads={'lift':study.loads['lift']},histories={'drop':drop},mechanics_executable=ROOT/'build/Release/gso.exe')

@@ -27,7 +27,7 @@ def combination(first,second,angle):
 
 def measure(mesh_path,work,force,torque,fixed_surface_edge_mm=None,factor_ram_mb=None):
     ident,points,cells,metadata=registered_analysis_mesh(mesh_path,work,fixed_surface_edge_mm)
-    study=PLA.apply(build_study(WORK/'installed-arm.obj'))
+    study=PLA.apply(build_study())
     loads=directional_loads(study,force,torque)
     study=replace(study,loads=loads,mechanics_executable=ROOT/'build/Release/gso.exe')
     work.mkdir(parents=True,exist_ok=True)

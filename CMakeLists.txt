@@ -71,15 +71,28 @@ if(BUILD_TESTING)
         "-DOUT=${CMAKE_CURRENT_BINARY_DIR}/evolution-block-result.json" -P "${CMAKE_CURRENT_SOURCE_DIR}/tests/evolution_example.cmake")
     add_test(NAME invalid_study COMMAND gso analyze "${CMAKE_CURRENT_SOURCE_DIR}/tests/invalid-study.json")
     set_tests_properties(invalid_study PROPERTIES WILL_FAIL TRUE)
+    option(GSO_REQUIRE_WORKFLOW_TESTS "Fail configuration if the Python workflow dependencies are unavailable" OFF)
     find_package(Python3 QUIET COMPONENTS Interpreter)
-    if(Python3_Interpreter_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/build/sunbeam33/deps/tetgen"
-       AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/build/sunbeam33/meshlib-runtime")
+    set(gso_workflow_status 1)
+    set(gso_workflow_error "Python interpreter unavailable")
+    if(Python3_Interpreter_FOUND)
+        execute_process(
+            COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_workflow_dependencies.py"
+            RESULT_VARIABLE gso_workflow_status
+            ERROR_VARIABLE gso_workflow_error
+            ERROR_STRIP_TRAILING_WHITESPACE)
+    endif()
+    if(gso_workflow_status STREQUAL "0")
         foreach(workflow_test IN ITEMS design_targets graded_load_transfer seeded_structures front_curvature design_inputs stress_evolution shape_adjoint stress_regions perforated_plate regional_history cad_history nonlinear_cad analysis_mesh orthographic realized_shape)
             add_test(NAME ${workflow_test} COMMAND "${Python3_EXECUTABLE}" -B -X faulthandler
                      "${CMAKE_CURRENT_SOURCE_DIR}/tests/${workflow_test}.py" $<TARGET_FILE:gso>)
         endforeach()
         # This end-to-end study independently remeshes two generations under two loads.
         set_tests_properties(realized_shape PROPERTIES TIMEOUT 7200)
+    elseif(GSO_REQUIRE_WORKFLOW_TESTS)
+        message(FATAL_ERROR "Workflow dependencies unavailable. Install requirements.txt into Python3_EXECUTABLE.\n${gso_workflow_error}")
+    else()
+        message(STATUS "Building native tests only. Install requirements.txt to enable workflow tests. ${gso_workflow_error}")
     endif()
 endif()
 install(TARGETS gso gso_field gso_view gso_mechanics gso_evolution RUNTIME DESTINATION bin LIBRARY DESTINATION bin)
