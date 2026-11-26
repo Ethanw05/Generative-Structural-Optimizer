@@ -1,0 +1,50 @@
+{
+  "envelope": "envelope.obj",
+  "preserved": [
+    "preserved.obj"
+  ],
+  "excluded": [
+    "excluded.obj"
+  ],
+  "fixed_faces": [
+    {
+      "pick_point": [
+        0,
+        2,
+        2
+      ],
+      "pick_normal": [
+        -1,
+        0,
+        0
+      ]
+    }
+  ],
+  "loads": {
+    "load A": {
+      "face": {
+        "pick_point": [
+          6,
+          1,
+          1
+        ],
+        "pick_normal": [
+          1,
+          0,
+          0
+        ]
+      },
+      "force_n": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  "young_mpa": 2000.0,
+  "poisson": 0.3,
+  "volume_limit_mm3": 70.0,
+  "pitch_mm": 0.5,
+  "iterations": 12,
+  "refinement_steps": 6
+}

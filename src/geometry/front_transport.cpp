@@ -104,16 +104,6 @@ void transport(std::size_t nx, std::size_t ny, std::size_t nz, const float* fiel
 }
 
 // C ABI for the analysis driver. No host-global pool or worker process is created.
-extern "C" GSO_EXPORT int gsoAdvanceFront(std::size_t nx, std::size_t ny, std::size_t nz,
-    const float* field, const float* speed, const float* retained, const float* restriction,
-    float spacing, float* result) noexcept
-{
-    try { transport(nx, ny, nz, field, speed, retained, restriction, spacing, 0.f, 0.f, result); }
-    catch (const std::invalid_argument&) { return 1; }
-    catch (...) { return 2; }
-    return 0;
-}
-
 extern "C" GSO_EXPORT int gsoAdvanceRegularizedFront(std::size_t nx, std::size_t ny, std::size_t nz,
     const float* field, const float* speed, const float* retained, const float* restriction,
     float spacing, float diffusionMm2, float moveBound, float* result) noexcept

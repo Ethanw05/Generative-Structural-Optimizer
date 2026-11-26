@@ -34,9 +34,6 @@ struct TimeResponse
     Eigen::VectorXd displacement, velocity;
 };
 // Probe is the work-conjugate interpolation vector for a unit directional force.
-TimeResponse integrateHistory(const System &system, const TransientCase &scenario,
-                              const Eigen::VectorXd &probe = {},
-                              const std::function<void(const Eigen::VectorXd &)> &observe = {});
 TimeResponse integrateTimedHistory(const System &system, const TransientCase &scenario, const Eigen::VectorXd &probe,
                                    const std::function<void(double, const Eigen::VectorXd &)> &observe,
                                    const std::function<void(double, const Eigen::VectorXd &)> &observeAcceleration = {});

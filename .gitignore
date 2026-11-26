@@ -2,3 +2,10 @@
 /out/
 /.vs/
 /CMakeUserPresets.json
+__pycache__/
+*.pyc
+# Generated meshes and study results
+/runs/
+*.obj
+*.npz
+/.venv/

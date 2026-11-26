@@ -87,6 +87,17 @@ System assemble(const Model &model)
     {
         throw std::runtime_error("Integrated solid has zero sampled volume");
     }
+    // Inserting into a compressed matrix one coefficient at a time shifts its storage
+    // on each new entry. Overlapping supports repeat every coefficient many times, so
+    // contributions are summed in bounded batches instead of one unbounded list.
+    constexpr std::size_t batch = std::size_t{1} << 22;
+    std::vector<Entry> stiffness, mass;
+    const auto merge = [n](std::vector<Entry> &entries, Sparse &target) {
+        Sparse part(n, n);
+        part.setFromTriplets(entries.begin(), entries.end());
+        target += part;
+        entries.clear();
+    };
     for (const auto &q : volume.points)
     {
         auto basis = approximation(sys.sites, model.solid, q.location, model.support);
@@ -103,50 +114,37 @@ System assemble(const Model &model)
             for (std::size_t j = 0; j <= i; ++j)
             {
                 const Eigen::Matrix3d block = left * b[j];
-                const double mass = grams * 1e-6 * basis[i].value * basis[j].value;
+                const double inertia = grams * 1e-6 * basis[i].value * basis[j].value;
                 const int row = 3 * basis[i].site, col = 3 * basis[j].site;
                 for (int a = 0; a < 3; ++a)
                 {
-                    sys.mass.coeffRef(row + a, col + a) += mass;
+                    mass.emplace_back(row + a, col + a, inertia);
                     if (i != j)
                     {
-                        sys.mass.coeffRef(col + a, row + a) += mass;
+                        mass.emplace_back(col + a, row + a, inertia);
                     }
                     for (int d = 0; d < 3; ++d)
                     {
-                        sys.stiffness.coeffRef(row + a, col + d) += block(a, d);
+                        stiffness.emplace_back(row + a, col + d, block(a, d));
                         if (i != j)
                         {
-                            sys.stiffness.coeffRef(col + d, row + a) += block(a, d);
+                            stiffness.emplace_back(col + d, row + a, block(a, d));
                         }
                     }
                 }
             }
         }
+        if (stiffness.size() >= batch)
+        {
+            merge(stiffness, sys.stiffness);
+            merge(mass, sys.mass);
+        }
     }
+    merge(stiffness, sys.stiffness);
+    merge(mass, sys.mass);
     sys.stiffness.makeCompressed();
     sys.mass.makeCompressed();
     sys.constraints.makeCompressed();
     return sys;
-}
-Eigen::VectorXd loadVector(const Model &model, const System &sys, const std::vector<Force> &forces)
-{
-    Eigen::VectorXd f = Eigen::VectorXd::Zero(sys.stiffness.rows());
-    for (const auto &applied : forces)
-    {
-        if (!applied.newtons.allFinite())
-        {
-            throw std::invalid_argument("Nonfinite force");
-        }
-        for (const auto &s : approximation(sys.sites, model.solid, applied.location, model.support))
-        {
-            f.segment<3>(3 * s.site) += s.value * applied.newtons;
-        }
-    }
-    if (!f.allFinite() || f.norm() == 0.0)
-    {
-        throw std::invalid_argument("Applied force vector is empty");
-    }
-    return f;
 }
 } // namespace gso

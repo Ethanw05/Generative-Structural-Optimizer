@@ -150,6 +150,18 @@ def mutation_weights(history, targets, label=None):
     return (stiffness, .5*stress, 0., 0., .5*stress)
 
 
+def lower_rank(delta, tolerance=1.e-9):
+    """Lexicographic decrease of normalized ranks, ignoring differences at solver roundoff."""
+    for value in delta:
+        if not np.isfinite(value):
+            return bool(value < 0.)
+        if value < -tolerance:
+            return True
+        if value > tolerance:
+            return False
+    return False
+
+
 def feedback_step(analysis, current, identity, label, targets, exe, pitch, spacing, propose, sweep, ordinal):
     parent = analysis.proposal_field(current, identity, label)
     if parent.geometry != identity or parent.label != label:
@@ -204,11 +216,11 @@ def feedback_step(analysis, current, identity, label, targets, exe, pitch, spaci
                             front = pareto([before, after], targets)
                             scores = compromise_scores([before, after], targets, scale)
                             delta = tuple(a-b for a,b in zip(scores['trial'],scores['parent'],strict=True))
-                            improves = any(item is after for item in front) and delta < (0.,)*len(delta)
+                            improves = any(item is after for item in front) and lower_rank(delta)
                             seen[child_id] = (improves, len(front)==1 and front[0] is after)
                             event['trials'].append(dict(geometry=child_id, direction=direction,
                                                        move_mm=move, regret=scores))
-                            if best is None or delta < best[0]:
+                            if best is None or lower_rank(tuple(a-b for a,b in zip(delta,best[0],strict=True))):
                                 best = (delta, child, result, move, direction)
                         improves, dominates = seen[child_id]
                         if improves:
@@ -221,7 +233,7 @@ def feedback_step(analysis, current, identity, label, targets, exe, pitch, spaci
     if best is not None:
         delta, child, result, move, direction = best
         event.update(status='advanced', child=result.geometry, move_mm=move, direction=direction,
-                     selection='improving' if delta < (0.,)*len(delta) else 'exploratory',
+                     selection='improving' if lower_rank(delta) else 'exploratory',
                      child_peak_MPa=result.response.get('peak_MPa'))
         analysis.checkpoint(child, event)
         analysis.record(event)

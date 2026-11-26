@@ -39,5 +39,4 @@ struct System
     double lowerMassGrams = 0.0;
 };
 System assemble(const Model &model);
-Eigen::VectorXd loadVector(const Model &model, const System &system, const std::vector<Force> &forces);
 } // namespace gso

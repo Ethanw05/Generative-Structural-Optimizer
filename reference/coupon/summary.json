@@ -1,0 +1,57 @@
+{
+  "surface": {
+    "volume_mm3": 69.9983132657435,
+    "triangles": 35708
+  },
+  "arrays": {
+    "allowed": [
+      12,
+      8,
+      8
+    ],
+    "protected": [
+      12,
+      8,
+      8
+    ],
+    "grid_origin": [
+      3
+    ],
+    "grid_shape": [
+      3
+    ],
+    "force": [
+      2910
+    ],
+    "lookup": [
+      1053
+    ],
+    "stencil_0.5_2000.0_0.3": [
+      24,
+      24
+    ],
+    "stencil_0.5_2.0_0.0": [
+      24,
+      24
+    ],
+    "stencil_0.5_2.5_0.25": [
+      24,
+      24
+    ],
+    "density_before_refine": [
+      760
+    ],
+    "density_after_refine": [
+      760
+    ],
+    "density_by_generation": [
+      12,
+      760
+    ],
+    "final_grid": [
+      12,
+      8,
+      8
+    ]
+  }
+}

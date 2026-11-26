@@ -241,10 +241,4 @@ TimeResponse integrateTimedHistory(const System &s, const TransientCase &c, cons
     out.velocity = std::move(v);
     return out;
 }
-TimeResponse integrateHistory(const System &s, const TransientCase &c, const Vec &probe,
-                              const std::function<void(const Eigen::VectorXd &)> &observe)
-{
-    if (!observe) { return integrateTimedHistory(s, c, probe, {}); }
-    return integrateTimedHistory(s, c, probe, [&](double, const Vec &u) { observe(u); });
-}
 } // namespace gso
