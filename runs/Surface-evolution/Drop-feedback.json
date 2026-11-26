@@ -1,0 +1,151 @@
+{
+  "driving_case": "PLA / drop",
+  "driver_window_s": 0.014,
+  "verification": "matched single-mesh screening through separation",
+  "selected": "trial",
+  "parts": {
+    "parent": {
+      "geometry": "894449eecab6b6cd9fada2132b5e37266345f6d6ed62437573d80f9959a36349",
+      "volume_mm3": 64496.10763250656,
+      "checks": [
+        {
+          "level": 0,
+          "scenario": "PLA / lift",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 29.236515775144966,
+          "achieved": 1.7443939076816044,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 1.1465300303978418,
+          "violation": 0.14653003039784185,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.1465300303978418
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.14653003039784185
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / drop",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 160.25924156758037,
+          "achieved": 0.3182343776317798,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 6.2846761399051125,
+          "violation": 5.2846761399051125,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            6.2846761399051125
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 5.2846761399051125
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / drop",
+          "quantity": "peak_acceleration_g@hub",
+          "achieved": 13.313174265674297,
+          "maximum": 11.241933106104414,
+          "utilization": 1.1842424376680547,
+          "violation": 0.1842424376680547,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.1842424376680547
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.1842424376680547
+        }
+      ],
+      "observed_targets_met": false,
+      "compliance_Nmm": 34.541494126545416,
+      "drop_peak_MPa": 160.25924156758037,
+      "hub_peak_g": 13.313174265674297
+    },
+    "trial": {
+      "geometry": "d6db0ba20201937d259d71af6a1b051ed50f55557c67cda8ddaaaca411435a55",
+      "volume_mm3": 64496.0833962076,
+      "checks": [
+        {
+          "level": 0,
+          "scenario": "PLA / lift",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 15.92094544410959,
+          "achieved": 3.2033273513206413,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.6243508017297879,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.6243508017297879
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / drop",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 51.0,
+          "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+          "peak_MPa": 83.80368121481231,
+          "achieved": 0.6085651520399529,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 3.2864188711691105,
+          "violation": 2.2864188711691105,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            3.2864188711691105
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 2.2864188711691105
+        },
+        {
+          "level": 0,
+          "scenario": "PLA / drop",
+          "quantity": "peak_acceleration_g@hub",
+          "achieved": 13.168440826112466,
+          "maximum": 11.241933106104414,
+          "utilization": 1.171368011339789,
+          "violation": 0.17136801133978907,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.171368011339789
+          ],
+          "last_utilization_change": 0.0,
+          "normalized_selection_excess": 0.17136801133978907
+        }
+      ],
+      "observed_targets_met": false,
+      "compliance_Nmm": 34.75296928339537,
+      "drop_peak_MPa": 83.80368121481231,
+      "hub_peak_g": 13.168440826112466
+    }
+  },
+  "reference_hub_g": 11.241933106104414
+}
