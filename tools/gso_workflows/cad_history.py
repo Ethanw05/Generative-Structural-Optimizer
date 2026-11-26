@@ -113,7 +113,7 @@ def measure_history(system,study,case,solver,executable,density_kg_m3,surface_to
     channels=np.column_stack(seeds)
     all_contacts=(*case.contacts,*case.rigid_contacts)
     reference=reference or ReferenceRegions()
-    patches = receiver_patches(case,system,surface_tol)
+    patches = receiver_patches(case,system,surface_tol,relative_tolerance)
     previous_order=None
     stable_orders=0
     def close(a,b):

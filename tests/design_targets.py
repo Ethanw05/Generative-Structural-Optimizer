@@ -62,4 +62,13 @@ maximize=ShapeTargets(False,False,(),(MaximizeResponse(('drop',),shock.metric),)
 assert [x.name for x in pareto([a,b,c],maximize)]==['shock fails']
 opposed=ShapeTargets(False,False,(),(extra,MaximizeResponse(('drop',),shock.metric)))
 rejects(lambda:pareto([a,b],opposed))
+narrow=part('near limit',(13.06,14.19,14.11),8.,1.)
+narrow.verify_margin=True
+assert assessments(narrow,(safety,))[0]['status']=='margin_unresolved'
+narrow.limit_evidence={'pull':[dict(scenario='pull',peak_MPa=15.12)]}
+check=assessments(narrow,(safety,))[0]
+assert check['status']=='exceeded' and check['level']==3
+narrow.limit_evidence={'pull':[dict(scenario='pull',peak_MPa=14.20)]}
+assert assessments(narrow,(safety,))[0]['met']
+rejects(lambda:ShapeTargets(verification_edges_mm=(.3,.4)))
 print('Scoped yield, shock, missing evidence and feasibility ordering passed')

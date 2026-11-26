@@ -111,11 +111,25 @@ def assessments(candidate, limits, *, require_all=False):
             if checks:
                 if len(checks) != len(candidate.responses):
                     raise ValueError(f'Incomplete mesh verification for {label}')
-                worst = max(checks, key=lambda check:(check['violation'],check['utilization']))
-                rows.append(dict(**worst, met=worst['violation'] == 0.,
-                                 utilization_by_mesh=[r['utilization'] for r in checks]))
+                extra=candidate.limit_evidence.get(label,())
+                base_count=len(checks)
+                for index,result in enumerate(extra,start=base_count):
+                    checks.append(dict(level=index,scenario=label,**limit.assessment(result)))
+                worst=max(checks,key=lambda check:(check['violation'],check['utilization']))
+                ratios=[r['utilization'] for r in checks]
+                spread=max(ratios)-min(ratios)
+                if extra:
+                    # Level 1 is the independently refined exterior. Level 2 refines its predecessor's interior.
+                    previous=ratios[-2] if len(extra)>1 else ratios[min(1,base_count-1)]
+                    spread=abs(ratios[-1]-previous)
+                observed=worst['violation']==0.
+                narrow=observed and candidate.verify_margin and spread>1.-max(ratios)
+                status='margin_unresolved' if narrow else ('met' if observed else 'exceeded')
+                rows.append(dict(**worst,met=observed and not narrow,status=status,observed_met=observed,
+                                 utilization_by_mesh=ratios,last_utilization_change=spread,
+                                 normalized_selection_excess=max(worst['violation'],max(ratios)+spread-1. if narrow else 0.)))
     return rows
 
 
 def violation(candidate, limits):
-    return max((r['violation'] for r in assessments(candidate, limits)),default=0.)
+    return max((r['normalized_selection_excess'] for r in assessments(candidate, limits)),default=0.)

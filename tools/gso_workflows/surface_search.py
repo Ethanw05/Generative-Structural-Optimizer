@@ -15,6 +15,7 @@ from .analysis_mesh import volume_mesh,digest
 from .mesh_quality import InadmissibleBoundary,validate_single_part
 from .tetra_check import solve
 from .reference_regions import ReferenceRegions, compare_regions
+from .limit_verification import verify_limits,include_measured_fields
 
 
 def evaluate(study,mesh,pitch,spacing,work,solver,name,regions=None,feedback=None):
@@ -107,6 +108,25 @@ def evolve_surface(study,baseline,pitch,exe,work,solver,targets=None,generations
     radius=pitch
     trust_history=[]
     print(f'Evolution seed {seed}, run {analysis.run}',flush=True)
+    def measure_checkpoint(tag,mesh):
+        item=evaluate(study,mesh,pitch,spacing,analysis.run,solver,tag,analysis.regions,analysis)
+        verify_limits(item,targets,analysis)
+        verified[tag]=item
+        trace.append(dict(name=tag,scenarios=list(study.scenarios()),geometry=digest(mesh),
+                          responses=item.responses,limit_evidence=item.limit_evidence))
+
+    # A requirement near the discretization error needs a resolved field before moving material.
+    if targets.limits:
+        measure_checkpoint('initial',baseline)
+        if 'resumed' in checkpoints:
+            try:
+                measure_checkpoint('resumed',current)
+            except (InadmissibleBoundary,UnresolvedHistory,UnresolvedSolid) as error:
+                trace.append(dict(name='resumed',rejected=str(error)))
+                del checkpoints['resumed']
+                current,identity=baseline,analysis.baseline_id
+                analysis.checkpoint(current,dict(child=identity,sweep=0))
+    include_measured_fields(verified.values(),targets,analysis)
     for generation in range(1,generations+1):
         if case_updates is not None:
             added=case_updates(generation,study)
@@ -156,7 +176,7 @@ def evolve_surface(study,baseline,pitch,exe,work,solver,targets=None,generations
             if tag in verified:
                 continue
             try:
-                item=evaluate(study,mesh,pitch,spacing,analysis.run,solver,tag,analysis.regions,analysis)
+                measure_checkpoint(tag,mesh)
             except (InadmissibleBoundary,UnresolvedHistory,UnresolvedSolid) as error:
                 if tag=='initial':
                     raise
@@ -173,9 +193,8 @@ def evolve_surface(study,baseline,pitch,exe,work,solver,targets=None,generations
                     analysis.record(rollback)
                     lineage.append(rollback)
                 continue
-            verified[tag]=item
-            trace.append(dict(name=tag,scenarios=list(study.scenarios()),geometry=digest(mesh),
-                              responses=item.responses))
+
+        include_measured_fields(verified.values(),targets,analysis)
         # Portfolio checks change the next move size on the working lineage. A load
         # which has just run cannot erase regressions under a different load.
         front=pareto(list(verified.values()),targets)
@@ -232,7 +251,8 @@ def evolve_surface(study,baseline,pitch,exe,work,solver,targets=None,generations
     checks=assessments(parent,targets.limits,require_all=True)
     requirements_met=all(row['met'] for row in checks)
     report=dict(requirements=checks,requirements_met=requirements_met,
-                selection_status=('least_violation' if not requirements_met else 'selected'),
+                selection_status=('selected' if requirements_met else ('mesh_margin_unresolved' if any(
+                    row['status']=='margin_unresolved' for row in checks) else 'least_violation')),
                 verification=('coarse','fine','fixed-interface refinement'),relative_mesh_spread=mesh_change,comparison_with_start=comparisons,scenarios=list(study.scenarios()),selected=parent.name,nondominated=[c.name for c in archive],
                 local_regions={name: region.anchors.tolist() for name,region in initial_surface.regions.items()},
                 termination=termination,expanded=expanded,sequence_seed=seed,lineage=lineage,trust_history=trust_history,

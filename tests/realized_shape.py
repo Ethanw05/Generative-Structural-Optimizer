@@ -63,6 +63,21 @@ from gso_workflows.scenario_feedback import CaseField,ScenarioAdditions,case_ord
 from gso_workflows.analysis_mesh import digest
 from types import SimpleNamespace
 exe=Path(sys.argv[1]).resolve()
+
+# A finer analysis overturns a provisional pass, and its field becomes the next proposal's resolution.
+from gso_workflows.design_targets import YieldSafety, assessments
+from gso_workflows.limit_verification import verify_limits
+near=EvaluatedSurface(trimesh.creation.box(),[[dict(scenario='pull',peak_MPa=s)] for s in (13.06,14.19,14.11)],[],'near')
+queries=[]
+def measured_field(mesh,identity,label,resolution):
+    queries.append(resolution)
+    return SimpleNamespace(response=dict(scenario=label,peak_MPa=15.12))
+probe=SimpleNamespace(analysis_pitch=.72,edge=.684,envelope=.036,proposal_resolution={},field=measured_field)
+constraint=YieldSafety(('pull',),30.,2.,'test')
+verify_limits(near,ShapeTargets(limits=(constraint,)),probe)
+assert len(queries)==1 and probe.proposal_resolution['pull']==queries[0]
+assert assessments(near,(constraint,))[0]['status']=='exceeded'
+
 with tempfile.TemporaryDirectory(dir=root/'build') as directory:
     work=Path(directory)
     coupon=trimesh.creation.box(extents=[2.,2.,2.])

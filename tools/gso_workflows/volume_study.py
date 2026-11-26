@@ -288,4 +288,5 @@ def generate(study,pitch,iterations,executable,work,destination,*,refinements=1,
                                    sequence_seed=sequence_seed,case_updates=case_updates,working_surface=working_surface)
     result=publish_surface(selected.mesh,destination,work)
     return dict(**result,selected=report['selected'],nondominated=report['nondominated'],
-                requirements_met=report['requirements_met'],requirements=report['requirements'])
+                requirements_met=report['requirements_met'],requirements=report['requirements'],
+                selection_status=report['selection_status'])

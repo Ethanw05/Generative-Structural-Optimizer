@@ -64,18 +64,25 @@ class FeedbackAnalysis:
         self.solver = solver
         self.regions = {}
         self.fields = {}
+        self.proposal_resolution = {}
         self.baseline_id = digest(baseline)
 
-    def field(self, mesh, identity, label):
-        key = (identity, label)
+    def proposal_field(self,mesh,identity,label):
+        if label in self.proposal_resolution:
+            return self.field(mesh,identity,label,self.proposal_resolution[label])
+        return self.field(mesh,identity,label)
+
+    def field(self, mesh, identity, label, resolution=None):
+        resolution=resolution or (self.edge,self.envelope)
+        key = (identity,label,resolution)
         if key in self.fields:
             return self.fields[key]
-        if identity != self.baseline_id and (self.baseline_id, label) not in self.fields:
-            self.field(self.baseline, self.baseline_id, label)
+        if identity != self.baseline_id and (self.baseline_id,label,resolution) not in self.fields:
+            self.field(self.baseline,self.baseline_id,label,resolution)
         if label not in self.regions:
             self.regions[label] = ReferenceRegions()
         print(f'Analyzing {label} on {identity[:12]}', flush=True)
-        p, t = volume_mesh(mesh, self.workspace, self.edge, self.envelope)
+        p, t = volume_mesh(mesh,self.workspace,*resolution)
         path = self.run/f'field-{len(self.fields)}'
         region = self.regions[label]
         active=self.study.for_case(label)
@@ -87,6 +94,7 @@ class FeedbackAnalysis:
             single = replace(active, loads={label: active.loads[label]})
             response = solve(p, t, single, path, self.solver, surface_tol=self.surface_tol, local_regions=region,
                              report_to_console=False)
+        response['verification_edge_mm']=resolution[0]
         evidence = CaseField(identity, label, response, path.with_suffix('.npz'))
         self.fields[key] = evidence
         return evidence
@@ -143,11 +151,11 @@ def mutation_weights(history, targets, label=None):
 
 
 def feedback_step(analysis, current, identity, label, targets, exe, pitch, spacing, propose, sweep, ordinal):
-    parent = analysis.field(current, identity, label)
+    parent = analysis.proposal_field(current, identity, label)
     if parent.geometry != identity or parent.label != label:
         raise ValueError('Mutation evidence does not belong to the current geometry and case')
     event = dict(sweep=sweep, step=ordinal, case=label, parent=identity, field_geometry=parent.geometry,
-                 parent_peak_MPa=parent.response.get('peak_MPa'))
+                 parent_peak_MPa=parent.response.get('peak_MPa'),proposal_edge_mm=parent.response.get('verification_edge_mm'))
     history = label in analysis.study.histories
     directions = [('requested', mutation_weights(history, targets,label))]
     if history:
@@ -169,7 +177,7 @@ def feedback_step(analysis, current, identity, label, targets, exe, pitch, spaci
         return EvaluatedSurface(None, [[field.response]], [], name)
 
     before = candidate(parent, 'parent')
-    reference = analysis.field(analysis.baseline, analysis.baseline_id, label)
+    reference = analysis.proposal_field(analysis.baseline, analysis.baseline_id, label)
     scale = objective_scales(candidate(reference, 'reference'), targets)
     best = None
     seen = {}
@@ -191,7 +199,7 @@ def feedback_step(analysis, current, identity, label, targets, exe, pitch, spaci
                     child_id = digest(child)
                     if child_id != identity:
                         if child_id not in seen:
-                            result = analysis.field(child, child_id, label)
+                            result = analysis.proposal_field(child, child_id, label)
                             after = candidate(result, 'trial')
                             front = pareto([before, after], targets)
                             scores = compromise_scores([before, after], targets, scale)

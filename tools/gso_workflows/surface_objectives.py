@@ -1,5 +1,5 @@
 """Comparable mechanical objectives for independently evaluated solid designs."""
-from dataclasses import dataclass
+from dataclasses import dataclass,field
 import numpy as np
 from .design_targets import YieldSafety, violation, measured
 
@@ -10,6 +10,15 @@ class ShapeTargets:
     maximum_stress: bool = True
     limits: tuple = ()
     extra_objectives: tuple = ()
+    verification_refinements: int = 2
+    verification_edges_mm: tuple = ()
+
+    def __post_init__(self):
+        if not isinstance(self.verification_refinements,int) or self.verification_refinements<0:
+            raise ValueError('The additional target refinement budget must be a nonnegative integer')
+        edges=self.verification_edges_mm
+        if any(not np.isfinite(edge) or edge<=0. for edge in edges) or any(a<=b for a,b in zip(edges,edges[1:])):
+            raise ValueError('Independent verification edge lengths must be positive and strictly decreasing')
 
     def validate_cases(self, study):
         labels = set(study.scenarios())
@@ -78,6 +87,8 @@ class EvaluatedSurface:
     name: str
     first_evidence: list | None = None
     regions: dict | None = None
+    limit_evidence: dict = field(default_factory=dict)
+    verify_margin: bool = False
 
 
 def objective_bounds(candidate,targets):

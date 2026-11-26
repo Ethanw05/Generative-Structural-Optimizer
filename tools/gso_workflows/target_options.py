@@ -4,6 +4,8 @@ from fnmatch import fnmatchcase
 
 
 def add_target_options(parser):
+    parser.add_argument('--verification-edge-mm',action='append',type=float,default=[],
+                        help='Add an independent target-verification mesh; repeat in decreasing order of edge length')
     options = (
         ('--yield-safety',('MODES','FACTOR','YIELD_MPA_OR_MATERIAL'),
          'Require a minimum yield factor on every matching case. Use material for a supplied coupon yield.'),
@@ -70,6 +72,7 @@ def configure_targets(study, targets, args):
     for entries,kind in ((args.minimize_response,MinimizeResponse),(args.maximize_response,MaximizeResponse)):
         goals.extend(kind(select(pattern),key) for pattern,key in entries)
     configured=replace(study,histories=histories)
-    targets=replace(targets,limits=tuple(limits),extra_objectives=tuple(goals))
+    targets=replace(targets,limits=tuple(limits),extra_objectives=tuple(goals),
+                    verification_edges_mm=(*targets.verification_edges_mm,*args.verification_edge_mm))
     targets.validate_cases(configured)
     return configured,targets

@@ -59,7 +59,7 @@ class ReceiverPatch:
         return magnitude / 9806.65
 
 
-def receiver_patches(case, system, tolerance):
+def receiver_patches(case, system, tolerance, relative_tolerance=None):
     names = [item.name for item in case.receivers]
     if len(names) != len(set(names)):
         raise ValueError('Receiver names must be unique within each history')
@@ -68,7 +68,7 @@ def receiver_patches(case, system, tolerance):
         if not pair.name or pair.name in ratios or pair.source == pair.receiver or {pair.source,pair.receiver}-set(names):
             raise ValueError('A transfer ratio needs a unique name and two distinct configured receivers')
         ratios.add(pair.name)
-    integration_tolerance=min(.005,case.relative_tolerance*.1)
+    integration_tolerance=.1*(case.relative_tolerance if relative_tolerance is None else relative_tolerance)
     return [ReceiverPatch(item,system,tolerance,case.carrier,integration_tolerance) for item in case.receivers]
 
 
