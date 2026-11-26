@@ -20,7 +20,8 @@ from gso_workflows.cad_wrench import SurfaceWrench
 from gso_workflows.design_space import DesignSpace, Face
 from gso_workflows.mesh_quality import validate_single_part
 from gso_workflows.scenario_feedback import FeedbackAnalysis, feedback_step
-from gso_workflows.surface_objectives import ShapeTargets
+from gso_workflows.surface_objectives import (ShapeTargets, EvaluatedSurface, pareto,
+                                              objective_scales, compromise_scores)
 from gso_workflows.tetra_check import solve
 from gso_workflows.volume_study import SurfaceLoad, VolumeStudy
 
@@ -123,18 +124,33 @@ def exercise(factory, rng, executable, directory):
         return False
     assert digest(changed) == new_id and changed.volume <= study.volume_limit_mm3
     validate_single_part(changed)
-    # Remesh both solids independently of the mesh that drove the mutation.
-    values = []
-    for name, part in (('stock',original), ('trial',changed)):
-        p,t = volume_mesh(part,directory,.60*pitch,.18*spacing)
-        response = solve(p,t,study,directory/f'fine-{name}',spsolve,surface_tol=analysis.surface_tol,
-                         report_to_console=False)
-        equilibrium(response)
-        values.append([response['compliance_Nmm'],response['peak_MPa']])
-    print(f'{factory.__name__} ({event["selection"]}), fine stock / trial [N mm, MPa]: {values}', flush=True)
+    decision, rows = verified_pair(analysis, label, original, changed, directory, pitch, spacing)
+    print(f'{factory.__name__} ({event["selection"]}), fine stock / trial [N mm, MPa]: {rows}; '
+          f'two-mesh selection: {decision}', flush=True)
     if exact_work is not None:
-        assert abs(values[0][0]/exact_work - 1.) < .06
+        assert abs(rows[0][0]/exact_work - 1.) < .06
     return True
+
+
+def verified_pair(analysis, label, original, changed, directory, pitch, spacing):
+    # Validate both geometry hypotheses using the same reference stress regions
+    # on independently remeshed solids and the production compromise selector.
+    verified = []
+    rows = []
+    for name, part in (('stock', original), ('trial', changed)):
+        coarse = analysis.field(part, digest(part), label)
+        p,t = volume_mesh(part,directory,.60*pitch,.18*spacing)
+        fine = solve(p,t,analysis.study,directory/f'fine-{name}',spsolve,
+                     surface_tol=analysis.surface_tol,local_regions=analysis.regions[label],
+                     report_to_console=False)
+        equilibrium(fine)
+        rows.append([fine['compliance_Nmm'],fine['peak_MPa']])
+        verified.append(EvaluatedSurface(part,[[coarse.response],[fine]],[],name,regions=analysis.regions))
+    targets = ShapeTargets()
+    archive = pareto(verified, targets)
+    scores = compromise_scores(archive, targets, objective_scales(verified[0], targets))
+    selection = min(archive, key=lambda item:scores[item.name]).name
+    return selection, rows
 
 
 if __name__ == '__main__':

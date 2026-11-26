@@ -31,6 +31,10 @@ def prescribed_faces(study):
                                       for item in history.loads)]
     faces = [*study.fixed_faces, *(face for load in loads for face in
                                    (load.faces if isinstance(load, SurfaceWrench) else (load.face,)))]
+    for history in study.histories.values():
+        for contact in history.contacts:
+            attachment = contact.unit_normal_load
+            faces.extend(attachment.faces if isinstance(attachment,SurfaceWrench) else (attachment.face,))
     return {id(face): face for face in faces}.values()
 
 
@@ -65,7 +69,7 @@ def solve_motion(study, evidence, executable, work, move, spacing, weights, avai
         if "transient" in case:
             # The spatial envelope supplies an exploratory energy direction. The full
             # history is resolved again on each proposal before Pareto selection.
-            if len(weights)>=4 and weights[3]>0.:
+            if len(weights)>=4 and weights[3]!=0.:
                 energy=case["vm"]**2
                 norm=np.average(energy,weights=area)
                 if norm>0.:drive+=weights[3]*energy/(norm*len(evidence))

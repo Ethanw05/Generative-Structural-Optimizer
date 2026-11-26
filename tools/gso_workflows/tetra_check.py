@@ -55,7 +55,7 @@ def _response(system,study,output,surface_tol,local_regions,free,A,linear_solve)
     order=np.argsort(vm)
     def percentile(q):return float(np.interp(q*volume.sum(),np.cumsum(volume[order]),vm[order]))
     fn=float(np.linalg.norm(direction));work=float(rhs@u)
-    summary=dict(solid_model=study.solid_model(next(iter(study.loads))),stress_measure='element von Mises',volume_mm3=volume.sum(),n_tets=len(t),n_nodes=n,
+    summary=dict(scenario=next(iter(study.loads)),solid_model=study.solid_model(next(iter(study.loads))),stress_measure='element von Mises',volume_mm3=volume.sum(),n_tets=len(t),n_nodes=n,
         force_N=force.sum(0).tolist(),reaction_N=balance.reshape(3,n).sum(1).tolist(),
         load_transfer=load_transfer,fixture_transfer=fixture_transfer,loaded_area_mm2=load_area,fixed_area_mm2=fixture_area,compliance_Nmm=work,
         p95_MPa=percentile(.95),p99_MPa=percentile(.99),

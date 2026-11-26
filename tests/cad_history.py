@@ -15,6 +15,7 @@ from gso_workflows.tetra_elasticity import assemble,applied
 from gso_workflows.ritz_response import consistent_mass,stress_envelope
 from gso_workflows.cad_history import HistoryCase,TimeExcitation,measure_history
 from gso_workflows.history_solver import integrate
+from gso_workflows.shock_receivers import AccelerationReceiver, ShockTransmission, receiver_patches
 
 exe=Path(sys.argv[1]).resolve()
 from gso_workflows.history_envelope import HistoryEnvelope
@@ -52,15 +53,32 @@ time=np.linspace(0.,duration,801)
 coordinates=(1.-np.cos(time[:,None]*np.sqrt(lam)))*((phi.T@force)/lam)
 basis=np.zeros((len(free),len(lam)));basis[free]=phi
 truth,_=stress_envelope(system,basis,coordinates)
-case=HistoryCase(duration,duration/50.,(TimeExcitation(load,np.array([0.]),np.array([1.])),))
+tip_sensor=AccelerationReceiver('tip',(right,))
+case=HistoryCase(duration,duration/50.,(TimeExcitation(load,np.array([0.]),np.array([1.])),),receivers=(tip_sensor,))
 response,vm,when=measure_history(system,study,case,spsolve,exe,1040.,.01,relative_tolerance=.003,max_orders=32)
 np.testing.assert_allclose(vm,truth,rtol=.012)
+# Independently integrate linear nodal acceleration over the physical end face.
+# Each linear triangle contributes one third of its area to each incident node.
+tip=system.skin[np.all(points[system.skin,0]==3.,axis=1)]
+tri=points[tip]
+area=.5*np.linalg.norm(np.cross(tri[:,1]-tri[:,0],tri[:,2]-tri[:,0]),axis=1)
+weights=np.zeros(len(points))
+np.add.at(weights,tip.ravel(),np.repeat(area/(3.*area.sum()),3))
+nodal_modes=basis.reshape(3,len(points),-1)
+sensor_modes=np.einsum('i,jik->jk',weights,nodal_modes)
+exact_acceleration=(np.cos(time[:,None]*np.sqrt(lam))*(phi.T@force))@sensor_modes.T
+expected=np.linalg.norm(exact_acceleration,axis=1).max()/9806.65
+np.testing.assert_allclose(response[tip_sensor.metric],expected,rtol=.012)
 assert np.max(when)<=duration and response['modes']<=len(lam)
 
 # A free mass strikes a linear unilateral foundation and rebounds. The force and
 # separation follow the closed-form compression half-wave.
 step=.002
-states,out=integrate(exe,[[0.]],[[1.]],[-2.],step,np.empty((0,1)),np.empty((0,551)),[[1.]],[.5],[16.])
+states,out,accel=integrate(exe,[[0.]],[[1.]],[-2.],step,np.empty((0,1)),np.empty((0,551)),[[1.]],[.5],[16.],record_acceleration=True)
+np.testing.assert_allclose(accel[:,0],16.*np.maximum(0.,-.5-states[:,0]),atol=1.e-8)
+# Initial acceleration and a nonuniform force record have independent exact values.
+_,_,driven=integrate(exe,[[0.]],[[2.]],[0.],[0.,.03,.1],[[1.]],[[4.,-2.,6.]],np.empty((0,1)),[],[],record_acceleration=True)
+np.testing.assert_allclose(driven[:,0],[2.,-1.,3.],atol=1.e-12)
 np.testing.assert_allclose(out['peak_contact_N'],8.,rtol=5.e-5)
 assert states[-1,0]>-.5
 
@@ -78,8 +96,19 @@ contact_face=Face.pick(mesh,[1.5,.5,0.],[0.,0.,-1.])
 carrier=RigidCarrier(np.array([0.,.5,.5]),np.array([0.,.5,.5]),.005,np.diag([.01,.01,.01]),
                      np.array([0.,0.,-5.]),np.zeros(3))
 contact=FoundationContact(SurfaceLoad(contact_face,np.array([0.,0.,1.])),.0002,20.)
-drop=HistoryCase(.0009,.000009,(),contacts=(contact,),carrier=carrier)
+hub=AccelerationReceiver('hub',(left,))
+source=AccelerationReceiver('input',(contact_face,))
+pair=ShockTransmission('hub-over-input','input','hub')
+drop=HistoryCase(.0009,.000009,(),contacts=(contact,),carrier=carrier,receivers=(hub,source),transmissions=(pair,))
+try:
+    receiver_patches(HistoryCase(.1,.01,(),receivers=(hub,)),system,.01)
+except ValueError as error:
+    assert 'mobile' in str(error)
+else:
+    raise AssertionError('A fully fixed accelerometer gave false credit for shock isolation')
 impact,vm,t=measure_history(system,study,drop,spsolve,exe,1040.,.01,relative_tolerance=.025,max_orders=24)
+assert impact[hub.metric]>0. and impact[source.metric]>0.
+np.testing.assert_allclose(impact[pair.metric],impact[hub.metric]/impact[source.metric])
 total_mass=.005+system.volume.sum()*1040.e-9
 assert 0.<impact['peak_contact_N']<=1.03*np.sqrt(20.*total_mass*.001*25.)
 assert vm.max()>0. and impact['peak_rigid_rotation_rad']<.01
@@ -110,3 +139,18 @@ with tempfile.TemporaryDirectory(dir=root/'build') as tmp:
     assert len(coordinates(scored,ShapeTargets()))>18
     with np.load(scored.evidence[1]) as field:
         assert field['transient'] and np.max(field['peak_time_s'])<=mild.duration_s
+
+# The same CLI target definitions apply to an unrelated imported solid and multiple case groups.
+from argparse import ArgumentParser
+from gso_workflows.target_options import add_target_options, configure_targets
+parser=ArgumentParser()
+add_target_options(parser)
+args=parser.parse_args(['--yield-safety','*','2','30','--receiver-on-fixtures','drop','payload',
+                        '--receiver-on-face','drop','striker','1.5','.5','0','0','0','-1',
+                        '--shock-transfer','drop','transfer','striker','payload',
+                        '--response-limit','drop','peak_transmission@transfer','.8',
+                        '--minimize-response','drop','peak_acceleration_g@payload'])
+configured,objectives=configure_targets(replace(study,histories={'drop':replace(drop,receivers=(),transmissions=())},
+                                         reference_surface_local=mesh),ShapeTargets(),args)
+assert len(objectives.limits)==3 and len(configured.histories['drop'].receivers)==2
+assert objectives.limits[-1].metric=='peak_transmission@transfer'

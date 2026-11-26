@@ -1,6 +1,7 @@
 """CAD time histories with shared 3-D elasticity, load-dependent Ritz vectors and native contact."""
 from dataclasses import dataclass
 import numpy as np
+from .shock_receivers import receiver_patches, shock_metrics
 from .rigid_carrier import rigid_modes
 from .history_solver import integrate
 from .history_envelope import HistoryEnvelope
@@ -53,6 +54,8 @@ class HistoryCase:
     max_orders: int = 12
     max_time_levels: int = 8
     require_contact: bool = True
+    receivers: tuple = ()
+    transmissions: tuple = ()
 
 
 def event_times(case,level):
@@ -110,6 +113,7 @@ def measure_history(system,study,case,solver,executable,density_kg_m3,surface_to
     channels=np.column_stack(seeds)
     all_contacts=(*case.contacts,*case.rigid_contacts)
     reference=reference or ReferenceRegions()
+    patches = receiver_patches(case,system,surface_tol)
     previous_order=None
     stable_orders=0
     def close(a,b):
@@ -131,26 +135,37 @@ def measure_history(system,study,case,solver,executable,density_kg_m3,surface_to
         normal_rows=[v@motion for v in normal]
         normal_rows.extend(np.r_[c.direction(carrier.origin_world_mm),np.zeros(len(k)-6)] for c in case.rigid_contacts)
         normals=np.asarray(normal_rows).reshape(-1,dimension)
+        sensors = [patch.translation_map(motion) for patch in patches]
         previous_time=None
         stable_times=0
         for power in range(max_time_levels):
             time=event_times(case,power)
             series=np.vstack([load.at(time) for load in case.loads]) if loads else np.empty((0,len(time)))
-            states,result=integrate(executable,k,m,velocity,time,force,series,normals,
-                                    [c.gap_mm for c in all_contacts],[c.stiffness_n_mm for c in all_contacts],case.damping)
+            recording=integrate(executable,k,m,velocity,time,force,series,normals,
+                                    [c.gap_mm for c in all_contacts],[c.stiffness_n_mm for c in all_contacts],case.damping,
+                                    record_acceleration=bool(patches))
+            states,result = recording[:2]
+            shock = {}
+            if patches:
+                acceleration = recording[2]
+                peaks = [patch.magnitude_g(acceleration @ sensor.T).max()
+                         for patch,sensor in zip(patches,sensors,strict=True)]
+                shock = shock_metrics(case,peaks)
+                result.update(shock)
             elastic_states=states[:,rigid.shape[1]:]
             recovery=HistoryEnvelope(elastic_states,executable)
             vm,instant=stress_envelope(system,full,elastic_states,recovery)
             nodal_map=full.reshape(3,len(system.points),-1).transpose(1,0,2)
             motion_peak,_=recovery.measure(nodal_map)
             result['peak_elastic_displacement_mm']=float(motion_peak.max())
-            metrics=np.r_[result['peak_energy_Nmm'],result['peak_contact_N'],result['peak_elastic_displacement_mm'],vm]
+            metrics=np.r_[result['peak_energy_Nmm'],result['peak_contact_N'],result['peak_elastic_displacement_mm'],vm,list(shock.values())]
             stable_times = stable_times+1 if previous_time is not None and close(metrics,previous_time) else 0
             if stable_times>=2:break
             if power+1==max_time_levels:
                 scale=np.maximum(np.maximum(abs(metrics),abs(previous_time)),np.finfo(float).eps)
                 worst=int(np.argmax(abs(metrics-previous_time)/scale))
                 name=('elastic energy in N mm','contact force in N','elastic displacement in mm')[worst] if worst<3 else f'element {worst-3} stress in MPa'
+                if worst >= 3+len(vm): name=list(shock)[worst-3-len(vm)]
                 raise UnresolvedHistory(f'Temporal refinement unresolved at Ritz order {order}, '
                                  f'dt={np.diff(time).max():.6g} s, {stable_times}/2 stable levels. '
                                  f'Largest relative change in {name}: {previous_time[worst]:.8g} to {metrics[worst]:.8g}')
@@ -190,7 +205,7 @@ def measure_history(system,study,case,solver,executable,density_kg_m3,surface_to
     raise UnresolvedHistory('Elastic basis refinement did not resolve all stress regions')
 
 
-def export_history(system,study,case,path,solver,regions,tolerance,*,law=None):
+def export_history(system,study,case,path,solver,regions,tolerance,*,law=None,label=None):
     import json
     from .stress_regions import stress_basins,basin_peaks
     additional={}
@@ -207,6 +222,9 @@ def export_history(system,study,case,path,solver,regions,tolerance,*,law=None):
     response['regional_peak_rms_MPa']=float(np.sqrt(np.average(vm[indices]**2,weights=volumes)))
     if law is None:response['solid_model']=dict(kinematics='small strain',material='linear isotropic elastic')
     response['solid_model'].update(young_MPa=study.young_mpa,poisson=study.poisson)
+    if label is not None:
+        response['scenario'] = label
+        response['solid_model'].update(study.solid_model(label))
     response['time_targets']=list(case.targets)
     response['n_tets']=len(system.cells)
     response['local_peak_count']=len(indices)

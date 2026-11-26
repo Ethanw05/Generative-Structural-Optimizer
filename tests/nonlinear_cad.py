@@ -82,9 +82,12 @@ with tempfile.TemporaryDirectory(dir=root/'build') as tmp:
     carrier=RigidCarrier(np.array([0.,.5,.5]),np.array([0.,.5,.5]),.002,np.diag([.005,.005,.005]),
                          np.array([-7.,0.,0.]),np.zeros(3))
     normal=SurfaceLoad(right,np.array([1.,0.,0.]))
-    drop=HistoryCase(.0016,.000025,(),contacts=(FoundationContact(normal,.0001,25.),),carrier=carrier,
+    from gso_workflows.shock_receivers import AccelerationReceiver
+    receiver=AccelerationReceiver('carrier',(left,),(1.,0.,0.))
+    drop=HistoryCase(.0016,.000025,(),contacts=(FoundationContact(normal,.0001,25.),),carrier=carrier,receivers=(receiver,),
                      relative_tolerance=.04,max_time_levels=6)
     impact=export_history(system,study,drop,path/'impact',spsolve,ReferenceRegions(),.01,law=FiniteStrain(2.,10.))
+    assert impact[receiver.metric]>0.
     assert impact['peak_MPa']>0. and impact['contact_histories'][0]['impulse_Ns']>0.
     assert impact['contact_histories'][0]['first_release_s'] is not None and impact['final_linear_momentum_Ns'][0]>0.
     np.testing.assert_allclose(impact['momentum_balance_Ns'],0.,atol=1.e-10)

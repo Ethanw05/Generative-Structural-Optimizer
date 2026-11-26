@@ -1,0 +1,218 @@
+{
+  "geometry": "68261d8b29e38e9ac49e8d2c5b38bde46604b4f36d157d074d7b1c7217fa12fb",
+  "target": 2.0,
+  "analysis": "single-mesh linear elastic screening",
+  "evaluated_cases": 21,
+  "rows": [
+    {
+      "material": "ABS",
+      "case": "brake",
+      "n_tets": 183001,
+      "peak_MPa": 19.085303258894832,
+      "required_yield_MPa": 38.170606517789665,
+      "strength_MPa": null
+    },
+    {
+      "material": "ABS",
+      "case": "drop",
+      "n_tets": 183001,
+      "peak_MPa": 123.2338064458541,
+      "required_yield_MPa": 246.4676128917082,
+      "strength_MPa": null
+    },
+    {
+      "material": "ABS",
+      "case": "lateral",
+      "n_tets": 183001,
+      "peak_MPa": 24.36922551202447,
+      "required_yield_MPa": 48.73845102404894,
+      "strength_MPa": null
+    },
+    {
+      "material": "ABS",
+      "case": "lift",
+      "n_tets": 183001,
+      "peak_MPa": 22.273548496929354,
+      "required_yield_MPa": 44.54709699385871,
+      "strength_MPa": null
+    },
+    {
+      "material": "ABS",
+      "case": "span",
+      "n_tets": 183001,
+      "peak_MPa": 3.2877039267876107,
+      "required_yield_MPa": 6.575407853575221,
+      "strength_MPa": null
+    },
+    {
+      "material": "ABS",
+      "case": "strike",
+      "n_tets": 183001,
+      "peak_MPa": 145.5439925498046,
+      "required_yield_MPa": 291.0879850996092,
+      "strength_MPa": null
+    },
+    {
+      "material": "ABS",
+      "case": "torque",
+      "n_tets": 183001,
+      "peak_MPa": 15.059458048306993,
+      "required_yield_MPa": 30.118916096613987,
+      "strength_MPa": null
+    },
+    {
+      "material": "PETG",
+      "case": "brake",
+      "n_tets": 183001,
+      "peak_MPa": 19.235323579517345,
+      "required_yield_MPa": 38.47064715903469,
+      "strength_MPa": 47.0,
+      "factor": 2.443421333969539,
+      "met": true,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PETG",
+      "case": "drop",
+      "n_tets": 183001,
+      "peak_MPa": 121.44938844212727,
+      "required_yield_MPa": 242.89877688425454,
+      "strength_MPa": 47.0,
+      "factor": 0.3869924797719036,
+      "met": false,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PETG",
+      "case": "lateral",
+      "n_tets": 183001,
+      "peak_MPa": 24.369225511416158,
+      "required_yield_MPa": 48.738451022832315,
+      "strength_MPa": 47.0,
+      "factor": 1.9286620322825643,
+      "met": false,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PETG",
+      "case": "lift",
+      "n_tets": 183001,
+      "peak_MPa": 22.273548496960228,
+      "required_yield_MPa": 44.547096993920455,
+      "strength_MPa": 47.0,
+      "factor": 2.110126278550286,
+      "met": true,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PETG",
+      "case": "span",
+      "n_tets": 183001,
+      "peak_MPa": 3.287703926736734,
+      "required_yield_MPa": 6.575407853473468,
+      "strength_MPa": 47.0,
+      "factor": 14.295691171513319,
+      "met": true,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PETG",
+      "case": "strike",
+      "n_tets": 183001,
+      "peak_MPa": 113.79140640485112,
+      "required_yield_MPa": 227.58281280970223,
+      "strength_MPa": 47.0,
+      "factor": 0.41303646281320866,
+      "met": false,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PETG",
+      "case": "torque",
+      "n_tets": 183001,
+      "peak_MPa": 15.059458048322874,
+      "required_yield_MPa": 30.118916096645748,
+      "strength_MPa": 47.0,
+      "factor": 3.1209622450679255,
+      "met": true,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PLA",
+      "case": "brake",
+      "n_tets": 183001,
+      "peak_MPa": 19.075373615888644,
+      "required_yield_MPa": 38.15074723177729,
+      "strength_MPa": 51.0,
+      "factor": 2.6736042515843597,
+      "met": true,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PLA",
+      "case": "drop",
+      "n_tets": 183001,
+      "peak_MPa": 123.27706457034476,
+      "required_yield_MPa": 246.55412914068953,
+      "strength_MPa": 51.0,
+      "factor": 0.4137022582241826,
+      "met": false,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PLA",
+      "case": "lateral",
+      "n_tets": 183001,
+      "peak_MPa": 24.369225511334204,
+      "required_yield_MPa": 48.73845102266841,
+      "strength_MPa": 51.0,
+      "factor": 2.092803481845565,
+      "met": true,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PLA",
+      "case": "lift",
+      "n_tets": 183001,
+      "peak_MPa": 22.2735484968984,
+      "required_yield_MPa": 44.5470969937968,
+      "strength_MPa": 51.0,
+      "factor": 2.289711493752411,
+      "met": true,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PLA",
+      "case": "span",
+      "n_tets": 183001,
+      "peak_MPa": 3.2877039267324837,
+      "required_yield_MPa": 6.575407853464967,
+      "strength_MPa": 51.0,
+      "factor": 15.512345739321741,
+      "met": true,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PLA",
+      "case": "strike",
+      "n_tets": 183001,
+      "peak_MPa": 154.18281559495185,
+      "required_yield_MPa": 308.3656311899037,
+      "strength_MPa": 51.0,
+      "factor": 0.3307761620723043,
+      "met": false,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    },
+    {
+      "material": "PLA",
+      "case": "torque",
+      "n_tets": 183001,
+      "peak_MPa": 15.059458048323483,
+      "required_yield_MPa": 30.118916096646966,
+      "strength_MPa": 51.0,
+      "factor": 3.386576053158676,
+      "met": true,
+      "basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf Prusament printed horizontal coupon, 100% rectilinear infill. Isotropic surrogate with assumed Poisson ratio 0.35."
+    }
+  ]
+}

@@ -58,7 +58,7 @@ def evaluate(study,mesh,pitch,spacing,work,solver,name,regions=None,feedback=Non
                     system=assemble(p,t,active,1.5*spacing)
                     previous=elastic
                 path=work/f"{name}-level{level}-case{index}"
-                results.append(export_history(system,active,case,path,solver,regions[label],1.5*spacing,law=active.solid_laws.get(label)))
+                results.append(export_history(system,active,case,path,solver,regions[label],1.5*spacing,law=active.solid_laws.get(label),label=label))
                 case_fields.append(path.with_suffix(".npz"))
             del system
         levels.append(results)
@@ -72,6 +72,8 @@ def evolve_surface(study,baseline,pitch,exe,work,solver,targets=None,generations
     """One generation visits every active case on the latest admissible descendant."""
     targets=targets or ShapeTargets()
     targets.names()
+    if case_updates is None:
+        targets.validate_cases(study)
     if not isinstance(generations,int) or generations<1:
         raise ValueError('A positive number of case sweeps is required')
     if not np.isfinite(pitch) or pitch<=0.:
@@ -190,6 +192,7 @@ def evolve_surface(study,baseline,pitch,exe,work,solver,targets=None,generations
         if case_updates is None and all(e['status']=='retained' for e in lineage[first_event:]):
             termination='no_distinct_feasible_candidate'
             break
+    targets.validate_cases(study)
     initial_surface=verified['initial']
     baseline_values=coordinates(initial_surface,targets)
     response_scale=objective_scales(initial_surface,targets)
@@ -225,15 +228,22 @@ def evolve_surface(study,baseline,pitch,exe,work,solver,targets=None,generations
                     [level[case_index] for level in initial_surface.responses],
                     [level[case_index] for level in item.responses])
         comparisons[item.name]=ranks
-    report=dict(verification=('coarse','fine','fixed-interface refinement'),relative_mesh_spread=mesh_change,comparison_with_start=comparisons,scenarios=list(study.scenarios()),selected=parent.name,nondominated=[c.name for c in archive],
+    from .design_targets import assessments
+    checks=assessments(parent,targets.limits,require_all=True)
+    requirements_met=all(row['met'] for row in checks)
+    report=dict(requirements=checks,requirements_met=requirements_met,
+                selection_status=('least_violation' if not requirements_met else 'selected'),
+                verification=('coarse','fine','fixed-interface refinement'),relative_mesh_spread=mesh_change,comparison_with_start=comparisons,scenarios=list(study.scenarios()),selected=parent.name,nondominated=[c.name for c in archive],
                 local_regions={name: region.anchors.tolist() for name,region in initial_surface.regions.items()},
                 termination=termination,expanded=expanded,sequence_seed=seed,lineage=lineage,trust_history=trust_history,
                 solid_models={name:study.solid_model(name) for name in study.scenarios()},
                 working_geometry=identity,feedback_directory=str(analysis.run),objective_names=targets.names(),
-                selection_method='minimum worst normalized regret from the observed per-objective best',
+                selection_method='minimum worst limit violation, then minimum worst normalized objective regret',
                 compromise_scores=scores,objective_scales=response_scale.tolist(),
                 objectives_by_scenario={name:targets.names(case) for name,case in
                                         zip(study.scenarios(),initial_surface.responses[0],strict=True)},
+                objective_direction_by_scenario={name:{key:('minimize' if targets.direction(case,key)>0 else 'maximize')
+                    for key in targets.names(case)} for name,case in zip(study.scenarios(),initial_surface.responses[0],strict=True)},
                 baseline=baseline_values.tolist(),evaluations=trace)
     report_path=analysis.run/'selection.json'
     report_path.write_text(json.dumps(report,indent=2,allow_nan=False))

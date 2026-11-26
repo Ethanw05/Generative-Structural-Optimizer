@@ -215,9 +215,12 @@ def optimize(study,pitch,iterations,executable,work,*,refinement_steps=24,filter
     def evaluate(x):return evaluate_design(x,ke,stress_matrix,connection,assemble,solve,cases,3.5,edges)
     def record(i,x,rs):
         print('verified proposal',i,{k:(r.compliance,r.stress_mpa) for k,r in rs.items()},flush=True)
-    density=refine(density,allowed,hard,sigma,evaluate,refinement_steps,record,
-                   stiffness=targets is None or targets.stiffness,
-                   maximum_stress=targets is None or targets.maximum_stress)
+    stiffness=targets is None or targets.stiffness
+    stress=targets is None or targets.uses_stress()
+    # A shock-only study uses the load-path seed; its acceptance requires a transient solve.
+    if stiffness or stress:
+        density=refine(density,allowed,hard,sigma,evaluate,refinement_steps,record,
+                       stiffness=stiffness,maximum_stress=stress)
     grid[allowed]=density
     np.savez_compressed(work/f'design-{tag}.npz',field=grid,protected=protected,origin=origin,pitch=pitch)
     return Design(grid,protected,origin,pitch,work)
@@ -284,4 +287,5 @@ def generate(study,pitch,iterations,executable,work,destination,*,refinements=1,
                                    work/(Path(destination).stem+'-surface'),solver,targets,generations=surface_generations,
                                    sequence_seed=sequence_seed,case_updates=case_updates,working_surface=working_surface)
     result=publish_surface(selected.mesh,destination,work)
-    return dict(**result,selected=report['selected'],nondominated=report['nondominated'])
+    return dict(**result,selected=report['selected'],nondominated=report['nondominated'],
+                requirements_met=report['requirements_met'],requirements=report['requirements'])

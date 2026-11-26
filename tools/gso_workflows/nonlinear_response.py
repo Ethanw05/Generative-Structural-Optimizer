@@ -24,7 +24,7 @@ def static_response(system,study,label,law,path,solve,tolerance,reference):
     labels=ref.assign(system.points,system.cells,system.gradients,volume,vm,system.skin,solve)
     peaks,_,occupied=moments(vm,volume,labels,len(ref.scale),8.)
     centers=system.points[system.cells].mean(axis=1)
-    result=dict(solid_model=study.solid_model(label),stress_measure='Cauchy element von Mises',
+    result=dict(scenario=label,solid_model=study.solid_model(label),stress_measure='Cauchy element von Mises',
                 peak_MPa=float(vm.max()),compliance_Nmm=float(rhs@displacement),
                 stored_elastic_energy_Nmm=float(volume@energy),volume_mm3=float(volume.sum()),
                 regional_peak_rms_MPa=float(np.sqrt(np.average(vm[maxima]**2,weights=weights))),

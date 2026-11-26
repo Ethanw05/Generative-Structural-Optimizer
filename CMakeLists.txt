@@ -74,7 +74,7 @@ if(BUILD_TESTING)
     find_package(Python3 QUIET COMPONENTS Interpreter)
     if(Python3_Interpreter_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/build/sunbeam33/deps/tetgen"
        AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/build/sunbeam33/meshlib-runtime")
-        foreach(workflow_test IN ITEMS graded_load_transfer seeded_structures front_curvature design_inputs stress_evolution shape_adjoint stress_regions perforated_plate regional_history cad_history nonlinear_cad analysis_mesh orthographic realized_shape)
+        foreach(workflow_test IN ITEMS design_targets graded_load_transfer seeded_structures front_curvature design_inputs stress_evolution shape_adjoint stress_regions perforated_plate regional_history cad_history nonlinear_cad analysis_mesh orthographic realized_shape)
             add_test(NAME ${workflow_test} COMMAND "${Python3_EXECUTABLE}" -B -X faulthandler
                      "${CMAKE_CURRENT_SOURCE_DIR}/tests/${workflow_test}.py" $<TARGET_FILE:gso>)
         endforeach()

@@ -6,9 +6,10 @@ from .nonlinear_equilibrium import equilibrium
 from .nonlinear_inertia import DynamicPorts,DynamicPreconditioner
 from .nonlinear_kinematics import AttachmentMap
 from .reference_regions import moments
+from .shock_receivers import receiver_patches, shock_metrics
 
 
-def _history(system,case,solid,ports,mapping,times,solve,preconditioner):
+def _history(system,case,solid,ports,mapping,times,solve,preconditioner,receivers):
     n=mapping.solid_dofs
     state=solid.virgin()
     u=np.zeros(mapping.size)
@@ -27,6 +28,7 @@ def _history(system,case,solid,ports,mapping,times,solve,preconditioner):
     jac=mapping.jacobian(q,rotation)
     a=jac@solve((jac.T@ports.mass@jac).tocsr(),jac.T@(ports.load(case,0.)+ports.normals.T@ports.contact(u)
                  -ports.damping@v-ports.mass@centripetal))+centripetal
+    peaks = np.array([r.magnitude_g(r.average(a[:n])) for r in receivers])
     vm=np.zeros(len(system.cells));when=np.zeros_like(vm);energy=np.zeros_like(vm)
     translations=np.vstack((np.repeat(np.eye(3),len(system.points),axis=0),np.tile(np.eye(3),(mapping.extra,1))))
     original_momentum=translations.T@(ports.mass@v)
@@ -69,6 +71,8 @@ def _history(system,case,solid,ports,mapping,times,solve,preconditioner):
         x=mapping.position(answer.coordinates,rotation)
         a=accel_factor*(x-prediction)
         v=velocity_prediction+.5*h*a
+        for index,r in enumerate(receivers):
+            peaks[index] = max(peaks[index],r.magnitude_g(r.average(a[:n])))
         u=x
         state=answer.field.state
         values=answer.field.measures
@@ -103,6 +107,7 @@ def _history(system,case,solid,ports,mapping,times,solve,preconditioner):
             first_contact_s=float(times[active[0]]) if len(active) else None,
             first_release_s=float(times[released[0]]) if len(released) else None,final_force_N=float(values[-1]),
             impulse_Ns=float(np.sum(np.diff(times)*(values[:-1]+values[1:])*.5))))
+    report.update(shock_metrics(case,peaks))
     return report,vm,when,energy,state[:,9]
 
 
@@ -110,6 +115,7 @@ def measure_nonlinear(system,study,case,solve,tolerance,regions,law):
     from .cad_history import event_times,UnresolvedHistory
     if not (0.<case.relative_tolerance<1. and 0.<case.step_s<=case.duration_s and case.max_time_levels>=3):
         raise ValueError('Invalid nonlinear time integration settings')
+    receivers=receiver_patches(case,system,tolerance)
     mapping=AttachmentMap(system,case)
     ports=DynamicPorts(system,study,case,mapping,tolerance)
     if not case.loads and not len(ports.gaps):raise ValueError('A history needs a load or contact')
@@ -119,12 +125,13 @@ def measure_nonlinear(system,study,case,solve,tolerance,regions,law):
         time=event_times(case,level)
         try:
             with DynamicPreconditioner(mapping,ports,system,solve) as preconditioner:
-                report,vm,when,energy,plastic=_history(system,case,solid,ports,mapping,time,solve,preconditioner)
+                report,vm,when,energy,plastic=_history(system,case,solid,ports,mapping,time,solve,preconditioner,receivers)
         except UnresolvedSolid:
             stable=0;previous=None
             if level+1==case.max_time_levels:raise
             continue
-        metrics=np.r_[report['peak_energy_Nmm'],report['peak_relative_displacement_mm'],report['peak_contact_N'],vm,plastic]
+        metrics=np.r_[report['peak_energy_Nmm'],report['peak_relative_displacement_mm'],report['peak_contact_N'],vm,plastic,
+                      [report[r.metric] for r in (*case.receivers,*case.transmissions)]]
         if previous is not None:
             scale=np.maximum(np.maximum(np.abs(metrics),np.abs(previous)),1.e-12)
             stable=stable+1 if np.all(abs(metrics-previous)<=case.relative_tolerance*scale) else 0

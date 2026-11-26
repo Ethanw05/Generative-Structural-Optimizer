@@ -12,6 +12,7 @@ def main():
     parser.add_argument('pitch_mm',type=float,nargs='?',default=2.)
     parser.add_argument('iterations',type=int,nargs='?',default=72)
     parser.add_argument('--assembly',type=Path)
+    parser.add_argument('--executable',type=Path,help='Use a specific GSO build for CAD import, mechanics and evolution')
     start=parser.add_mutually_exclusive_group()
     start.add_argument('--refine-generated-obj',type=Path)
     start.add_argument('--resume-feedback',type=Path,metavar='RUN_DIRECTORY',
@@ -26,7 +27,8 @@ def main():
     parser.add_argument('--plastic-law',action='append',nargs=3,default=[],metavar=('CASE','YIELD_MPA','H_MPA'),
                         help='Use finite-strain J2 with initial Kirchhoff yield stress and isotropic hardening modulus')
     parser.add_argument('--sequence-seed',type=int,help='Replay the order of the load cases')
-    parser.add_argument('--target',choices=('stiffness','maximum-stress'),action='append')
+    parser.add_argument('--target',choices=('stiffness','maximum-stress','none'),action='append',
+                        help='Select built-in objectives; none uses only explicit study limits and responses')
     parser.add_argument('--cpu-limit',type=int,help='Limit this run and its workers to this many CPUs')
     parser.add_argument('--force-local-n',nargs=3,type=float,action='append',metavar=('FX','FY','FZ'),
                         help='Add a named force case on the selected load face in local CAD axes (N)')
@@ -47,6 +49,9 @@ def main():
     parser.add_argument('--carrier-mass-kg',type=float)
     parser.add_argument('--carrier-center-mm',type=float,nargs=3)
     parser.add_argument('--carrier-inertia-kg-mm2',type=float,nargs=3,metavar=('IXX','IYY','IZZ'))
+    sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'tools'))
+    from gso_workflows.target_options import add_target_options,configure_targets
+    add_target_options(parser)
     args=parser.parse_args()
     if args.cpu_limit is not None:
         sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'tools'))
@@ -56,8 +61,10 @@ def main():
     from gso_workflows.volume_study import generate
     from gso_workflows.surface_search import ShapeTargets
     names=args.target or ('stiffness','maximum-stress')
+    if 'none' in names and (len(names)>1 or not (args.yield_safety or args.response_limit or args.minimize_response or args.maximize_response)):
+        parser.error('--target none requires explicit study limits or responses and cannot be combined with built-in objectives')
     targets=ShapeTargets('stiffness' in names,'maximum-stress' in names)
-    executable=ROOT/'build/Release/gso.exe'
+    executable=(args.executable or ROOT/'build/Release/gso.exe').resolve(strict=True)
     from tempfile import TemporaryDirectory
     with TemporaryDirectory(dir=WORK) as directory:
         source=Path(directory)/'part.obj'
@@ -113,6 +120,10 @@ def main():
     qualified={k:v for k,v in laws.items() if k not in base_names}
     if qualified.keys()-set(study.scenarios()):parser.error('Unknown nonlinear scenario. Available: '+', '.join(study.scenarios()))
     study=replace(study,solid_laws={**study.solid_laws,**qualified})
+    try:
+        study,targets=configure_targets(study,targets,args)
+    except ValueError as error:
+        parser.error(str(error))
     baseline=working=None
     if args.resume_feedback:
         from gso_workflows.scenario_feedback import resume_pair

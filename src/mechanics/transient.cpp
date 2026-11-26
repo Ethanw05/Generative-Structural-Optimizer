@@ -120,7 +120,8 @@ class RestrainedFactor
 };
 } // namespace
 TimeResponse integrateTimedHistory(const System &s, const TransientCase &c, const Vec &probe,
-                                  const std::function<void(double, const Vec &)> &observe)
+                                  const std::function<void(double, const Vec &)> &observe,
+                                  const std::function<void(double, const Vec &)> &observeAcceleration)
 {
     const auto n = s.stiffness.rows();
     const auto knots = boundaries(c, n);
@@ -153,6 +154,7 @@ TimeResponse integrateTimedHistory(const System &s, const TransientCase &c, cons
     RestrainedFactor factor;
     factor.factor(s.mass, s.constraints);
     Vec a = factor.apply(external(0.) - damping * v, out.maxResidual);
+    if (observeAcceleration) { observeAcceleration(0., a); }
     for (std::size_t k = 1; k < knots.size(); ++k)
     {
         const double interval = knots[k] - knots[k - 1], count = std::ceil(interval / c.maxStepSeconds);
@@ -217,6 +219,7 @@ TimeResponse integrateTimedHistory(const System &s, const TransientCase &c, cons
             }
             v = vp + g * a;
             ++out.steps;
+            if (observeAcceleration) { observeAcceleration(time, a); }
             if (observe)
             {
                 observe(time, u);

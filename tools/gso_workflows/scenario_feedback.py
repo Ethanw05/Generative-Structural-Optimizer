@@ -82,7 +82,7 @@ class FeedbackAnalysis:
         if label in self.study.histories:
             system = assemble(p, t, active, self.surface_tol)
             response = export_history(system, active, active.histories[label], path,
-                                      self.solver, region, self.surface_tol, law=self.study.solid_laws.get(label))
+                                      self.solver, region, self.surface_tol, law=self.study.solid_laws.get(label), label=label)
         else:
             single = replace(active, loads={label: active.loads[label]})
             response = solve(p, t, single, path, self.solver, surface_tol=self.surface_tol, local_regions=region,
@@ -130,12 +130,15 @@ def resume_pair(directory):
     return (_read_geometry(reference) if reference.is_file() else current), current
 
 
-def mutation_weights(history, targets):
+def mutation_weights(history, targets, label=None):
     if history:
         # Exploratory dynamic stress-energy envelope. Each changed solid receives a fresh history solve.
         return (0., 0., 0., 1.)
     stiffness = float(targets.stiffness)
-    stress = float(targets.maximum_stress)
+    stress = float(targets.uses_stress(label))
+    if not stiffness and not stress:
+        # Explore mechanically active boundary directions for user-defined scalar responses.
+        stiffness,stress = 1.,1.
     return (stiffness, .5*stress, 0., 0., .5*stress)
 
 
@@ -146,13 +149,20 @@ def feedback_step(analysis, current, identity, label, targets, exe, pitch, spaci
     event = dict(sweep=sweep, step=ordinal, case=label, parent=identity, field_geometry=parent.geometry,
                  parent_peak_MPa=parent.response.get('peak_MPa'))
     history = label in analysis.study.histories
-    directions = [('requested', mutation_weights(history, targets))]
+    directions = [('requested', mutation_weights(history, targets,label))]
+    if history:
+        quantities = [*targets.names(parent.response),
+                      *(getattr(limit,'metric','') for limit in targets.limits if label in limit.cases)]
+        if any(key.startswith(('peak_acceleration_g@','peak_transmission@')) for key in quantities):
+            # Either stiffening or softening a stressed region can reduce receiver shock.
+            # The actual transient on each proposed shape determines its ranking.
+            directions.append(('reverse dynamic energy',(0.,0.,0.,-1.)))
     if not history and targets.stiffness and targets.maximum_stress:
         # Step reduction changes magnitude only. Probe the separate shape
         # derivatives if the combined direction trades away another objective.
         directions.extend([
             ('stress', mutation_weights(False, replace(targets, stiffness=False))),
-            ('stiffness', mutation_weights(False, replace(targets, maximum_stress=False))),
+            ('stiffness', mutation_weights(False, replace(targets, maximum_stress=False,limits=()))),
         ])
 
     def candidate(field, name):
@@ -186,7 +196,7 @@ def feedback_step(analysis, current, identity, label, targets, exe, pitch, spaci
                             front = pareto([before, after], targets)
                             scores = compromise_scores([before, after], targets, scale)
                             delta = tuple(a-b for a,b in zip(scores['trial'],scores['parent'],strict=True))
-                            improves = any(item is after for item in front) and delta < (0.,0.)
+                            improves = any(item is after for item in front) and delta < (0.,)*len(delta)
                             seen[child_id] = (improves, len(front)==1 and front[0] is after)
                             event['trials'].append(dict(geometry=child_id, direction=direction,
                                                        move_mm=move, regret=scores))
@@ -203,7 +213,7 @@ def feedback_step(analysis, current, identity, label, targets, exe, pitch, spaci
     if best is not None:
         delta, child, result, move, direction = best
         event.update(status='advanced', child=result.geometry, move_mm=move, direction=direction,
-                     selection='improving' if delta < (0.,0.) else 'exploratory',
+                     selection='improving' if delta < (0.,)*len(delta) else 'exploratory',
                      child_peak_MPa=result.response.get('peak_MPa'))
         analysis.checkpoint(child, event)
         analysis.record(event)
