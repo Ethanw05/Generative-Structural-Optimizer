@@ -1,0 +1,56 @@
+{
+  "material": "PLA",
+  "brake": {
+    "initial_rpm": 15000.0,
+    "stop_s": 0.1,
+    "rotating_inertia_kg_m2": 5e-05
+  },
+  "strike": {
+    "speed_m_s": 3.0,
+    "contact_stiffness_N_per_mm": 100.0,
+    "carrier_mass_kg": 1.6
+  },
+  "parts": {
+    "trial": {
+      "geometry": "d6db0ba20201937d259d71af6a1b051ed50f55557c67cda8ddaaaca411435a55",
+      "results": {
+        "brake": {
+          "scenario": "PLA / brake",
+          "n_tets": 153003,
+          "peak_MPa": 13.299537722652707,
+          "regional_peak_rms_MPa": 2.5717074703071265,
+          "peak_elastic_displacement_mm": 4.144041783329181,
+          "peak_energy_Nmm": 37.48758446733511,
+          "peak_contact_N": 0.0,
+          "step_s": 3.1250000000010436e-05,
+          "window_s": 0.15,
+          "peak_at_window_end": false
+        },
+        "strike": {
+          "scenario": "PLA / strike",
+          "n_tets": 153003,
+          "peak_MPa": 152.33981816872839,
+          "regional_peak_rms_MPa": 31.264104551628208,
+          "peak_elastic_displacement_mm": 45.94458258373543,
+          "peak_energy_Nmm": 3961.2767202145933,
+          "peak_contact_N": 413.5546614065329,
+          "peak_acceleration_g@hub": 22.358767836650795,
+          "step_s": 1.5625000000005218e-05,
+          "window_s": 0.056,
+          "peak_at_window_end": false,
+          "contact_histories": [
+            {
+              "peak_N": 413.5546614065329,
+              "peak_time_s": 0.013234375,
+              "first_contact_s": 1.5625e-05,
+              "first_release_s": 0.0053750000000000004,
+              "final_force_N": 0.0,
+              "impulse_Ns": 5.740894716786908
+            }
+          ],
+          "all_active_contacts_released_at_end": true
+        }
+      }
+    }
+  }
+}
