@@ -1,0 +1,348 @@
+{
+  "example": "necked-link",
+  "material": {
+    "young_MPa": 2100.0,
+    "poisson": 0.33,
+    "yield_MPa": 30.0,
+    "basis": "synthetic isotropic"
+  },
+  "analysis_pitch_mm": 0.72,
+  "verification": [
+    "coarse",
+    "fine",
+    "fixed-interface refinement"
+  ],
+  "additional_edges_mm": [
+    0.26
+  ],
+  "seed": 193,
+  "original_volume_mm3": 28.328999999999994,
+  "selection": {
+    "volume_mm3": 28.266479942493163,
+    "triangles": 5460,
+    "selected": "g1",
+    "nondominated": [
+      "g1"
+    ],
+    "requirements_met": true,
+    "requirements": [
+      {
+        "level": 0,
+        "scenario": "tension",
+        "quantity": "whole-part yield factor of safety",
+        "minimum": 2.0,
+        "yield_MPa": 30.0,
+        "strength_basis": "synthetic isotropic yield",
+        "peak_MPa": 13.755537622630994,
+        "achieved": 2.180939838414106,
+        "unbounded": false,
+        "plastic_flow_detected": false,
+        "utilization": 0.917035841508733,
+        "violation": 0.0,
+        "met": true,
+        "status": "met",
+        "observed_met": true,
+        "utilization_by_mesh": [
+          0.917035841508733,
+          0.8733782106943546,
+          0.8946266861032631,
+          0.9039786373230343
+        ],
+        "last_utilization_change": 0.030600426628679678,
+        "normalized_selection_excess": 0.0
+      },
+      {
+        "level": 2,
+        "scenario": "oblique",
+        "quantity": "whole-part yield factor of safety",
+        "minimum": 2.0,
+        "yield_MPa": 30.0,
+        "strength_basis": "synthetic isotropic yield",
+        "peak_MPa": 7.57462824277356,
+        "achieved": 3.960590412951417,
+        "unbounded": false,
+        "plastic_flow_detected": false,
+        "utilization": 0.504975216184904,
+        "violation": 0.0,
+        "met": true,
+        "status": "met",
+        "observed_met": true,
+        "utilization_by_mesh": [
+          0.42910388353761064,
+          0.42202613494047175,
+          0.504975216184904,
+          0.44252114384592306
+        ],
+        "last_utilization_change": 0.020495008905451306,
+        "normalized_selection_excess": 0.0
+      }
+    ],
+    "selection_status": "selected"
+  },
+  "comparisons": {
+    "original": {
+      "geometry": "4a89b4051b2498b5e7b02666f6bcc0f36d333c14a5f1c6309ac8572da8a51c31",
+      "checks": [
+        {
+          "level": 3,
+          "scenario": "tension",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 30.0,
+          "strength_basis": "synthetic isotropic yield",
+          "peak_MPa": 16.614062672474862,
+          "achieved": 1.8056992194752053,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 1.1076041781649908,
+          "violation": 0.1076041781649908,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            0.7636988533781772,
+            0.8660315337494544,
+            0.850648581305147,
+            1.1076041781649908
+          ],
+          "last_utilization_change": 0.24157264441553639,
+          "normalized_selection_excess": 0.1076041781649908
+        },
+        {
+          "level": 3,
+          "scenario": "oblique",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 30.0,
+          "strength_basis": "synthetic isotropic yield",
+          "peak_MPa": 29.661333184673737,
+          "achieved": 1.011417788041343,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 1.9774222123115826,
+          "violation": 0.9774222123115826,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
+          "utilization_by_mesh": [
+            1.1224146421721153,
+            1.4283426388569898,
+            1.6840217453536401,
+            1.9774222123115826
+          ],
+          "last_utilization_change": 0.5490795734545928,
+          "normalized_selection_excess": 0.9774222123115826
+        }
+      ],
+      "responses": [
+        [
+          {
+            "scenario": "tension",
+            "n_tets": 1467,
+            "compliance_Nmm": 0.3016254218744122,
+            "peak_MPa": 11.455482800672659
+          },
+          {
+            "scenario": "oblique",
+            "n_tets": 1467,
+            "compliance_Nmm": 0.20004691381426476,
+            "peak_MPa": 16.83621963258173
+          }
+        ],
+        [
+          {
+            "scenario": "tension",
+            "n_tets": 3503,
+            "compliance_Nmm": 0.31476703085056196,
+            "peak_MPa": 12.990473006241816
+          },
+          {
+            "scenario": "oblique",
+            "n_tets": 3503,
+            "compliance_Nmm": 0.2292121101134919,
+            "peak_MPa": 21.425139582854847
+          }
+        ],
+        [
+          {
+            "scenario": "tension",
+            "n_tets": 3301,
+            "compliance_Nmm": 0.3150392986981021,
+            "peak_MPa": 12.759728719577204
+          },
+          {
+            "scenario": "oblique",
+            "n_tets": 3301,
+            "compliance_Nmm": 0.22843949627348936,
+            "peak_MPa": 25.260326180304602
+          }
+        ]
+      ],
+      "extra_verification": {
+        "oblique": [
+          {
+            "scenario": "oblique",
+            "n_tets": 20293,
+            "compliance_Nmm": 0.24649060209169382,
+            "peak_MPa": 29.661333184673737,
+            "verification_edge_mm": 0.26
+          }
+        ],
+        "tension": [
+          {
+            "scenario": "tension",
+            "n_tets": 20293,
+            "compliance_Nmm": 0.32794705174341354,
+            "peak_MPa": 16.614062672474862,
+            "verification_edge_mm": 0.26
+          }
+        ]
+      }
+    },
+    "generated": {
+      "geometry": "c4192761ca0ef394799dab505255e61c4898c7aaf9c5c931815e00d7f5833f28",
+      "checks": [
+        {
+          "level": 0,
+          "scenario": "tension",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 30.0,
+          "strength_basis": "synthetic isotropic yield",
+          "peak_MPa": 13.755537622630994,
+          "achieved": 2.180939838414106,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.917035841508733,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.917035841508733,
+            0.8733782106943546,
+            0.8946266861032631,
+            0.9039786373230343
+          ],
+          "last_utilization_change": 0.030600426628679678,
+          "normalized_selection_excess": 0.0
+        },
+        {
+          "level": 2,
+          "scenario": "oblique",
+          "quantity": "whole-part yield factor of safety",
+          "minimum": 2.0,
+          "yield_MPa": 30.0,
+          "strength_basis": "synthetic isotropic yield",
+          "peak_MPa": 7.57462824277356,
+          "achieved": 3.960590412951417,
+          "unbounded": false,
+          "plastic_flow_detected": false,
+          "utilization": 0.504975216184904,
+          "violation": 0.0,
+          "met": true,
+          "status": "met",
+          "observed_met": true,
+          "utilization_by_mesh": [
+            0.42910388353761064,
+            0.42202613494047175,
+            0.504975216184904,
+            0.44252114384592306
+          ],
+          "last_utilization_change": 0.020495008905451306,
+          "normalized_selection_excess": 0.0
+        }
+      ],
+      "responses": [
+        [
+          {
+            "scenario": "tension",
+            "n_tets": 5107,
+            "compliance_Nmm": 0.2533938528218467,
+            "peak_MPa": 13.755537622630994
+          },
+          {
+            "scenario": "oblique",
+            "n_tets": 5107,
+            "compliance_Nmm": 0.09926872336808326,
+            "peak_MPa": 6.43655825306416
+          }
+        ],
+        [
+          {
+            "scenario": "tension",
+            "n_tets": 5594,
+            "compliance_Nmm": 0.2580520534989268,
+            "peak_MPa": 13.100673160415319
+          },
+          {
+            "scenario": "oblique",
+            "n_tets": 5594,
+            "compliance_Nmm": 0.10020633926051521,
+            "peak_MPa": 6.330392024107076
+          }
+        ],
+        [
+          {
+            "scenario": "tension",
+            "n_tets": 12305,
+            "compliance_Nmm": 0.25790071054564906,
+            "peak_MPa": 13.419400291548946
+          },
+          {
+            "scenario": "oblique",
+            "n_tets": 12305,
+            "compliance_Nmm": 0.10029532843855093,
+            "peak_MPa": 7.57462824277356
+          }
+        ]
+      ],
+      "extra_verification": {
+        "oblique": [
+          {
+            "scenario": "oblique",
+            "n_tets": 17636,
+            "compliance_Nmm": 0.10184361749851631,
+            "peak_MPa": 6.637817157688846,
+            "verification_edge_mm": 0.26
+          }
+        ],
+        "tension": [
+          {
+            "scenario": "tension",
+            "n_tets": 17636,
+            "compliance_Nmm": 0.26348074553329576,
+            "peak_MPa": 13.559679559845515,
+            "verification_edge_mm": 0.26
+          }
+        ]
+      }
+    }
+  },
+  "lineage": [
+    {
+      "case": "tension",
+      "parent": "5cf1d623315ec8b3827f74f576ca2889b5482191c51cd051474f46c1a0c92650",
+      "child": "ceac2104821011feb2e09df3f92b1f08f2aead958c229d744ad122e4f1f420c1",
+      "status": "advanced"
+    },
+    {
+      "case": "oblique",
+      "parent": "ceac2104821011feb2e09df3f92b1f08f2aead958c229d744ad122e4f1f420c1",
+      "child": "c4192761ca0ef394799dab505255e61c4898c7aaf9c5c931815e00d7f5833f28",
+      "status": "advanced"
+    },
+    {
+      "case": "oblique",
+      "parent": "c4192761ca0ef394799dab505255e61c4898c7aaf9c5c931815e00d7f5833f28",
+      "child": "b20997b70fdf67cba60a9b706af35d973e97ff95a6fa90da3feaee71ad041c36",
+      "status": "advanced"
+    },
+    {
+      "case": "tension",
+      "parent": "b20997b70fdf67cba60a9b706af35d973e97ff95a6fa90da3feaee71ad041c36",
+      "child": "c676518380f82b98f6ba4a69a1e788e80b768102bf7c29a81fc22a8270acaed7",
+      "status": "advanced"
+    }
+  ]
+}
