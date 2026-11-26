@@ -9,3 +9,6 @@ __pycache__/
 *.obj
 *.npz
 /.venv/
+/reference/python-bin/
+!/studies/**/*.obj
+!/tests/data/*.obj

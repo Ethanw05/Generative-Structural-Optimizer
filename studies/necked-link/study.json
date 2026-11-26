@@ -1,0 +1,48 @@
+{
+  "format": "gso-study",
+  "version": 1,
+  "units": {"length": "mm", "force": "N", "time": "s", "stress": "MPa", "mass": "kg"},
+  "part": {"source": "part.obj"},
+  "selections": {
+    "base": {"planar_face": {"point": [0, 0, 0], "normal": [0, 0, -1]}},
+    "cap": {"planar_face": {"point": [0, 0, 5.6], "normal": [0, 0, 1]}}
+  },
+  "design_space": {
+    "envelope": {"box": {"min_mm": [-1.9, -1.4, 0.0], "max_mm": [1.9, 1.4, 5.6]}},
+    "preserve": [
+      {"selection": "base", "depth_mm": 0.25},
+      {"selection": "cap", "depth_mm": 0.25}
+    ],
+    "exclude": []
+  },
+  "materials": {
+    "synthetic": {
+      "density_kg_m3": 1050,
+      "elasticity": {"isotropic": {"young_mpa": 2100, "poisson": 0.33}},
+      "strength": {"von_mises": {"yield_mpa": 30}},
+      "source": "Synthetic isotropic material of the former studies/target_examples/compare.py necked-link case"
+    }
+  },
+  "cases": [
+    {
+      "name": "tension",
+      "type": "static",
+      "material": "synthetic",
+      "fixtures": ["base"],
+      "loads": [{"on": "cap", "force_n": [0, 0, 18]}]
+    },
+    {
+      "name": "oblique",
+      "type": "static",
+      "material": "synthetic",
+      "fixtures": ["base"],
+      "loads": [{"on": "cap", "force_n": [1.4, 0.6, 12]}]
+    }
+  ],
+  "targets": [
+    {"quantity": "safety_factor", "relation": ">=", "value": 2.0},
+    {"quantity": "volume", "relation": "<=", "value": 28.329},
+    {"quantity": "compliance", "relation": "minimize"}
+  ],
+  "start": {"from": "part", "freedom": "shape"}
+}

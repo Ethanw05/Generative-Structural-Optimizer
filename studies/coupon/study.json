@@ -1,0 +1,35 @@
+{
+  "format": "gso-study",
+  "version": 1,
+  "units": {"length": "mm", "force": "N", "time": "s", "stress": "MPa", "mass": "kg"},
+  "part": {"source": "part.obj"},
+  "selections": {
+    "mounted_end": {"planar_face": {"point": [0, 2, 2], "normal": [-1, 0, 0]}},
+    "loaded_end": {"planar_face": {"point": [6, 1, 1], "normal": [1, 0, 0]}}
+  },
+  "design_space": {
+    "envelope": "bounding_box",
+    "preserve": [{"selection": "loaded_end", "depth_mm": 1.0}],
+    "exclude": [{"solid": "keep-out.obj"}]
+  },
+  "materials": {
+    "synthetic": {
+      "density_kg_m3": 1000,
+      "elasticity": {"isotropic": {"young_mpa": 2000, "poisson": 0.3}},
+      "source": "Synthetic test material of the 6 x 4 x 4 mm coupon in the former tests/design_inputs.py"
+    }
+  },
+  "cases": [
+    {
+      "name": "end load",
+      "type": "static",
+      "material": "synthetic",
+      "fixtures": ["mounted_end"],
+      "loads": [{"on": "loaded_end", "force_n": [0, 0, 1]}]
+    }
+  ],
+  "targets": [
+    {"quantity": "volume", "relation": "<=", "value": 70},
+    {"quantity": "compliance", "relation": "minimize"}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {"major": 3, "minor": 28, "patch": 0},
+  "configurePresets": [
+    {
+      "name": "windows",
+      "displayName": "Windows x64, MSVC + CUDA",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_CUDA_ARCHITECTURES": "native"
+      },
+      "condition": {"type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows"}
+    },
+    {
+      "name": "windows-distribution",
+      "inherits": "windows",
+      "displayName": "Windows x64, all supported NVIDIA GPUs (Turing to Blackwell)",
+      "cacheVariables": {
+        "CMAKE_CUDA_ARCHITECTURES": "75-real;80-real;86-real;89-real;120"
+      }
+    }
+  ],
+  "buildPresets": [
+    {"name": "release", "configurePreset": "windows", "configuration": "Release"},
+    {"name": "debug", "configurePreset": "windows", "configuration": "Debug"},
+    {"name": "distribution", "configurePreset": "windows-distribution", "configuration": "Release"}
+  ],
+  "testPresets": [
+    {"name": "release", "configurePreset": "windows", "configuration": "Release", "output": {"outputOnFailure": true}}
+  ]
+}
