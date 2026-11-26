@@ -38,34 +38,36 @@ def simulate(study,mesh,folder,solver,*,rebound_window=None):
     print(folder.name,'lift',stat['peak_MPa'],flush=True)
     dynamic=study.for_case('PLA / drop')
     system=assemble(p,t,dynamic,.36)
-    dyn=drop_history(system,dynamic,folder/'drop',solver,rebound_window)
+    dyn=contact_history(system,dynamic,folder/'drop',solver,rebound_window,'PLA / drop')
     print(folder.name,'drop',dyn['peak_MPa'],dyn['peak_acceleration_g@hub'],flush=True)
+    (folder/'identity.txt').write_text(identity)
     return identity,[stat,dyn]
 
 
-def drop_history(system,study,output,solver,rebound_window=None):
+def contact_history(system,study,output,solver,rebound_window,label):
     from gso_workflows.cad_history import UnresolvedHistory
-    case=study.histories['PLA / drop']
+    case=study.histories[label]
     if rebound_window is not None:
         initial,maximum=rebound_window
         if not 0.<initial<=maximum:
             raise ValueError('Rebound verification needs a positive initial and maximum observation time')
         case=replace(case,duration_s=initial)
     while True:
-        row=export_history(system,study,case,output,solver,ReferenceRegions(),.36,label='PLA / drop')
+        row=export_history(system,study,case,output,solver,ReferenceRegions(),.36,label=label)
         touched=[contact for contact in row['contact_histories'] if contact['first_contact_s'] is not None]
         separated=bool(touched) and all(contact['first_release_s'] is not None and contact['final_force_N']==0.
                                         for contact in touched)
         row['all_active_contacts_released_at_end']=separated
         if rebound_window is None or separated:
+            output.with_suffix('.json').write_text(json.dumps(row,indent=2,allow_nan=False))
             return row
         if case.duration_s>=maximum:
             raise UnresolvedHistory('Motor contact persisted at the maximum rebound verification time')
         case=replace(case,duration_s=min(2.*case.duration_s,maximum))
 
 
-def study_definition():
-    study=service_portfolio(build_study(WORK/'installed-arm.obj'))
+def study_definition(assembly=None):
+    study=service_portfolio(build_study(WORK/'installed-arm.obj',assembly))
     receiver=AccelerationReceiver('hub',study.fixed_faces)
     drop=replace(study.histories['drop'],receivers=(receiver,))
     study=replace(study,loads={'lift':study.loads['lift']},histories={'drop':drop},mechanics_executable=ROOT/'build/Release/gso.exe')
