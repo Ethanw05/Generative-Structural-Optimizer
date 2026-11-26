@@ -13,7 +13,8 @@ from geometry import WORK,build_study
 import numpy as np
 from filaments import ABS,PLA,PETG
 from service_scenarios import directional_loads
-from gso_workflows.analysis_mesh import read_mesh
+from gso_workflows.analysis_boundary import analysis_skin
+from gso_workflows.analysis_mesh import digest,read_mesh,volume_mesh
 from gso_workflows.cad_wrench import SurfaceWrench
 from gso_workflows.design_targets import YieldSafety
 from gso_workflows.study_materials import material_portfolio
@@ -39,13 +40,14 @@ def mesh_statistics(points,cells,tolerance):
                                                  p95=float(np.quantile(longest,.95)),maximum=float(longest.max())))
 
 
-def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.):
+def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.,fixed_surface_edge_mm=None,factor_ram_mb=None):
     study=build_study(WORK/'installed-arm.obj')
     loads=directional_loads(study,force_n,torque_nmm)
     signed={mode+' '+symbol:action for mode,load in loads.items()
             for symbol,action in (('positive',load),('negative',reversed_load(load)))}
     study=material_portfolio(replace(study,loads=signed,mechanics_executable=ROOT/'build/Release/gso.exe'),materials)
-    solver,handle=linear_solver(WORK)
+    storage=(workspace,factor_ram_mb) if factor_ram_mb is not None else None
+    solver,handle=linear_solver(WORK,factor_storage=storage)
     with np.load(mesh) as data:
         if int(data['verified_boundary'])!=2:
             raise ValueError('Expected a verified conforming solid mesh')
@@ -53,6 +55,15 @@ def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.
         tolerance=float(data['effective_tolerance'])
     points,cells=read_mesh(mesh,key)
     workspace.mkdir(parents=True,exist_ok=True)
+    refinement={}
+    if fixed_surface_edge_mm is not None:
+        skin=analysis_skin(points,cells)
+        maximum_volume=fixed_surface_edge_mm**3/(6.*np.sqrt(2.))
+        refinement=dict(method='refine tetrahedra on registered exterior',source_tetrahedra=len(cells),
+                        source_skin=digest(skin),regular_tet_equivalent_edge_mm=fixed_surface_edge_mm,
+                        maximum_tetrahedron_volume_mm3=maximum_volume)
+        points,cells=volume_mesh(skin,workspace,maximum_volume,0.,'interior')
+        print(workspace.name,'fixed surface refinement:',len(cells),'tetrahedra',flush=True)
     paths={label:workspace/label.replace(' / ','-') for label in study.loads}
     raw=solve_static_cases(points,cells,study,paths,solver,surface_tol=.36)
     report={}
@@ -85,7 +96,10 @@ def measure(mesh,workspace,materials=(ABS,PLA,PETG),force_n=33.,torque_nmm=1000.
             modes[mode]=values
             print(workspace.name,spec.name,mode,round(values['positive']['peak_MPa'],3),'MPa',flush=True)
         report[spec.name]=modes
-    return dict(geometry=key,n_tets=len(cells),mesh=mesh_statistics(points,cells,tolerance),modes=report)
+    mesh_info=mesh_statistics(points,cells,tolerance)
+    if refinement:
+        mesh_info['refinement']=refinement
+    return dict(geometry=key,n_tets=len(cells),mesh=mesh_info,modes=report)
 
 
 def main():
@@ -95,6 +109,8 @@ def main():
     parser.add_argument('--work',type=Path,required=True)
     parser.add_argument('--force-n',type=float,default=33.)
     parser.add_argument('--torque-nmm',type=float,default=1000.)
+    parser.add_argument('--fixed-surface-edge-mm',type=float,help='Refine the registered exterior with a regular-tetrahedron equivalent volume bound')
+    parser.add_argument('--factor-ram-mb',type=int,help='Store numerical stiffness factors on disk with this oneMKL RAM budget')
     parser.add_argument('--material',choices=('ABS','PLA','PETG'),action='append',
                         help='Restrict a refinement study to the named materials')
     args=parser.parse_args()
@@ -102,11 +118,16 @@ def main():
     materials=tuple(catalog[key] for key in dict.fromkeys(args.material or catalog))
     if min(args.force_n,args.torque_nmm)<=0. or not np.isfinite([args.force_n,args.torque_nmm]).all():
         parser.error('Supply finite positive test amplitudes')
+    if args.fixed_surface_edge_mm is not None and not (np.isfinite(args.fixed_surface_edge_mm) and args.fixed_surface_edge_mm>0.):
+        parser.error('Choose a finite positive refinement edge')
+    if args.factor_ram_mb is not None and args.factor_ram_mb<=0:
+        parser.error('Choose a positive factor memory budget in MB')
     parts={}
     for label,path in args.part:
         if label in parts or Path(label).name!=label:
             parser.error('Choose distinct part labels without path components')
-        parts[label]=measure(Path(path),args.work/label,materials=materials,force_n=args.force_n,torque_nmm=args.torque_nmm)
+        parts[label]=measure(Path(path),args.work/label,materials=materials,force_n=args.force_n,torque_nmm=args.torque_nmm,
+                             fixed_surface_edge_mm=args.fixed_surface_edge_mm,factor_ram_mb=args.factor_ram_mb)
     record=dict(linear_elastic=True,force_N=args.force_n,torque_Nmm=args.torque_nmm,frame='arm-local CAD',
                 force_application='distributed on motor pad',moment_application='pure couple on motor bolt bores',
                 fixtures='same two hub attachment faces',parts=parts)

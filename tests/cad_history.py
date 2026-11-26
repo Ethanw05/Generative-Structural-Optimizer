@@ -167,6 +167,25 @@ with tempfile.TemporaryDirectory(dir=root/'build') as tmp:
         np.testing.assert_allclose(plane.at(theta),trial)
         assert np.all(trial<=maxima+1.e-12)
     independent=solve(points,np.asarray(cells),study,folder/'check-step',spsolve,surface_tol=.01,report_to_console=False)
+    from gso_workflows.volume_study import linear_solver
+    import os
+    runtime=root/'build/sunbeam33'
+    if os.environ.get('PYPARDISO_MKL_RT') or any((runtime/'intel').rglob('mkl_rt*.dll')):
+        disk_solver,dll_handle=linear_solver(runtime,factor_storage=(folder,512))
+        prefix=os.environ.get('MKL_PARDISO_OOC_FILE_NAME')
+        h=solve_static_cases(points,np.asarray(cells),opposing,{'forward':folder/'disk-forward','reverse':folder/'disk-reverse'},
+                             disk_solver,surface_tol=.01)
+        for key,row in h.items():
+            for metric in ('peak_MPa','compliance_Nmm','regional_peak_rms_MPa'):
+                np.testing.assert_allclose(row[metric],responses['stiff / '+key][metric],rtol=1.e-9)
+        from scipy import sparse
+        matrix=sparse.csr_matrix([[2.,-1.],[-1.,3.]])
+        rhs=np.array([1.,2.])
+        with disk_solver.fixed_stiffness(matrix) as outer_solve:
+            with disk_solver.fixed_stiffness(2.*matrix) as inner_solve:
+                np.testing.assert_allclose((2.*matrix)@inner_solve(rhs),rhs)
+            np.testing.assert_allclose(matrix@outer_solve(rhs),rhs)
+        assert os.environ.get('MKL_PARDISO_OOC_FILE_NAME')==prefix and not list(folder.glob('factors-*'))
     for key,row in responses.items():
         np.testing.assert_allclose(row['peak_MPa'],independent['peak_MPa'],rtol=1.e-10)
         np.testing.assert_allclose(row['regional_peak_rms_MPa'],independent['regional_peak_rms_MPa'],rtol=1.e-10)

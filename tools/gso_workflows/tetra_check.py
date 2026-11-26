@@ -26,7 +26,7 @@ def solve(p,t,study,output,linear_solve,*,surface_tol=.35,local_regions=None,rep
     free=np.tile(~system.fixed,3)
     stiffness=system.stiffness[free][:,free].tocsr()
     stiffness.sort_indices()
-    with fixed_matrix_solver(stiffness,linear_solve) as factorized:
+    with fixed_matrix_solver(stiffness,linear_solve,positive_definite=True) as factorized:
         def solve_system(matrix,rhs):
             # Reference-region recovery has its own scalar projection matrix.
             return factorized(rhs) if matrix is stiffness else linear_solve(matrix,rhs)
@@ -56,7 +56,7 @@ def solve_static_cases(points,cells,study,outputs,linear_solve,*,surface_tol=.35
         free=np.tile(~system.fixed,3)
         stiffness=system.stiffness[free][:,free].tocsr()
         stiffness.sort_indices()
-        with fixed_matrix_solver(stiffness,linear_solve) as factorized:
+        with fixed_matrix_solver(stiffness,linear_solve,positive_definite=True) as factorized:
             def solve_system(matrix,rhs):
                 return factorized(rhs) if matrix is stiffness else linear_solve(matrix,rhs)
             for label,single,path in cases:

@@ -5,12 +5,19 @@ from scipy.sparse.linalg import splu, spsolve
 
 
 class PardisoLinearSolver:
-    def __init__(self):
+    def __init__(self,factor_storage=None):
+        self.factor_storage=factor_storage
         from pypardiso import PyPardisoSolver
         self.single = PyPardisoSolver(mtype=11)
 
     def __call__(self, matrix, rhs):
         return self.single.solve(matrix, rhs)
+
+    def fixed_stiffness(self,matrix):
+        if self.factor_storage is None:
+            return self.fixed_matrix(matrix)
+        from .disk_factors import disk_backed_stiffness
+        return disk_backed_stiffness(matrix,*self.factor_storage)
 
     @contextmanager
     def fixed_matrix(self, matrix):
@@ -26,8 +33,11 @@ class PardisoLinearSolver:
 
 
 @contextmanager
-def fixed_matrix_solver(matrix, solve):
-    if hasattr(solve, "fixed_matrix"):
+def fixed_matrix_solver(matrix, solve, *, positive_definite=False):
+    if positive_definite and hasattr(solve,"fixed_stiffness"):
+        with solve.fixed_stiffness(matrix) as apply:
+            yield apply
+    elif hasattr(solve, "fixed_matrix"):
         with solve.fixed_matrix(matrix) as apply:
             yield apply
     elif solve is spsolve:

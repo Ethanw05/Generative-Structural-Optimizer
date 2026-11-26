@@ -88,17 +88,19 @@ class Design:
     workspace: Path
 
 
-def linear_solver(work):
+def linear_solver(work,*,factor_storage=None):
     configured=os.environ.get('PYPARDISO_MKL_RT')
     dll=Path(configured) if configured else next((work/'intel').rglob('mkl_rt*.dll'),None)
     if dll is None:
+        if factor_storage is not None:
+            raise ValueError("Disk-backed stiffness factors require the oneMKL runtime")
         return spsolve,None
     dll=dll.resolve(strict=True)
     os.environ['PYPARDISO_MKL_RT']=str(dll)
     os.environ.setdefault('MKL_NUM_THREADS','6')
     handle=os.add_dll_directory(str(dll.parent)) if os.name=='nt' else None
     from .sparse_solve import PardisoLinearSolver
-    return PardisoLinearSolver(),handle
+    return PardisoLinearSolver(factor_storage),handle
 
 
 def stencil(executable,work,pitch,young,poisson):
