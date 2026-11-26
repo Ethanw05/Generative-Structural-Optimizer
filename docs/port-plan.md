@@ -81,6 +81,48 @@ Generation runs in two stages on one geometry, followed by a certification step.
 - Rejected alternatives for this step, which would give the same answer by other means:
   the three-mesh check, and SOLIDWORKS-style "converged" checks.
 
+### Evolving a part: re-running with new targets
+
+You can feed any part back in and optimize it again for new or changed targets. The part
+can be one this generator produced, or one that exists already (OBJ, STL, or SLDPRT
+through SOLIDWORKS).
+
+- **Every run saves its design state.** That means the level set, the density field,
+  the certified mesh, the study it was generated for, its results, and a link to its
+  parent run.
+- A new study names a `start` (a previous run, or a part file) and a **freedom**:
+  - **`shape`**: the topology is kept; only stage 2 moves the boundary. Use this to tune
+    a design you like.
+  - **`topology`**: stage 1 reopens. The part becomes the starting density, and
+    projection sharpness is reset so members can thin, vanish or appear. Holes can open
+    where the new loads want them, using a topological derivative.
+- **Limits on change.**
+  - A maximum deviation from the parent.
+  - Regions that must not change.
+  - Mass change relative to the parent.
+
+  These are ordinary targets, so they combine with everything else.
+- **Inheritance.** By default the new study inherits the parent's targets and adds the
+  new ones. A design therefore doesn't quietly lose a safety factor it already met. You
+  can remove inherited targets explicitly.
+- The lineage (parent → child, with each run's study) is recorded, and the viewport can
+  replay it.
+
+**Where I'd push back:**
+1. **"Evolutionary" here means iterative refinement, not a genetic algorithm.**
+   - A design has 10⁵–10⁷ variables.
+   - A genetic algorithm needs thousands of full analyses per generation and still
+     converges far worse than gradient methods at that size.
+   - The gradient-based generator re-runs from the parent, and you watch it evolve
+     iteration by iteration, as ProjectGoal item 3 asks.
+2. **Starting from an existing part finds the best design near that part, not
+   necessarily the best design overall.**
+   - Gradient methods are local.
+   - That is what you want when keeping a design, but not when the targets change
+     drastically, for example adding a vibration limit the old shape can't meet.
+   - So a run can also start from the design space with the same targets. The report
+     then compares the two certified results side by side, and you choose.
+
 ### Why this combination, and what was rejected
 
 | Choice | Rejected | Why |
