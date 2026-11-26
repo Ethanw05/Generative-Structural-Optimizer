@@ -130,6 +130,21 @@ with tempfile.TemporaryDirectory(dir=root/'build') as tmp:
         scored=evaluate(mixed,mesh,.5,.04,folder,spsolve,'mixed')
     from gso_workflows.tetra_check import solve
     from gso_workflows.reference_regions import ReferenceRegions
+    from gso_workflows.study_materials import IsotropicMaterial,material_portfolio
+    from gso_workflows.tetra_check import solve_static_cases
+    # A reversed load and two different elastic moduli on one arbitrary solid.
+    opposing=replace(study,loads={'forward':load,'reverse':replace(load,force_n=-load.force_n)})
+    materials=(IsotropicMaterial('soft',1100.,.35,1040.),IsotropicMaterial('stiff',2200.,.35,1040.))
+    both=material_portfolio(opposing,materials)
+    paths={key:folder/key.replace(' / ','-') for key in both.loads}
+    responses=solve_static_cases(points,np.asarray(cells),both,paths,spsolve,surface_tol=.01)
+    independent=solve(points,np.asarray(cells),study,folder/'check-step',spsolve,surface_tol=.01,report_to_console=False)
+    for key,row in responses.items():
+        np.testing.assert_allclose(row['peak_MPa'],independent['peak_MPa'],rtol=1.e-10)
+        np.testing.assert_allclose(row['regional_peak_rms_MPa'],independent['regional_peak_rms_MPa'],rtol=1.e-10)
+        np.testing.assert_allclose(row['compliance_Nmm'],independent['compliance_Nmm']*(2. if key.startswith('soft') else 1.))
+        np.testing.assert_allclose(row['force_N'],load.force_n*(1. if key.endswith('forward') else -1.))
+        np.testing.assert_allclose(row['moment_residual_Nmm'],0.,atol=1.e-12)
     unloaded=replace(study,loads={'unloaded':SurfaceLoad(right,np.zeros(3))})
     zero=solve(points,np.asarray(cells),unloaded,folder/'unloaded',spsolve,surface_tol=.01,local_regions=ReferenceRegions())
     assert zero['peak_MPa']==zero['compliance_Nmm']==zero['relative_regional_stress']==0.

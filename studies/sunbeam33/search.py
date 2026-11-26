@@ -19,7 +19,7 @@ def main():
                        help='Start a new pass on the latest evaluated working mesh with the current load cases')
     parser.add_argument('--surface-generations',type=int,default=2,help='Complete shuffled passes through the load cases')
     parser.add_argument('--service-cases',action='store_true',
-                        help='Use the recorded three 33 N directions, bolt torque, motor braking, drop and strike conditions')
+                        help='Use the recorded three 33 N directions, motor-axis torque, span twist, motor braking, drop and strike conditions')
     parser.add_argument('--filament',choices=('ABS','PLA','PETG'),action='append',
                         help='Apply every case to this reference filament on the same evolving arm; repeat for a material portfolio')
     parser.add_argument('--finite-strain',action='append',default=[],metavar='CASE',

@@ -1,5 +1,6 @@
 """Independent small-strain P1 elasticity with native face patch loads, fixtures and element stresses."""
 import json
+from dataclasses import replace
 from pathlib import Path
 import numpy as np
 from .tetra_elasticity import assemble, applied, exterior
@@ -35,7 +36,34 @@ def solve(p,t,study,output,linear_solve,*,surface_tol=.35,local_regions=None,rep
     return result
 
 
-def _response(system,study,output,surface_tol,local_regions,free,A,linear_solve):
+def solve_static_cases(points,cells,study,outputs,linear_solve,*,surface_tol=.35):
+    """Evaluate named load and moment cases, factoring each common linear elastic solid once."""
+    if not outputs or set(outputs)-study.loads.keys():
+        raise ValueError('Select one or more defined static cases')
+    results={}
+    groups={}
+    for label,path in outputs.items():
+        active=study.for_case(label)
+        single=replace(active,loads={label:study.loads[label]})
+        if label in study.solid_laws:
+            results[label]=solve(points,cells,single,path,linear_solve,surface_tol=surface_tol,report_to_console=False)
+        else:
+            groups.setdefault((active.young_mpa,active.poisson),[]).append((label,single,path))
+    for cases in groups.values():
+        system=assemble(points,cells,cases[0][1],surface_tol)
+        free=np.tile(~system.fixed,3)
+        stiffness=system.stiffness[free][:,free].tocsr()
+        stiffness.sort_indices()
+        with fixed_matrix_solver(stiffness,linear_solve) as factorized:
+            def solve_system(matrix,rhs):
+                return factorized(rhs) if matrix is stiffness else linear_solve(matrix,rhs)
+            for label,single,path in cases:
+                results[label]=_response(system,single,path,surface_tol,None,free,stiffness,solve_system,
+                                         sensitivities=False)
+    return results
+
+
+def _response(system,study,output,surface_tol,local_regions,free,A,linear_solve,*,sensitivities=True):
     (p,t,volume,grad,shear,lame,matrix,skin,owner,local,fixed,fixture_area,fixture_transfer)=system
     n=len(p)
     load=next(iter(study.loads.values()))
@@ -79,6 +107,13 @@ def _response(system,study,output,surface_tol,local_regions,free,A,linear_solve)
     moment=np.cross(p-study.world_origin,force+forces_at_supports).sum(0)
     summary['moment_residual_Nmm']=moment.tolist()
     active,indices=np.unique(skin,return_inverse=True)
+    if not sensitivities:
+        basins=stress_basins(t,vm)
+        maxima,weights=basin_peaks(vm,volume,basins)
+        summary['regional_peak_rms_MPa']=float(np.sqrt(np.average(vm[maxima]**2,weights=weights)))
+        np.savez_compressed(output.with_suffix('.npz'),v=p[active],f=indices.reshape(-1,3),vm=vm[owner])
+        output.with_suffix('.json').write_text(json.dumps(summary,indent=2,allow_nan=False))
+        return summary
     energy=2.*shear*np.einsum('ijk,ijk->i',strain,strain)+lame*np.trace(strain,axis1=1,axis2=2)**2
     aggregate,derivative=stress_shape_gradient(p,t,grad,volume,du,shear,lame,free,A,linear_solve)
     descent=normal_descent(p,skin,derivative)

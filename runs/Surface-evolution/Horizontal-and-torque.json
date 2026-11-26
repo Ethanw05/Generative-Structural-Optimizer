@@ -1,0 +1,1931 @@
+{
+  "linear_elastic": true,
+  "force_N": 33.0,
+  "torque_Nmm": 1000.0,
+  "frame": "arm-local CAD",
+  "force_application": "distributed on motor pad",
+  "moment_application": "pure couple on motor bolt bores",
+  "fixtures": "same two hub attachment faces",
+  "parts": {
+    "installed": {
+      "geometry": "6ebcc1942b82d3b185367dcefec0cb68369f793b2403c298ca713b3d0c47c0af",
+      "n_tets": 127052,
+      "modes": {
+        "ABS": {
+          "span": {
+            "positive": {
+              "peak_MPa": 9.825153537305969,
+              "regional_peak_rms_MPa": 0.9098901853086376,
+              "required_yield_MPa_for_factor_two": 19.650307074611938,
+              "peak_at_world_mm": [
+                -146.7174887516311,
+                -2.3663643406213284,
+                144.36909436053836
+              ],
+              "force_world_N": [
+                -22.548583372934242,
+                0.0,
+                24.09484151999831
+              ],
+              "reaction_world_N": [
+                22.548583372968757,
+                -5.67510483051592e-11,
+                -24.094841520047222
+              ],
+              "moment_balance_world_Nmm": [
+                6.292726284495842e-09,
+                2.016277381167164e-09,
+                5.568798908117678e-09
+              ],
+              "compliance_Nmm": 9.431206394508902,
+              "signed_displacement_mm": 0.2857941331669364,
+              "stiffness_N_per_mm": 115.46773068544493
+            },
+            "negative": {
+              "peak_MPa": 9.825153537305969,
+              "regional_peak_rms_MPa": 0.9098901853086376,
+              "required_yield_MPa_for_factor_two": 19.650307074611938,
+              "peak_at_world_mm": [
+                -146.7174887516311,
+                -2.3663643406213284,
+                144.36909436053836
+              ],
+              "force_world_N": [
+                22.548583372934242,
+                0.0,
+                -24.09484151999831
+              ],
+              "reaction_world_N": [
+                -22.548583372968757,
+                5.67510483051592e-11,
+                24.094841520047222
+              ],
+              "moment_balance_world_Nmm": [
+                -6.292726284495842e-09,
+                -2.016277381167164e-09,
+                -5.568798908117678e-09
+              ],
+              "compliance_Nmm": 9.431206394508902,
+              "signed_displacement_mm": -0.2857941331669364,
+              "stiffness_N_per_mm": 115.46773068544493
+            }
+          },
+          "lateral": {
+            "positive": {
+              "peak_MPa": 31.872960878050073,
+              "regional_peak_rms_MPa": 5.059027346519901,
+              "required_yield_MPa_for_factor_two": 63.745921756100145,
+              "peak_at_world_mm": [
+                -102.63940043867295,
+                -1.942766380501753,
+                115.75648679008663
+              ],
+              "force_world_N": [
+                24.09484151999831,
+                0.0,
+                22.548583372934242
+              ],
+              "reaction_world_N": [
+                -24.094841519957694,
+                5.375273559593552e-10,
+                -22.548583373275022
+              ],
+              "moment_balance_world_Nmm": [
+                -6.654977924291927e-08,
+                -2.6623237037171066e-07,
+                -3.7825060195118e-08
+              ],
+              "compliance_Nmm": 309.4562071219551,
+              "signed_displacement_mm": 9.377460821877428,
+              "stiffness_N_per_mm": 3.519076285875987
+            },
+            "negative": {
+              "peak_MPa": 31.872960878050073,
+              "regional_peak_rms_MPa": 5.059027346519901,
+              "required_yield_MPa_for_factor_two": 63.745921756100145,
+              "peak_at_world_mm": [
+                -102.63940043867295,
+                -1.942766380501753,
+                115.75648679008663
+              ],
+              "force_world_N": [
+                -24.09484151999831,
+                0.0,
+                -22.548583372934242
+              ],
+              "reaction_world_N": [
+                24.094841519957694,
+                -5.375273559593552e-10,
+                22.548583373275022
+              ],
+              "moment_balance_world_Nmm": [
+                6.654977924291927e-08,
+                2.6623237037171066e-07,
+                3.7825060195118e-08
+              ],
+              "compliance_Nmm": 309.4562071219551,
+              "signed_displacement_mm": -9.377460821877428,
+              "stiffness_N_per_mm": 3.519076285875987
+            }
+          },
+          "torque": {
+            "positive": {
+              "peak_MPa": 14.846700917553255,
+              "regional_peak_rms_MPa": 2.5613826411412743,
+              "required_yield_MPa_for_factor_two": 29.69340183510651,
+              "peak_at_world_mm": [
+                -121.48359205833069,
+                -23.974369077473412,
+                145.1887540538485
+              ],
+              "force_world_N": [
+                -2.407796184655808e-13,
+                3.9238801281555463e-19,
+                -9.159339953157541e-16
+              ],
+              "reaction_world_N": [
+                -3.248334934369268e-10,
+                4.9540815894033585e-11,
+                -2.7338131758369855e-12
+              ],
+              "moment_balance_world_Nmm": [
+                -3.084264499353395e-08,
+                -4.707596401587466e-08,
+                -2.2756561857129043e-08
+              ],
+              "compliance_Nmm": 75.43972737617395,
+              "applied_moment_local_Nmm": [
+                1.268082860939046e-15,
+                6.0958182945825e-15,
+                999.999999999994
+              ],
+              "signed_rotation_deg": 4.322377986272303,
+              "stiffness_Nmm_per_rad": 13255.61524120551
+            },
+            "negative": {
+              "peak_MPa": 14.846700917553255,
+              "regional_peak_rms_MPa": 2.5613826411412743,
+              "required_yield_MPa_for_factor_two": 29.69340183510651,
+              "peak_at_world_mm": [
+                -121.48359205833069,
+                -23.974369077473412,
+                145.1887540538485
+              ],
+              "force_world_N": [
+                2.407796184655808e-13,
+                -3.9238801281555463e-19,
+                9.159339953157541e-16
+              ],
+              "reaction_world_N": [
+                3.248334934369268e-10,
+                -4.9540815894033585e-11,
+                2.7338131758369855e-12
+              ],
+              "moment_balance_world_Nmm": [
+                3.084264499353395e-08,
+                4.707596401587466e-08,
+                2.2756561857129043e-08
+              ],
+              "compliance_Nmm": 75.43972737617395,
+              "applied_moment_local_Nmm": [
+                -1.268082860939046e-15,
+                -6.0958182945825e-15,
+                -999.999999999994
+              ],
+              "signed_rotation_deg": -4.322377986272303,
+              "stiffness_Nmm_per_rad": 13255.61524120551
+            }
+          },
+          "span twist": {
+            "positive": {
+              "peak_MPa": 28.81347601858685,
+              "regional_peak_rms_MPa": 3.347877165725873,
+              "required_yield_MPa_for_factor_two": 57.6269520371737,
+              "peak_at_world_mm": [
+                -143.9624583260347,
+                -5.568066554436846,
+                155.48879560384685
+              ],
+              "force_world_N": [
+                6.392456008974534e-16,
+                -3.1968871994081383e-13,
+                7.016956460326185e-16
+              ],
+              "reaction_world_N": [
+                2.1052359855389113e-10,
+                -2.5680568782604496e-11,
+                1.7892443082700993e-10
+              ],
+              "moment_balance_world_Nmm": [
+                -9.117475940900732e-10,
+                3.6672960862516035e-08,
+                -3.3964192153179695e-09
+              ],
+              "compliance_Nmm": 137.18516630361407,
+              "applied_moment_local_Nmm": [
+                1000.0000000000016,
+                1.0857981180834031e-13,
+                -1.2004286453759505e-15
+              ],
+              "signed_rotation_deg": 7.860131040997403,
+              "stiffness_Nmm_per_rad": 7289.417849935978
+            },
+            "negative": {
+              "peak_MPa": 28.81347601858685,
+              "regional_peak_rms_MPa": 3.347877165725873,
+              "required_yield_MPa_for_factor_two": 57.6269520371737,
+              "peak_at_world_mm": [
+                -143.9624583260347,
+                -5.568066554436846,
+                155.48879560384685
+              ],
+              "force_world_N": [
+                -6.392456008974534e-16,
+                3.1968871994081383e-13,
+                -7.016956460326185e-16
+              ],
+              "reaction_world_N": [
+                -2.1052359855389113e-10,
+                2.5680568782604496e-11,
+                -1.7892443082700993e-10
+              ],
+              "moment_balance_world_Nmm": [
+                9.117475940900732e-10,
+                -3.6672960862516035e-08,
+                3.3964192153179695e-09
+              ],
+              "compliance_Nmm": 137.18516630361407,
+              "applied_moment_local_Nmm": [
+                -1000.0000000000016,
+                -1.0857981180834031e-13,
+                1.2004286453759505e-15
+              ],
+              "signed_rotation_deg": -7.860131040997403,
+              "stiffness_Nmm_per_rad": 7289.417849935978
+            }
+          }
+        },
+        "PLA": {
+          "span": {
+            "positive": {
+              "peak_MPa": 9.825153537303994,
+              "regional_peak_rms_MPa": 0.909890185308144,
+              "required_yield_MPa_for_factor_two": 19.650307074607987,
+              "peak_at_world_mm": [
+                -146.7174887516311,
+                -2.3663643406213284,
+                144.36909436053836
+              ],
+              "force_world_N": [
+                -22.548583372934242,
+                0.0,
+                24.09484151999831
+              ],
+              "reaction_world_N": [
+                22.548583372964735,
+                -2.436384427539906e-11,
+                -24.094841520019937
+              ],
+              "moment_balance_world_Nmm": [
+                3.7193118307410344e-09,
+                6.755163539651221e-09,
+                3.1705392200542803e-09
+              ],
+              "compliance_Nmm": 9.021153942568676,
+              "signed_displacement_mm": 0.27336830128995987,
+              "stiffness_N_per_mm": 120.71626389848737,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 9.825153537303994,
+                "achieved": 5.190758577600236,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.38530013871780366,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 9.825153537303994,
+              "regional_peak_rms_MPa": 0.909890185308144,
+              "required_yield_MPa_for_factor_two": 19.650307074607987,
+              "peak_at_world_mm": [
+                -146.7174887516311,
+                -2.3663643406213284,
+                144.36909436053836
+              ],
+              "force_world_N": [
+                22.548583372934242,
+                0.0,
+                -24.09484151999831
+              ],
+              "reaction_world_N": [
+                -22.548583372964735,
+                2.436384427539906e-11,
+                24.094841520019937
+              ],
+              "moment_balance_world_Nmm": [
+                -3.7193118307410344e-09,
+                -6.755163539651221e-09,
+                -3.1705392200542803e-09
+              ],
+              "compliance_Nmm": 9.021153942568676,
+              "signed_displacement_mm": -0.27336830128995987,
+              "stiffness_N_per_mm": 120.71626389848737,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 9.825153537303994,
+                "achieved": 5.190758577600236,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.38530013871780366,
+                "violation": 0.0
+              }
+            }
+          },
+          "lateral": {
+            "positive": {
+              "peak_MPa": 31.872960877488087,
+              "regional_peak_rms_MPa": 5.059027346425533,
+              "required_yield_MPa_for_factor_two": 63.74592175497617,
+              "peak_at_world_mm": [
+                -102.63940043867295,
+                -1.942766380501753,
+                115.75648679008663
+              ],
+              "force_world_N": [
+                24.09484151999831,
+                0.0,
+                22.548583372934242
+              ],
+              "reaction_world_N": [
+                -24.094841520080138,
+                -1.227133950010284e-10,
+                -22.54858337305386
+              ],
+              "moment_balance_world_Nmm": [
+                -4.698058386765069e-09,
+                -1.1534227395415542e-07,
+                1.117026271479915e-08
+              ],
+              "compliance_Nmm": 296.0015894154998,
+              "signed_displacement_mm": 8.969745133803023,
+              "stiffness_N_per_mm": 3.6790342989387197,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 31.872960877488087,
+                "achieved": 1.6001023625019213,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 1.2499200344112975,
+                "violation": 0.2499200344112975
+              }
+            },
+            "negative": {
+              "peak_MPa": 31.872960877488087,
+              "regional_peak_rms_MPa": 5.059027346425533,
+              "required_yield_MPa_for_factor_two": 63.74592175497617,
+              "peak_at_world_mm": [
+                -102.63940043867295,
+                -1.942766380501753,
+                115.75648679008663
+              ],
+              "force_world_N": [
+                -24.09484151999831,
+                0.0,
+                -22.548583372934242
+              ],
+              "reaction_world_N": [
+                24.094841520080138,
+                1.227133950010284e-10,
+                22.54858337305386
+              ],
+              "moment_balance_world_Nmm": [
+                4.698058386765069e-09,
+                1.1534227395415542e-07,
+                -1.117026271479915e-08
+              ],
+              "compliance_Nmm": 296.0015894154998,
+              "signed_displacement_mm": -8.969745133803023,
+              "stiffness_N_per_mm": 3.6790342989387197,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 31.872960877488087,
+                "achieved": 1.6001023625019213,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 1.2499200344112975,
+                "violation": 0.2499200344112975
+              }
+            }
+          },
+          "torque": {
+            "positive": {
+              "peak_MPa": 14.846700917517346,
+              "regional_peak_rms_MPa": 2.561382641132039,
+              "required_yield_MPa_for_factor_two": 29.69340183503469,
+              "peak_at_world_mm": [
+                -121.48359205833069,
+                -23.974369077473412,
+                145.1887540538485
+              ],
+              "force_world_N": [
+                -2.407796184655808e-13,
+                3.9238801281555463e-19,
+                -9.159339953157541e-16
+              ],
+              "reaction_world_N": [
+                1.0249845416865355e-10,
+                1.3370016205271895e-10,
+                -4.296829558825266e-11
+              ],
+              "moment_balance_world_Nmm": [
+                -2.0302890924028816e-08,
+                -2.135387955348733e-08,
+                -1.2742757959927076e-08
+              ],
+              "compliance_Nmm": 72.15973922913244,
+              "applied_moment_local_Nmm": [
+                1.268082860939046e-15,
+                6.0958182945825e-15,
+                999.999999999994
+              ],
+              "signed_rotation_deg": 4.134448508593889,
+              "stiffness_Nmm_per_rad": 13858.143206763121,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 14.846700917517346,
+                "achieved": 3.4351065791206215,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.582223565392837,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 14.846700917517346,
+              "regional_peak_rms_MPa": 2.561382641132039,
+              "required_yield_MPa_for_factor_two": 29.69340183503469,
+              "peak_at_world_mm": [
+                -121.48359205833069,
+                -23.974369077473412,
+                145.1887540538485
+              ],
+              "force_world_N": [
+                2.407796184655808e-13,
+                -3.9238801281555463e-19,
+                9.159339953157541e-16
+              ],
+              "reaction_world_N": [
+                -1.0249845416865355e-10,
+                -1.3370016205271895e-10,
+                4.296829558825266e-11
+              ],
+              "moment_balance_world_Nmm": [
+                2.0302890924028816e-08,
+                2.135387955348733e-08,
+                1.2742757959927076e-08
+              ],
+              "compliance_Nmm": 72.15973922913244,
+              "applied_moment_local_Nmm": [
+                -1.268082860939046e-15,
+                -6.0958182945825e-15,
+                -999.999999999994
+              ],
+              "signed_rotation_deg": -4.134448508593889,
+              "stiffness_Nmm_per_rad": 13858.143206763121,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 14.846700917517346,
+                "achieved": 3.4351065791206215,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.582223565392837,
+                "violation": 0.0
+              }
+            }
+          },
+          "span twist": {
+            "positive": {
+              "peak_MPa": 28.813476018589476,
+              "regional_peak_rms_MPa": 3.347877165723728,
+              "required_yield_MPa_for_factor_two": 57.62695203717895,
+              "peak_at_world_mm": [
+                -143.9624583260347,
+                -5.568066554436846,
+                155.48879560384685
+              ],
+              "force_world_N": [
+                6.392456008974534e-16,
+                -3.1968871994081383e-13,
+                7.016956460326185e-16
+              ],
+              "reaction_world_N": [
+                8.40594260864691e-11,
+                7.617884101307482e-11,
+                2.1533885785629536e-11
+              ],
+              "moment_balance_world_Nmm": [
+                -2.017798499120982e-08,
+                4.583935965529751e-08,
+                -1.5730152555515353e-08
+              ],
+              "compliance_Nmm": 131.2205938555483,
+              "applied_moment_local_Nmm": [
+                1000.0000000000016,
+                1.0857981180834031e-13,
+                -1.2004286453759505e-15
+              ],
+              "signed_rotation_deg": 7.51838621312322,
+              "stiffness_Nmm_per_rad": 7620.755024937863,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 28.813476018589476,
+                "achieved": 1.7700051172963835,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 1.1299402360231168,
+                "violation": 0.12994023602311677
+              }
+            },
+            "negative": {
+              "peak_MPa": 28.813476018589476,
+              "regional_peak_rms_MPa": 3.347877165723728,
+              "required_yield_MPa_for_factor_two": 57.62695203717895,
+              "peak_at_world_mm": [
+                -143.9624583260347,
+                -5.568066554436846,
+                155.48879560384685
+              ],
+              "force_world_N": [
+                -6.392456008974534e-16,
+                3.1968871994081383e-13,
+                -7.016956460326185e-16
+              ],
+              "reaction_world_N": [
+                -8.40594260864691e-11,
+                -7.617884101307482e-11,
+                -2.1533885785629536e-11
+              ],
+              "moment_balance_world_Nmm": [
+                2.017798499120982e-08,
+                -4.583935965529751e-08,
+                1.5730152555515353e-08
+              ],
+              "compliance_Nmm": 131.2205938555483,
+              "applied_moment_local_Nmm": [
+                -1000.0000000000016,
+                -1.0857981180834031e-13,
+                1.2004286453759505e-15
+              ],
+              "signed_rotation_deg": -7.51838621312322,
+              "stiffness_Nmm_per_rad": 7620.755024937863,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 28.813476018589476,
+                "achieved": 1.7700051172963835,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 1.1299402360231168,
+                "violation": 0.12994023602311677
+              }
+            }
+          }
+        },
+        "PETG": {
+          "span": {
+            "positive": {
+              "peak_MPa": 9.825153537297384,
+              "regional_peak_rms_MPa": 0.9098901853077042,
+              "required_yield_MPa_for_factor_two": 19.650307074594767,
+              "peak_at_world_mm": [
+                -146.7174887516311,
+                -2.3663643406213284,
+                144.36909436053836
+              ],
+              "force_world_N": [
+                -22.548583372934242,
+                0.0,
+                24.09484151999831
+              ],
+              "reaction_world_N": [
+                22.548583372947526,
+                -8.020251129892131e-12,
+                -24.094841519968405
+              ],
+              "moment_balance_world_Nmm": [
+                2.837640733499569e-09,
+                6.9478182929128e-10,
+                2.804673229772625e-09
+              ],
+              "compliance_Nmm": 13.83243604526627,
+              "signed_displacement_mm": 0.41916472864443244,
+              "stiffness_N_per_mm": 78.72799819469812,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 9.825153537297384,
+                "achieved": 4.783640257791671,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.41809163988499504,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 9.825153537297384,
+              "regional_peak_rms_MPa": 0.9098901853077042,
+              "required_yield_MPa_for_factor_two": 19.650307074594767,
+              "peak_at_world_mm": [
+                -146.7174887516311,
+                -2.3663643406213284,
+                144.36909436053836
+              ],
+              "force_world_N": [
+                22.548583372934242,
+                0.0,
+                -24.09484151999831
+              ],
+              "reaction_world_N": [
+                -22.548583372947526,
+                8.020251129892131e-12,
+                24.094841519968405
+              ],
+              "moment_balance_world_Nmm": [
+                -2.837640733499569e-09,
+                -6.9478182929128e-10,
+                -2.804673229772625e-09
+              ],
+              "compliance_Nmm": 13.83243604526627,
+              "signed_displacement_mm": -0.41916472864443244,
+              "stiffness_N_per_mm": 78.72799819469812,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 9.825153537297384,
+                "achieved": 4.783640257791671,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.41809163988499504,
+                "violation": 0.0
+              }
+            }
+          },
+          "lateral": {
+            "positive": {
+              "peak_MPa": 31.872960875775206,
+              "regional_peak_rms_MPa": 5.059027346125846,
+              "required_yield_MPa_for_factor_two": 63.74592175155041,
+              "peak_at_world_mm": [
+                -102.63940043867295,
+                -1.942766380501753,
+                115.75648679008663
+              ],
+              "force_world_N": [
+                24.09484151999831,
+                0.0,
+                22.548583372934242
+              ],
+              "reaction_world_N": [
+                -24.09484151943539,
+                -3.8742076213793553e-10,
+                -22.548583371842994
+              ],
+              "moment_balance_world_Nmm": [
+                -2.453008085545605e-08,
+                2.558702720811823e-07,
+                -3.477399257434399e-08
+              ],
+              "compliance_Nmm": 453.86910374343825,
+              "signed_displacement_mm": 13.753609204346613,
+              "stiffness_N_per_mm": 2.3993701951027417,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 31.872960875775206,
+                "achieved": 1.4746041380712132,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 1.356296207479796,
+                "violation": 0.35629620747979596
+              }
+            },
+            "negative": {
+              "peak_MPa": 31.872960875775206,
+              "regional_peak_rms_MPa": 5.059027346125846,
+              "required_yield_MPa_for_factor_two": 63.74592175155041,
+              "peak_at_world_mm": [
+                -102.63940043867295,
+                -1.942766380501753,
+                115.75648679008663
+              ],
+              "force_world_N": [
+                -24.09484151999831,
+                0.0,
+                -22.548583372934242
+              ],
+              "reaction_world_N": [
+                24.09484151943539,
+                3.8742076213793553e-10,
+                22.548583371842994
+              ],
+              "moment_balance_world_Nmm": [
+                2.453008085545605e-08,
+                -2.558702720811823e-07,
+                3.477399257434399e-08
+              ],
+              "compliance_Nmm": 453.86910374343825,
+              "signed_displacement_mm": -13.753609204346613,
+              "stiffness_N_per_mm": 2.3993701951027417,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 31.872960875775206,
+                "achieved": 1.4746041380712132,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 1.356296207479796,
+                "violation": 0.35629620747979596
+              }
+            }
+          },
+          "torque": {
+            "positive": {
+              "peak_MPa": 14.846700917156895,
+              "regional_peak_rms_MPa": 2.5613826410680334,
+              "required_yield_MPa_for_factor_two": 29.69340183431379,
+              "peak_at_world_mm": [
+                -121.48359205833069,
+                -23.974369077473412,
+                145.1887540538485
+              ],
+              "force_world_N": [
+                -2.407796184655808e-13,
+                3.9238801281555463e-19,
+                -9.159339953157541e-16
+              ],
+              "reaction_world_N": [
+                -3.2522429194159486e-11,
+                -5.544897874187882e-12,
+                4.696971700468566e-10
+              ],
+              "moment_balance_world_Nmm": [
+                1.3012279032054153e-09,
+                8.133952250632959e-08,
+                1.8829859893543244e-10
+              ],
+              "compliance_Nmm": 110.64493348181298,
+              "applied_moment_local_Nmm": [
+                1.268082860939046e-15,
+                6.0958182945825e-15,
+                999.999999999994
+              ],
+              "signed_rotation_deg": 6.339487713013616,
+              "stiffness_Nmm_per_rad": 9037.919482904952,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 14.846700917156895,
+                "achieved": 3.165686455344881,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.6317745071130594,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 14.846700917156895,
+              "regional_peak_rms_MPa": 2.5613826410680334,
+              "required_yield_MPa_for_factor_two": 29.69340183431379,
+              "peak_at_world_mm": [
+                -121.48359205833069,
+                -23.974369077473412,
+                145.1887540538485
+              ],
+              "force_world_N": [
+                2.407796184655808e-13,
+                -3.9238801281555463e-19,
+                9.159339953157541e-16
+              ],
+              "reaction_world_N": [
+                3.2522429194159486e-11,
+                5.544897874187882e-12,
+                -4.696971700468566e-10
+              ],
+              "moment_balance_world_Nmm": [
+                -1.3012279032054153e-09,
+                -8.133952250632959e-08,
+                -1.8829859893543244e-10
+              ],
+              "compliance_Nmm": 110.64493348181298,
+              "applied_moment_local_Nmm": [
+                -1.268082860939046e-15,
+                -6.0958182945825e-15,
+                -999.999999999994
+              ],
+              "signed_rotation_deg": -6.339487713013616,
+              "stiffness_Nmm_per_rad": 9037.919482904952,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 14.846700917156895,
+                "achieved": 3.165686455344881,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.6317745071130594,
+                "violation": 0.0
+              }
+            }
+          },
+          "span twist": {
+            "positive": {
+              "peak_MPa": 28.81347601864054,
+              "regional_peak_rms_MPa": 3.3478771657282596,
+              "required_yield_MPa_for_factor_two": 57.62695203728108,
+              "peak_at_world_mm": [
+                -143.9624583260347,
+                -5.568066554436846,
+                155.48879560384685
+              ],
+              "force_world_N": [
+                6.392456008974534e-16,
+                -3.1968871994081383e-13,
+                7.016956460326185e-16
+              ],
+              "reaction_world_N": [
+                3.8087089038185695e-11,
+                2.68685518278744e-10,
+                7.648104372037778e-11
+              ],
+              "moment_balance_world_Nmm": [
+                -6.005610382608939e-08,
+                -1.6778643682768823e-08,
+                -5.731483004867144e-08
+              ],
+              "compliance_Nmm": 201.2049105787911,
+              "applied_moment_local_Nmm": [
+                1000.0000000000016,
+                1.0857981180834031e-13,
+                -1.2004286453759505e-15
+              ],
+              "signed_rotation_deg": 11.528192193471861,
+              "stiffness_Nmm_per_rad": 4970.057624952467,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 28.81347601864054,
+                "achieved": 1.6311811865251489,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 1.2261053624953422,
+                "violation": 0.2261053624953422
+              }
+            },
+            "negative": {
+              "peak_MPa": 28.81347601864054,
+              "regional_peak_rms_MPa": 3.3478771657282596,
+              "required_yield_MPa_for_factor_two": 57.62695203728108,
+              "peak_at_world_mm": [
+                -143.9624583260347,
+                -5.568066554436846,
+                155.48879560384685
+              ],
+              "force_world_N": [
+                -6.392456008974534e-16,
+                3.1968871994081383e-13,
+                -7.016956460326185e-16
+              ],
+              "reaction_world_N": [
+                -3.8087089038185695e-11,
+                -2.68685518278744e-10,
+                -7.648104372037778e-11
+              ],
+              "moment_balance_world_Nmm": [
+                6.005610382608939e-08,
+                1.6778643682768823e-08,
+                5.731483004867144e-08
+              ],
+              "compliance_Nmm": 201.2049105787911,
+              "applied_moment_local_Nmm": [
+                -1000.0000000000016,
+                -1.0857981180834031e-13,
+                1.2004286453759505e-15
+              ],
+              "signed_rotation_deg": -11.528192193471861,
+              "stiffness_Nmm_per_rad": 4970.057624952467,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 28.81347601864054,
+                "achieved": 1.6311811865251489,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 1.2261053624953422,
+                "violation": 0.2261053624953422
+              }
+            }
+          }
+        }
+      }
+    },
+    "generated": {
+      "geometry": "894449eecab6b6cd9fada2132b5e37266345f6d6ed62437573d80f9959a36349",
+      "n_tets": 154365,
+      "modes": {
+        "ABS": {
+          "span": {
+            "positive": {
+              "peak_MPa": 2.729098765645846,
+              "regional_peak_rms_MPa": 0.5469196618158478,
+              "required_yield_MPa_for_factor_two": 5.458197531291692,
+              "peak_at_world_mm": [
+                -115.84301203321809,
+                -3.6133710794164977,
+                118.52777331889558
+              ],
+              "force_world_N": [
+                -22.548583372934218,
+                0.0,
+                24.094841519998287
+              ],
+              "reaction_world_N": [
+                22.548583373026705,
+                2.1231905122931494e-11,
+                -24.09484151999369
+              ],
+              "moment_balance_world_Nmm": [
+                -5.291881988167546e-09,
+                1.4542826502067507e-08,
+                -5.518975224744205e-09
+              ],
+              "compliance_Nmm": 3.509916077240929,
+              "signed_displacement_mm": 0.10636109324972512,
+              "stiffness_N_per_mm": 310.2638285460204
+            },
+            "negative": {
+              "peak_MPa": 2.729098765645846,
+              "regional_peak_rms_MPa": 0.5469196618158478,
+              "required_yield_MPa_for_factor_two": 5.458197531291692,
+              "peak_at_world_mm": [
+                -115.84301203321809,
+                -3.6133710794164977,
+                118.52777331889558
+              ],
+              "force_world_N": [
+                22.548583372934218,
+                0.0,
+                -24.094841519998287
+              ],
+              "reaction_world_N": [
+                -22.548583373026705,
+                -2.1231905122931494e-11,
+                24.09484151999369
+              ],
+              "moment_balance_world_Nmm": [
+                5.291881988167546e-09,
+                -1.4542826502067507e-08,
+                5.518975224744205e-09
+              ],
+              "compliance_Nmm": 3.509916077240929,
+              "signed_displacement_mm": -0.10636109324972512,
+              "stiffness_N_per_mm": 310.2638285460204
+            }
+          },
+          "lateral": {
+            "positive": {
+              "peak_MPa": 17.588372944447233,
+              "regional_peak_rms_MPa": 4.23230412488487,
+              "required_yield_MPa_for_factor_two": 35.176745888894466,
+              "peak_at_world_mm": [
+                -25.58359245834082,
+                -5.642256003642573,
+                1.762666606075764
+              ],
+              "force_world_N": [
+                24.094841519998287,
+                0.0,
+                22.548583372934218
+              ],
+              "reaction_world_N": [
+                -24.09484152172842,
+                -1.9510304483105756e-10,
+                -22.548583372869487
+              ],
+              "moment_balance_world_Nmm": [
+                5.2065021849401205e-08,
+                -1.4186332797372359e-07,
+                5.516258916316019e-08
+              ],
+              "compliance_Nmm": 224.7711726077068,
+              "signed_displacement_mm": 6.811247654778994,
+              "stiffness_N_per_mm": 4.84492734262072
+            },
+            "negative": {
+              "peak_MPa": 17.588372944447233,
+              "regional_peak_rms_MPa": 4.23230412488487,
+              "required_yield_MPa_for_factor_two": 35.176745888894466,
+              "peak_at_world_mm": [
+                -25.58359245834082,
+                -5.642256003642573,
+                1.762666606075764
+              ],
+              "force_world_N": [
+                -24.094841519998287,
+                0.0,
+                -22.548583372934218
+              ],
+              "reaction_world_N": [
+                24.09484152172842,
+                1.9510304483105756e-10,
+                22.548583372869487
+              ],
+              "moment_balance_world_Nmm": [
+                -5.2065021849401205e-08,
+                1.4186332797372359e-07,
+                -5.516258916316019e-08
+              ],
+              "compliance_Nmm": 224.7711726077068,
+              "signed_displacement_mm": -6.811247654778994,
+              "stiffness_N_per_mm": 4.84492734262072
+            }
+          },
+          "torque": {
+            "positive": {
+              "peak_MPa": 13.507583744745483,
+              "regional_peak_rms_MPa": 1.9650953602498447,
+              "required_yield_MPa_for_factor_two": 27.015167489490967,
+              "peak_at_world_mm": [
+                -143.38889982401753,
+                -2.527811081964037,
+                140.95954974678654
+              ],
+              "force_world_N": [
+                -6.569744748219364e-14,
+                1.0415858273267724e-18,
+                3.26405569239796e-14
+              ],
+              "reaction_world_N": [
+                -4.431504052604396e-10,
+                -2.3263724280297993e-11,
+                -3.0684788043799927e-11
+              ],
+              "moment_balance_world_Nmm": [
+                5.916798828664582e-09,
+                -5.031266397947931e-08,
+                7.2226976621792005e-09
+              ],
+              "compliance_Nmm": 46.218819099467964,
+              "applied_moment_local_Nmm": [
+                2.7755575615628914e-16,
+                -4.858613511515841e-14,
+                999.9999999999981
+              ],
+              "signed_rotation_deg": 2.6481432684781545,
+              "stiffness_Nmm_per_rad": 21636.20835590564
+            },
+            "negative": {
+              "peak_MPa": 13.507583744745483,
+              "regional_peak_rms_MPa": 1.9650953602498447,
+              "required_yield_MPa_for_factor_two": 27.015167489490967,
+              "peak_at_world_mm": [
+                -143.38889982401753,
+                -2.527811081964037,
+                140.95954974678654
+              ],
+              "force_world_N": [
+                6.569744748219364e-14,
+                -1.0415858273267724e-18,
+                -3.26405569239796e-14
+              ],
+              "reaction_world_N": [
+                4.431504052604396e-10,
+                2.3263724280297993e-11,
+                3.0684788043799927e-11
+              ],
+              "moment_balance_world_Nmm": [
+                -5.916798828664582e-09,
+                5.031266397947931e-08,
+                -7.2226976621792005e-09
+              ],
+              "compliance_Nmm": 46.218819099467964,
+              "applied_moment_local_Nmm": [
+                -2.7755575615628914e-16,
+                4.858613511515841e-14,
+                -999.9999999999981
+              ],
+              "signed_rotation_deg": -2.6481432684781545,
+              "stiffness_Nmm_per_rad": 21636.20835590564
+            }
+          },
+          "span twist": {
+            "positive": {
+              "peak_MPa": 11.712229767131033,
+              "regional_peak_rms_MPa": 2.6731159174660424,
+              "required_yield_MPa_for_factor_two": 23.424459534262066,
+              "peak_at_world_mm": [
+                -136.84779902802643,
+                -18.12494179738107,
+                146.03535564572297
+              ],
+              "force_world_N": [
+                -1.106753577673203e-15,
+                -8.032463583163008e-14,
+                -1.5265566588595902e-16
+              ],
+              "reaction_world_N": [
+                1.2245293667945134e-10,
+                -3.590017172427906e-12,
+                1.0928236093832311e-10
+              ],
+              "moment_balance_world_Nmm": [
+                -4.2895141744159204e-09,
+                2.755843598115093e-08,
+                -6.508774248736859e-09
+              ],
+              "compliance_Nmm": 86.83179342273795,
+              "applied_moment_local_Nmm": [
+                1000.0000000000047,
+                8.308909116294672e-13,
+                8.826273045769994e-15
+              ],
+              "signed_rotation_deg": 4.975095290674705,
+              "stiffness_Nmm_per_rad": 11516.519014314612
+            },
+            "negative": {
+              "peak_MPa": 11.712229767131033,
+              "regional_peak_rms_MPa": 2.6731159174660424,
+              "required_yield_MPa_for_factor_two": 23.424459534262066,
+              "peak_at_world_mm": [
+                -136.84779902802643,
+                -18.12494179738107,
+                146.03535564572297
+              ],
+              "force_world_N": [
+                1.106753577673203e-15,
+                8.032463583163008e-14,
+                1.5265566588595902e-16
+              ],
+              "reaction_world_N": [
+                -1.2245293667945134e-10,
+                3.590017172427906e-12,
+                -1.0928236093832311e-10
+              ],
+              "moment_balance_world_Nmm": [
+                4.2895141744159204e-09,
+                -2.755843598115093e-08,
+                6.508774248736859e-09
+              ],
+              "compliance_Nmm": 86.83179342273795,
+              "applied_moment_local_Nmm": [
+                -1000.0000000000047,
+                -8.308909116294672e-13,
+                -8.826273045769994e-15
+              ],
+              "signed_rotation_deg": -4.975095290674705,
+              "stiffness_Nmm_per_rad": 11516.519014314612
+            }
+          }
+        },
+        "PLA": {
+          "span": {
+            "positive": {
+              "peak_MPa": 2.7290987656061323,
+              "regional_peak_rms_MPa": 0.5469196618057749,
+              "required_yield_MPa_for_factor_two": 5.458197531212265,
+              "peak_at_world_mm": [
+                -115.84301203321809,
+                -3.6133710794164977,
+                118.52777331889558
+              ],
+              "force_world_N": [
+                -22.548583372934218,
+                0.0,
+                24.094841519998287
+              ],
+              "reaction_world_N": [
+                22.54858337293844,
+                -2.017253031283417e-11,
+                -24.094841519994247
+              ],
+              "moment_balance_world_Nmm": [
+                -1.1244363357088005e-09,
+                -4.984941320840264e-09,
+                -5.401804628601958e-10
+              ],
+              "compliance_Nmm": 3.3573110303464357,
+              "signed_displacement_mm": 0.10173669788928594,
+              "stiffness_N_per_mm": 324.3667298491638,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 2.7290987656061323,
+                "achieved": 18.687487841310467,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.10702348100416205,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 2.7290987656061323,
+              "regional_peak_rms_MPa": 0.5469196618057749,
+              "required_yield_MPa_for_factor_two": 5.458197531212265,
+              "peak_at_world_mm": [
+                -115.84301203321809,
+                -3.6133710794164977,
+                118.52777331889558
+              ],
+              "force_world_N": [
+                22.548583372934218,
+                0.0,
+                -24.094841519998287
+              ],
+              "reaction_world_N": [
+                -22.54858337293844,
+                2.017253031283417e-11,
+                24.094841519994247
+              ],
+              "moment_balance_world_Nmm": [
+                1.1244363357088005e-09,
+                4.984941320840264e-09,
+                5.401804628601958e-10
+              ],
+              "compliance_Nmm": 3.3573110303464357,
+              "signed_displacement_mm": -0.10173669788928594,
+              "stiffness_N_per_mm": 324.3667298491638,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 2.7290987656061323,
+                "achieved": 18.687487841310467,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.10702348100416205,
+                "violation": 0.0
+              }
+            }
+          },
+          "lateral": {
+            "positive": {
+              "peak_MPa": 17.58837294432902,
+              "regional_peak_rms_MPa": 4.232304124785453,
+              "required_yield_MPa_for_factor_two": 35.17674588865804,
+              "peak_at_world_mm": [
+                -25.58359245834082,
+                -5.642256003642573,
+                1.762666606075764
+              ],
+              "force_world_N": [
+                24.094841519998287,
+                0.0,
+                22.548583372934218
+              ],
+              "reaction_world_N": [
+                -24.09484151997697,
+                8.255907069099067e-11,
+                -22.548583372740133
+              ],
+              "moment_balance_world_Nmm": [
+                -4.628195227063259e-08,
+                -1.7106760452634262e-10,
+                -4.121101881970901e-08
+              ],
+              "compliance_Nmm": 214.9985129240069,
+              "signed_displacement_mm": 6.515106452242633,
+              "stiffness_N_per_mm": 5.065151312860087,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 17.58837294432902,
+                "achieved": 2.899642858462574,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.6897401154638831,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 17.58837294432902,
+              "regional_peak_rms_MPa": 4.232304124785453,
+              "required_yield_MPa_for_factor_two": 35.17674588865804,
+              "peak_at_world_mm": [
+                -25.58359245834082,
+                -5.642256003642573,
+                1.762666606075764
+              ],
+              "force_world_N": [
+                -24.094841519998287,
+                0.0,
+                -22.548583372934218
+              ],
+              "reaction_world_N": [
+                24.09484151997697,
+                -8.255907069099067e-11,
+                22.548583372740133
+              ],
+              "moment_balance_world_Nmm": [
+                4.628195227063259e-08,
+                1.7106760452634262e-10,
+                4.121101881970901e-08
+              ],
+              "compliance_Nmm": 214.9985129240069,
+              "signed_displacement_mm": -6.515106452242633,
+              "stiffness_N_per_mm": 5.065151312860087,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 17.58837294432902,
+                "achieved": 2.899642858462574,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.6897401154638831,
+                "violation": 0.0
+              }
+            }
+          },
+          "torque": {
+            "positive": {
+              "peak_MPa": 13.507583744742417,
+              "regional_peak_rms_MPa": 1.9650953602409447,
+              "required_yield_MPa_for_factor_two": 27.015167489484835,
+              "peak_at_world_mm": [
+                -143.38889982401753,
+                -2.527811081964037,
+                140.95954974678654
+              ],
+              "force_world_N": [
+                -6.569744748219364e-14,
+                1.0415858273267724e-18,
+                3.26405569239796e-14
+              ],
+              "reaction_world_N": [
+                -3.40349970429088e-12,
+                4.413291954108445e-11,
+                -1.5077983306355236e-10
+              ],
+              "moment_balance_world_Nmm": [
+                3.055264374829392e-11,
+                -3.489726535521598e-08,
+                3.881660173843393e-09
+              ],
+              "compliance_Nmm": 44.209305225381684,
+              "applied_moment_local_Nmm": [
+                2.7755575615628914e-16,
+                -4.858613511515841e-14,
+                999.9999999999981
+              ],
+              "signed_rotation_deg": 2.5330066046200272,
+              "stiffness_Nmm_per_rad": 22619.672372183642,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 13.507583744742417,
+                "achieved": 3.7756567690983833,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.5297091664604869,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 13.507583744742417,
+              "regional_peak_rms_MPa": 1.9650953602409447,
+              "required_yield_MPa_for_factor_two": 27.015167489484835,
+              "peak_at_world_mm": [
+                -143.38889982401753,
+                -2.527811081964037,
+                140.95954974678654
+              ],
+              "force_world_N": [
+                6.569744748219364e-14,
+                -1.0415858273267724e-18,
+                -3.26405569239796e-14
+              ],
+              "reaction_world_N": [
+                3.40349970429088e-12,
+                -4.413291954108445e-11,
+                1.5077983306355236e-10
+              ],
+              "moment_balance_world_Nmm": [
+                -3.055264374829392e-11,
+                3.489726535521598e-08,
+                -3.881660173843393e-09
+              ],
+              "compliance_Nmm": 44.209305225381684,
+              "applied_moment_local_Nmm": [
+                -2.7755575615628914e-16,
+                4.858613511515841e-14,
+                -999.9999999999981
+              ],
+              "signed_rotation_deg": -2.5330066046200272,
+              "stiffness_Nmm_per_rad": 22619.672372183642,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 13.507583744742417,
+                "achieved": 3.7756567690983833,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.5297091664604869,
+                "violation": 0.0
+              }
+            }
+          },
+          "span twist": {
+            "positive": {
+              "peak_MPa": 11.712229767149028,
+              "regional_peak_rms_MPa": 2.6731159174681767,
+              "required_yield_MPa_for_factor_two": 23.424459534298055,
+              "peak_at_world_mm": [
+                -136.84779902802643,
+                -18.12494179738107,
+                146.03535564572297
+              ],
+              "force_world_N": [
+                -1.106753577673203e-15,
+                -8.032463583163008e-14,
+                -1.5265566588595902e-16
+              ],
+              "reaction_world_N": [
+                3.1896152385968435e-11,
+                -2.9409363833110547e-10,
+                4.763833771903592e-11
+              ],
+              "moment_balance_world_Nmm": [
+                3.258312464282653e-08,
+                2.5860823000406485e-08,
+                2.873877202186348e-08
+              ],
+              "compliance_Nmm": 83.05649805661743,
+              "applied_moment_local_Nmm": [
+                1000.0000000000047,
+                8.308909116294672e-13,
+                8.826273045769994e-15
+              ],
+              "signed_rotation_deg": 4.758786799780703,
+              "stiffness_Nmm_per_rad": 12039.99715131652,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 11.712229767149028,
+                "achieved": 4.354422771234136,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.4593031281234913,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 11.712229767149028,
+              "regional_peak_rms_MPa": 2.6731159174681767,
+              "required_yield_MPa_for_factor_two": 23.424459534298055,
+              "peak_at_world_mm": [
+                -136.84779902802643,
+                -18.12494179738107,
+                146.03535564572297
+              ],
+              "force_world_N": [
+                1.106753577673203e-15,
+                8.032463583163008e-14,
+                1.5265566588595902e-16
+              ],
+              "reaction_world_N": [
+                -3.1896152385968435e-11,
+                2.9409363833110547e-10,
+                -4.763833771903592e-11
+              ],
+              "moment_balance_world_Nmm": [
+                -3.258312464282653e-08,
+                -2.5860823000406485e-08,
+                -2.873877202186348e-08
+              ],
+              "compliance_Nmm": 83.05649805661743,
+              "applied_moment_local_Nmm": [
+                -1000.0000000000047,
+                -8.308909116294672e-13,
+                -8.826273045769994e-15
+              ],
+              "signed_rotation_deg": -4.758786799780703,
+              "stiffness_Nmm_per_rad": 12039.99715131652,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 51.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 11.712229767149028,
+                "achieved": 4.354422771234136,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.4593031281234913,
+                "violation": 0.0
+              }
+            }
+          }
+        },
+        "PETG": {
+          "span": {
+            "positive": {
+              "peak_MPa": 2.7290987656543573,
+              "regional_peak_rms_MPa": 0.5469196618175348,
+              "required_yield_MPa_for_factor_two": 5.4581975313087145,
+              "peak_at_world_mm": [
+                -115.84301203321809,
+                -3.6133710794164977,
+                118.52777331889558
+              ],
+              "force_world_N": [
+                -22.548583372934218,
+                0.0,
+                24.094841519998287
+              ],
+              "reaction_world_N": [
+                22.548583373019714,
+                -1.4399814673993205e-11,
+                -24.094841520009695
+              ],
+              "moment_balance_world_Nmm": [
+                2.6825769591787285e-09,
+                2.2570324557241728e-08,
+                1.5357269345095403e-09
+              ],
+              "compliance_Nmm": 5.147876913302007,
+              "signed_displacement_mm": 0.1559962701000608,
+              "stiffness_N_per_mm": 211.54351946256654,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 2.7290987656543573,
+                "achieved": 17.221802520119052,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.11613186236827053,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 2.7290987656543573,
+              "regional_peak_rms_MPa": 0.5469196618175348,
+              "required_yield_MPa_for_factor_two": 5.4581975313087145,
+              "peak_at_world_mm": [
+                -115.84301203321809,
+                -3.6133710794164977,
+                118.52777331889558
+              ],
+              "force_world_N": [
+                22.548583372934218,
+                0.0,
+                -24.094841519998287
+              ],
+              "reaction_world_N": [
+                -22.548583373019714,
+                1.4399814673993205e-11,
+                24.094841520009695
+              ],
+              "moment_balance_world_Nmm": [
+                -2.6825769591787285e-09,
+                -2.2570324557241728e-08,
+                -1.5357269345095403e-09
+              ],
+              "compliance_Nmm": 5.147876913302007,
+              "signed_displacement_mm": -0.1559962701000608,
+              "stiffness_N_per_mm": 211.54351946256654,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 2.7290987656543573,
+                "achieved": 17.221802520119052,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.11613186236827053,
+                "violation": 0.0
+              }
+            }
+          },
+          "lateral": {
+            "positive": {
+              "peak_MPa": 17.58837294444844,
+              "regional_peak_rms_MPa": 4.2323041248421225,
+              "required_yield_MPa_for_factor_two": 35.17674588889688,
+              "peak_at_world_mm": [
+                -25.58359245834082,
+                -5.642256003642573,
+                1.762666606075764
+              ],
+              "force_world_N": [
+                24.094841519998287,
+                0.0,
+                22.548583372934218
+              ],
+              "reaction_world_N": [
+                -24.094841521077285,
+                1.2636736101967472e-10,
+                -22.548583372946943
+              ],
+              "moment_balance_world_Nmm": [
+                -3.0506102088878606e-09,
+                -9.372450571198954e-08,
+                -2.1803174821144466e-09
+              ],
+              "compliance_Nmm": 329.66438648791063,
+              "signed_displacement_mm": 9.989829893573049,
+              "stiffness_N_per_mm": 3.3033595518208503,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 17.58837294444844,
+                "achieved": 2.672219889153248,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.748441401891423,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 17.58837294444844,
+              "regional_peak_rms_MPa": 4.2323041248421225,
+              "required_yield_MPa_for_factor_two": 35.17674588889688,
+              "peak_at_world_mm": [
+                -25.58359245834082,
+                -5.642256003642573,
+                1.762666606075764
+              ],
+              "force_world_N": [
+                -24.094841519998287,
+                0.0,
+                -22.548583372934218
+              ],
+              "reaction_world_N": [
+                24.094841521077285,
+                -1.2636736101967472e-10,
+                22.548583372946943
+              ],
+              "moment_balance_world_Nmm": [
+                3.0506102088878606e-09,
+                9.372450571198954e-08,
+                2.1803174821144466e-09
+              ],
+              "compliance_Nmm": 329.66438648791063,
+              "signed_displacement_mm": -9.989829893573049,
+              "stiffness_N_per_mm": 3.3033595518208503,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 17.58837294444844,
+                "achieved": 2.672219889153248,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.748441401891423,
+                "violation": 0.0
+              }
+            }
+          },
+          "torque": {
+            "positive": {
+              "peak_MPa": 13.507583744732777,
+              "regional_peak_rms_MPa": 1.9650953602454104,
+              "required_yield_MPa_for_factor_two": 27.015167489465554,
+              "peak_at_world_mm": [
+                -143.38889982401753,
+                -2.527811081964037,
+                140.95954974678654
+              ],
+              "force_world_N": [
+                -6.569744748219364e-14,
+                1.0415858273267724e-18,
+                3.26405569239796e-14
+              ],
+              "reaction_world_N": [
+                -4.672662257121374e-10,
+                5.715383721849321e-11,
+                -1.6367707189601788e-10
+              ],
+              "moment_balance_world_Nmm": [
+                -6.437011590421093e-09,
+                -4.5193565070822395e-08,
+                -3.951809740554424e-09
+              ],
+              "compliance_Nmm": 67.78760134573628,
+              "applied_moment_local_Nmm": [
+                2.7755575615628914e-16,
+                -4.858613511515841e-14,
+                999.9999999999981
+              ],
+              "signed_rotation_deg": 3.8839434604260283,
+              "stiffness_Nmm_per_rad": 14751.960242695595,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 13.507583744732777,
+                "achieved": 3.479526826426484,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.5747907976482033,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 13.507583744732777,
+              "regional_peak_rms_MPa": 1.9650953602454104,
+              "required_yield_MPa_for_factor_two": 27.015167489465554,
+              "peak_at_world_mm": [
+                -143.38889982401753,
+                -2.527811081964037,
+                140.95954974678654
+              ],
+              "force_world_N": [
+                6.569744748219364e-14,
+                -1.0415858273267724e-18,
+                -3.26405569239796e-14
+              ],
+              "reaction_world_N": [
+                4.672662257121374e-10,
+                -5.715383721849321e-11,
+                1.6367707189601788e-10
+              ],
+              "moment_balance_world_Nmm": [
+                6.437011590421093e-09,
+                4.5193565070822395e-08,
+                3.951809740554424e-09
+              ],
+              "compliance_Nmm": 67.78760134573628,
+              "applied_moment_local_Nmm": [
+                -2.7755575615628914e-16,
+                4.858613511515841e-14,
+                -999.9999999999981
+              ],
+              "signed_rotation_deg": -3.8839434604260283,
+              "stiffness_Nmm_per_rad": 14751.960242695595,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 13.507583744732777,
+                "achieved": 3.479526826426484,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.5747907976482033,
+                "violation": 0.0
+              }
+            }
+          },
+          "span twist": {
+            "positive": {
+              "peak_MPa": 11.712229767135012,
+              "regional_peak_rms_MPa": 2.6731159174673107,
+              "required_yield_MPa_for_factor_two": 23.424459534270024,
+              "peak_at_world_mm": [
+                -136.84779902802643,
+                -18.12494179738107,
+                146.03535564572297
+              ],
+              "force_world_N": [
+                -1.106753577673203e-15,
+                -8.032463583163008e-14,
+                -1.5265566588595902e-16
+              ],
+              "reaction_world_N": [
+                1.886268918838141e-12,
+                1.0156320229270932e-11,
+                -3.1946889578193804e-11
+              ],
+              "moment_balance_world_Nmm": [
+                -1.3252241540251397e-08,
+                2.8726894538491643e-08,
+                -1.554614449672531e-08
+              ],
+              "compliance_Nmm": 127.35329702006896,
+              "applied_moment_local_Nmm": [
+                1000.0000000000047,
+                8.308909116294672e-13,
+                8.826273045769994e-15
+              ],
+              "signed_rotation_deg": 7.296806426325956,
+              "stiffness_Nmm_per_rad": 7852.172055211221,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 11.712229767135012,
+                "achieved": 4.012899416632338,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.4983927560482984,
+                "violation": 0.0
+              }
+            },
+            "negative": {
+              "peak_MPa": 11.712229767135012,
+              "regional_peak_rms_MPa": 2.6731159174673107,
+              "required_yield_MPa_for_factor_two": 23.424459534270024,
+              "peak_at_world_mm": [
+                -136.84779902802643,
+                -18.12494179738107,
+                146.03535564572297
+              ],
+              "force_world_N": [
+                1.106753577673203e-15,
+                8.032463583163008e-14,
+                1.5265566588595902e-16
+              ],
+              "reaction_world_N": [
+                -1.886268918838141e-12,
+                -1.0156320229270932e-11,
+                3.1946889578193804e-11
+              ],
+              "moment_balance_world_Nmm": [
+                1.3252241540251397e-08,
+                -2.8726894538491643e-08,
+                1.554614449672531e-08
+              ],
+              "compliance_Nmm": 127.35329702006896,
+              "applied_moment_local_Nmm": [
+                -1000.0000000000047,
+                -8.308909116294672e-13,
+                -8.826273045769994e-15
+              ],
+              "signed_rotation_deg": -7.296806426325956,
+              "stiffness_Nmm_per_rad": 7852.172055211221,
+              "yield_check": {
+                "quantity": "whole-part yield factor of safety",
+                "minimum": 2.0,
+                "yield_MPa": 47.0,
+                "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PETG_Prusament_TDS_2021_10_EN.pdf",
+                "peak_MPa": 11.712229767135012,
+                "achieved": 4.012899416632338,
+                "unbounded": false,
+                "plastic_flow_detected": false,
+                "utilization": 0.4983927560482984,
+                "violation": 0.0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

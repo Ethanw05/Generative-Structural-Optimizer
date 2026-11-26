@@ -5,6 +5,14 @@ from motor_load import braking_case,motor_mount_moment
 from impact_cases import motor_first_impact
 
 
+def directional_loads(study,force_n=33.,torque_nmm=1000.):
+    lift=study.loads['lift']
+    motor_torque=motor_mount_moment(study,torque_nmm)
+    return {'span':replace(lift,force_n=np.array([force_n,0.,0.])),
+            'lateral':replace(lift,force_n=np.array([0.,force_n,0.])),
+            'torque':motor_torque,'span twist':replace(motor_torque,moment_nmm=np.array([torque_nmm,0.,0.]))}
+
+
 def service_portfolio(study):
     brake=braking_case(study,15000.,.1,5.e-5,.09,15.,np.diag([29.,29.,50.]),.15,.002)
     brake=replace(brake,max_orders=20,relative_tolerance=.035,max_time_levels=11)
@@ -20,8 +28,7 @@ def service_portfolio(study):
                                   -speed*normal,stiffness,.014,.00025)
         histories[label]=replace(impact,max_orders=22,relative_tolerance=.04,max_time_levels=11)
     lift=study.loads['lift']
-    loads={'lift':lift,'span':replace(lift,force_n=np.array([33.,0.,0.])),
-           'lateral':replace(lift,force_n=np.array([0.,33.,0.])),'torque':motor_mount_moment(study,1000.)}
+    loads={'lift':lift,**directional_loads(study)}
     if ((loads.keys()-{'lift'}) & study.loads.keys()) or histories.keys() & study.histories.keys():
         raise ValueError('Recorded and additional cases need distinct names')
     return replace(study,loads={**loads,**study.loads},histories={**histories,**study.histories},
