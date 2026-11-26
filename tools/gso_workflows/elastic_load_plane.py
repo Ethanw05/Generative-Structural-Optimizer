@@ -5,9 +5,9 @@ import numpy as np
 
 @dataclass(frozen=True)
 class QuadraticPlane:
-    first: object
-    second: object
-    cross: object
+    first: float | np.ndarray
+    second: float | np.ndarray
+    cross: float | np.ndarray
 
     def at(self,radians):
         c,s=np.cos(radians),np.sin(radians)
@@ -15,7 +15,7 @@ class QuadraticPlane:
 
     def maximum(self):
         # Largest eigenpair of the symmetric two-by-two Gram matrix at every element.
-        value=.5*(self.first+self.second)+np.hypot(.5*(self.first-self.second),self.cross)
+        value=.5*self.first+.5*self.second+np.hypot(.5*(self.first-self.second),self.cross)
         angle=np.mod(.5*np.arctan2(2.*self.cross,self.first-self.second),np.pi)
         return value,angle
 
@@ -42,7 +42,8 @@ def compliance_plane(load_a,motion_a,load_b,motion_b):
     ba=float(np.vdot(load_b,motion_a))
     if not np.isfinite([aa,bb,ab,ba]).all() or min(aa,bb)<0.:
         raise ValueError('Nonfinite or negative elastic work')
-    tolerance=1.e-7*max(np.sqrt(aa*bb),np.finfo(float).tiny)
-    if abs(ab-ba)>tolerance or max(abs(ab),abs(ba))>np.sqrt(aa*bb)+tolerance:
+    bound=np.sqrt(aa)*np.sqrt(bb)
+    tolerance=1.e-7*max(bound,np.finfo(float).tiny)
+    if abs(ab-ba)>tolerance or max(abs(ab),abs(ba))>bound+tolerance:
         raise ValueError('The solutions violate elastic reciprocity or positive semidefiniteness')
     return QuadraticPlane(aa,bb,.5*(ab+ba))

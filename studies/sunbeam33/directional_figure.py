@@ -16,7 +16,7 @@ def font(size,bold=False):
     return ImageFont.truetype('C:/Windows/Fonts/'+('segoeuib.ttf' if bold else 'segoeui.ttf'),size)
 
 
-def draw(report,work,output,labels,additional=()):
+def draw(report,work,output,labels,additional=(),under_pad=False):
     sample=json.loads(report.read_text())
     for path in additional:
         other=json.loads(path.read_text())
@@ -37,7 +37,7 @@ def draw(report,work,output,labels,additional=()):
     linear=palette.copy()
     rgb=palette[:,:3]
     linear[:,:3]=np.where(rgb<=.04045,rgb/12.92,((rgb+.055)/1.055)**2.4)
-    back=np.array([.13,-.85,.6]);back/=np.linalg.norm(back)
+    back=np.array([.62,-.50,-.74] if under_pad else [.13,-.85,.6]);back/=np.linalg.norm(back)
     right=np.array([1.,0.,0.])-back*back[0];right/=np.linalg.norm(right)
     back,right=back@ROT,right@ROT
     axes=np.stack([right,np.cross(back,right),back])
@@ -49,20 +49,25 @@ def draw(report,work,output,labels,additional=()):
     lo,hi=np.min(lows,axis=0),np.max(highs,axis=0)
     target=.5*(lo+hi)@axes
     width=1.10*max(hi[0]-lo[0],(hi[1]-lo[1])/.36)
+    if under_pad:
+        target=np.array([-152.4,0.,161.925])+np.array([-8.,0.,-8.])@ROT
+        width=110.
     cfg=dict(target=[target],back=[back],right=[right],width=[width],scale=maximum,log_reference=1.,palette=linear)
     panel=660
-    image=Image.new('RGB',(panel*len(labels),1220),'#f6f8f9')
+    row_height=276 if under_pad else 246
+    image=Image.new('RGB',(panel*len(labels),1220+len(modes)*(row_height-246)),'#f6f8f9')
     ink='#243b47'
     pen=ImageDraw.Draw(image)
-    pen.text((26,18),'Horizontal loading and torsion',fill=ink,font=font(34,True))
-    pen.text((26,67),'ABS  |  Elastic von Mises stress  |  Circle marks the governing element',fill=ink,font=font(20))
+    pen.text((26,18),'Motor-pad underside under load' if under_pad else 'Horizontal loading and torsion',fill=ink,font=font(34,True))
+    marker='Circles mark whole-arm peaks that fall within view' if under_pad else 'Circle marks the governing element'
+    pen.text((26,67),'ABS  |  Elastic von Mises stress  |  '+marker,fill=ink,font=font(20))
     for j,(_,title) in enumerate(labels):
         pen.text((panel*(j+.5),125),title,fill=ink,font=font(23,True),anchor='mm')
     with TemporaryDirectory(dir=WORK) as temp:
         base=Path(temp)
         render_views(cfg,[(path,base/str(i)) for i,(_,_,path) in enumerate(cases)],ROOT/'build/Release/gso.exe')
         for i,(mode,case_title) in enumerate(modes):
-            y=148+246*i
+            y=148+row_height*i
             pen.line((25,y,image.width-25,y),fill='#ccd8dd',width=2)
             pen.text((26,y+7),case_title,fill=ink,font=font(22,True))
             for j,(label,_) in enumerate(labels):
@@ -74,13 +79,14 @@ def draw(report,work,output,labels,additional=()):
                 delta=np.asarray(report_row['peak_at_world_mm'])-target
                 x=origin[0]+300.+600.*(delta@right)/width
                 py=origin[1]+108.-600.*(delta@axes[1])/width
-                pen.ellipse((x-6,py-6,x+6,py+6),outline='white',width=3)
-                pen.ellipse((x-8,py-8,x+8,py+8),outline=ink,width=2)
+                if origin[0]+8<x<origin[0]+592 and origin[1]+8<py<origin[1]+208:
+                    pen.ellipse((x-6,py-6,x+6,py+6),outline='white',width=3)
+                    pen.ellipse((x-8,py-8,x+8,py+8),outline=ink,width=2)
                 motion=(f"{report_row['signed_rotation_deg']:.2f} deg" if 'signed_rotation_deg' in report_row
                         else f"{report_row['signed_displacement_mm']:.3f} mm")
-                pen.text((panel*(j+.5),y+224),f"{report_row['peak_MPa']:.2f} MPa   /   {motion}",
+                pen.text((panel*(j+.5),y+row_height-22),f"{'Whole arm ' if under_pad else ''}{report_row['peak_MPa']:.2f} MPa   /   {motion}",
                          fill=ink,font=font(19),anchor='mm')
-    y=1153
+    y=image.height-67
     pen.text((26,y),'MPa',font=font(20,True),fill=ink)
     left,right_edge=125,image.width-40
     for x in range(left,right_edge):
@@ -99,6 +105,7 @@ if __name__=='__main__':
     parser.add_argument('work',type=Path)
     parser.add_argument('output',type=Path)
     parser.add_argument('--additional',type=Path,action='append',default=[])
+    parser.add_argument('--under-pad',action='store_true')
     parser.add_argument('--column',nargs=2,action='append',metavar=('LABEL','TITLE'))
     args=parser.parse_args()
-    draw(args.report,args.work,args.output,args.column or [('installed','Installed Rev 2'),('generated','Generated arm')],args.additional)
+    draw(args.report,args.work,args.output,args.column or [('installed','Installed Rev 2'),('generated','Generated arm')],args.additional,args.under_pad)

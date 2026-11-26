@@ -8,12 +8,13 @@ from PIL import Image,ImageDraw,ImageFont
 from matplotlib import colormaps
 
 
-def make_figures(generated_geometry,installed_geometry,generated_stress,installed_stress,out,mesh_caption='Fine mesh'):
+def make_figures(generated_geometry,installed_geometry,generated_stress,installed_stress,out,mesh_caption='Fine mesh',
+                 load_caption='ABS   /   33 N upward'):
     with TemporaryDirectory(dir=WORK) as directory:
-        _render(generated_geometry,installed_geometry,generated_stress,installed_stress,out,mesh_caption,Path(directory))
+        _render(generated_geometry,installed_geometry,generated_stress,installed_stress,out,mesh_caption,Path(directory),load_caption)
 
 
-def _render(generated_geometry,installed_geometry,generated_stress,installed_stress,out,mesh_caption,stage):
+def _render(generated_geometry,installed_geometry,generated_stress,installed_stress,out,mesh_caption,stage,load_caption):
     out.mkdir(parents=True,exist_ok=True)
     geometries=[np.load(p)['v'] for p in (generated_geometry,installed_geometry)]
     v=(np.vstack(geometries)-ORIGIN)@ROT.T
@@ -59,7 +60,7 @@ def _render(generated_geometry,installed_geometry,generated_stress,installed_str
         canvas=Image.new('RGB',(1680,height),'#f6f8f9');d=ImageDraw.Draw(canvas)
         title='Elastic von Mises stress' if field else 'Front-left arm geometry'
         d.text((42,20),title,font=font(40,True),fill='#1c2e3a')
-        d.text((1638,36),'ABS   /   33 N upward',font=font(24),fill='#314957',anchor='ra')
+        d.text((1638,36),load_caption,font=font(24),fill='#314957',anchor='ra')
         for j,name in enumerate(['Generated','Installed Rev 2']):
             x=420+840*j
             d.text((x,92 if field else 102),name,font=font(27,True),fill='#243e4c',anchor='mm')

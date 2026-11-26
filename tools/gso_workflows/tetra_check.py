@@ -40,14 +40,14 @@ def solve_static_cases(points,cells,study,outputs,linear_solve,*,surface_tol=.35
     """Evaluate named load and moment cases, factoring each common linear elastic solid once."""
     if not outputs or set(outputs)-study.loads.keys():
         raise ValueError('Select one or more defined static cases')
-    if observe_linear is not None and set(outputs) & study.solid_laws.keys():
+    if observe_linear is not None and any(study.solid_laws.get(key) is not None for key in outputs):
         raise ValueError('Linear superposition requires linear material and small-strain kinematics')
     results={}
     groups={}
     for label,path in outputs.items():
         active=study.for_case(label)
         single=replace(active,loads={label:study.loads[label]})
-        if label in study.solid_laws:
+        if study.solid_laws.get(label) is not None:
             results[label]=solve(points,cells,single,path,linear_solve,surface_tol=surface_tol,report_to_console=False)
         else:
             groups.setdefault((active.young_mpa,active.poisson),[]).append((label,single,path))
