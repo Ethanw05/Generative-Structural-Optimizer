@@ -148,48 +148,50 @@
           "normalized_selection_excess": 0.0011225129116083643
         },
         {
-          "level": 0,
+          "level": 1,
           "scenario": "PLA / horizontal range",
           "quantity": "whole-part yield factor of safety",
           "minimum": 2.0,
           "yield_MPa": 51.0,
           "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
-          "peak_MPa": 31.973831336888786,
-          "achieved": 1.595054388779501,
+          "peak_MPa": 34.48807153842234,
+          "achieved": 1.4787721587500802,
           "unbounded": false,
           "plastic_flow_detected": false,
-          "utilization": 1.253875738701521,
-          "violation": 0.2538757387015209,
+          "utilization": 1.352473393663621,
+          "violation": 0.35247339366362107,
           "met": false,
           "status": "exceeded",
           "observed_met": false,
           "utilization_by_mesh": [
-            1.253875738701521
+            1.253875738701521,
+            1.352473393663621
           ],
-          "last_utilization_change": 0.0,
-          "normalized_selection_excess": 0.2538757387015209
+          "last_utilization_change": 0.09859765496210016,
+          "normalized_selection_excess": 0.35247339366362107
         },
         {
-          "level": 0,
+          "level": 1,
           "scenario": "PLA / torque plane range",
           "quantity": "whole-part yield factor of safety",
           "minimum": 2.0,
           "yield_MPa": 51.0,
           "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
-          "peak_MPa": 29.410913524143126,
-          "achieved": 1.7340501837229438,
+          "peak_MPa": 40.59609447700979,
+          "achieved": 1.2562784833620413,
           "unbounded": false,
           "plastic_flow_detected": false,
-          "utilization": 1.1533691578095344,
-          "violation": 0.15336915780953442,
+          "utilization": 1.5920037049807763,
+          "violation": 0.5920037049807763,
           "met": false,
           "status": "exceeded",
           "observed_met": false,
           "utilization_by_mesh": [
-            1.1533691578095344
+            1.1533691578095344,
+            1.5920037049807763
           ],
-          "last_utilization_change": 0.0,
-          "normalized_selection_excess": 0.15336915780953442
+          "last_utilization_change": 0.43863454717124184,
+          "normalized_selection_excess": 0.5920037049807763
         },
         {
           "level": 0,
@@ -372,7 +374,18 @@
           "maximum_compliance_Nmm": 296.0178765039634,
           "regional_peak_rms_at_stress_angle_MPa": 5.040474126885528,
           "stress_angle_deg": 85.446311899034,
-          "compliance_angle_deg": 89.56838386025072
+          "compliance_angle_deg": 89.56838386025072,
+          "refinement": [
+            {
+              "scenario": "PLA / horizontal range",
+              "n_tets": 1399832,
+              "peak_MPa": 34.48807153842234,
+              "maximum_compliance_Nmm": 312.78022830364085,
+              "regional_peak_rms_at_stress_angle_MPa": 4.750257349171729,
+              "stress_angle_deg": 86.64574738397188,
+              "compliance_angle_deg": 89.67468632972894
+            }
+          ]
         },
         {
           "scenario": "PLA / torque plane range",
@@ -380,7 +393,18 @@
           "maximum_compliance_Nmm": 134.77449870254952,
           "regional_peak_rms_at_stress_angle_MPa": 3.4180049412063074,
           "stress_angle_deg": 101.80986205073475,
-          "compliance_angle_deg": 103.40034258408002
+          "compliance_angle_deg": 103.40034258408002,
+          "refinement": [
+            {
+              "scenario": "PLA / torque plane range",
+              "n_tets": 1399832,
+              "peak_MPa": 40.59609447700979,
+              "maximum_compliance_Nmm": 151.6059875612071,
+              "regional_peak_rms_at_stress_angle_MPa": 3.4410613292314425,
+              "stress_angle_deg": 103.7654656701047,
+              "compliance_angle_deg": 102.75824112814935
+            }
+          ]
         },
         {
           "scenario": "PLA / brake",
@@ -552,47 +576,49 @@
           "normalized_selection_excess": 0.0
         },
         {
-          "level": 0,
+          "level": 1,
           "scenario": "PLA / horizontal range",
           "quantity": "whole-part yield factor of safety",
           "minimum": 2.0,
           "yield_MPa": 51.0,
           "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
-          "peak_MPa": 17.614786579524395,
-          "achieved": 2.895294800748986,
+          "peak_MPa": 51.317862894692695,
+          "achieved": 0.9938059989882086,
           "unbounded": false,
           "plastic_flow_detected": false,
-          "utilization": 0.6907759442950743,
-          "violation": 0.0,
-          "met": true,
-          "status": "met",
-          "observed_met": true,
+          "utilization": 2.0124652115565764,
+          "violation": 1.0124652115565764,
+          "met": false,
+          "status": "exceeded",
+          "observed_met": false,
           "utilization_by_mesh": [
-            0.6907759442950743
+            0.6907759442950743,
+            2.0124652115565764
           ],
-          "last_utilization_change": 0.0,
-          "normalized_selection_excess": 0.0
+          "last_utilization_change": 1.3216892672615022,
+          "normalized_selection_excess": 1.0124652115565764
         },
         {
-          "level": 0,
+          "level": 1,
           "scenario": "PLA / torque plane range",
           "quantity": "whole-part yield factor of safety",
           "minimum": 2.0,
           "yield_MPa": 51.0,
           "strength_basis": "https://prusament.com/wp-content/uploads/2022/10/PLA_Prusament_TDS_2021_10_EN.pdf",
-          "peak_MPa": 14.734195421238146,
-          "achieved": 3.4613359292416903,
+          "peak_MPa": 16.440565310100677,
+          "achieved": 3.102083111988057,
           "unbounded": false,
           "plastic_flow_detected": false,
-          "utilization": 0.5778115851465939,
+          "utilization": 0.6447280513764971,
           "violation": 0.0,
           "met": true,
           "status": "met",
           "observed_met": true,
           "utilization_by_mesh": [
-            0.5778115851465939
+            0.5778115851465939,
+            0.6447280513764971
           ],
-          "last_utilization_change": 0.0,
+          "last_utilization_change": 0.06691646622990322,
           "normalized_selection_excess": 0.0
         },
         {
@@ -776,7 +802,18 @@
           "maximum_compliance_Nmm": 216.6472233734529,
           "regional_peak_rms_at_stress_angle_MPa": 4.20668671134618,
           "stress_angle_deg": 86.86176083242232,
-          "compliance_angle_deg": 95.02451772067481
+          "compliance_angle_deg": 95.02451772067481,
+          "refinement": [
+            {
+              "scenario": "PLA / horizontal range",
+              "n_tets": 1412950,
+              "peak_MPa": 51.317862894692695,
+              "maximum_compliance_Nmm": 224.30495351493576,
+              "regional_peak_rms_at_stress_angle_MPa": 3.8614143100712828,
+              "stress_angle_deg": 96.19485631600352,
+              "compliance_angle_deg": 95.03703697893161
+            }
+          ]
         },
         {
           "scenario": "PLA / torque plane range",
@@ -784,7 +821,18 @@
           "maximum_compliance_Nmm": 83.78156324110009,
           "regional_peak_rms_at_stress_angle_MPa": 1.948433520241351,
           "stress_angle_deg": 27.74761424739623,
-          "compliance_angle_deg": 97.70875257021208
+          "compliance_angle_deg": 97.70875257021208,
+          "refinement": [
+            {
+              "scenario": "PLA / torque plane range",
+              "n_tets": 1412950,
+              "peak_MPa": 16.440565310100677,
+              "maximum_compliance_Nmm": 92.01040493001415,
+              "regional_peak_rms_at_stress_angle_MPa": 2.632496376186756,
+              "stress_angle_deg": 112.1521880362408,
+              "compliance_angle_deg": 97.28193980137127
+            }
+          ]
         },
         {
           "scenario": "PLA / brake",
